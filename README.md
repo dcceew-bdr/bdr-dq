@@ -1,4 +1,4 @@
-# Biodiversity Data Repository (BDR) Data Quality (DQ)
+# Data Quality Assessment Framework (FFP component), case study: SDM
 
 This repository will soon contain criteria, use cases and queries for data quality scenarios for data that will be housed within the BDR.
 
