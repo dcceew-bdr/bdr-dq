@@ -1,0 +1,11 @@
+PREFIX ex: <http://example.com/>
+PREFIX schema: <https://schema.org/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+ex:eg001
+    a schema:Person ;
+    schema:name "Nicholas Car" ;
+    schema:email "nicholas.car@dccees.gov.au"^^xsd:anyURI ;
+    schema:url "https://www.dcceew.gov.au"^^xsd:anyURI ;
+    schema:honorificPrefix "Dr" ;
+.
