@@ -46,7 +46,7 @@ def test_assessment_01_01():
 
     assert (
         URIRef("http://example.com/thingWithResult"),
-        URIRef("https://linked.data.gov.au/def/bdt/dqaf/hasDQAFResult"),
+        URIRef("https://linked.data.gov.au/def/bdr/dqaf/hasDQAFResult"),
         None
     ) in result
 
@@ -56,7 +56,7 @@ def test_assessment_01_02():
     result = assessment_01(g)
     actual_count = None
 
-    for o in result.objects(URIRef("http://example.com/thingWithResult"), URIRef("https://linked.data.gov.au/def/bdt/dqaf/hasDQAFResult")):
+    for o in result.objects(URIRef("http://example.com/thingWithResult"), URIRef("https://linked.data.gov.au/def/bdr/dqaf/hasDQAFResult")):
         for o2 in result.objects(o, SDO.value):
             actual_count = int(o2)
 

@@ -8,18 +8,19 @@ The DQ assessment tool is a Python package stored in the `dq/` directory of this
 
 ### Installation
 
-This Python package relies on Python 3.11+ and the dependencies given in the `pyproject.toml` file that should be installed using the [Poetry](https://python-poetry.org/) dependency manager.
+This Python package relies on Python 3.11+ and the dependencies given in the `pyproject.toml` file that should be installed using the [Poetry](https://python-poetry.org/) dependency manager or PIP.
 
 Here are the major steps needed to start using this package:
 
 1. Download/clone this repository somewhere
 2. Install Python, if you haven't already got it
    1. 3.11+ needed
-3. Install Poetry (from the link above) in you Python environemnt
+3. Install Poetry (from the link above) in you Python environment (or just use PIP)
 4. Create a [Virtual Environment](https://docs.python.org/3/library/venv.html) just for this package
    1. some programming tools, like [PyCharm](https://www.jetbrains.com/pycharm/) have integrated support for this
 5. Load this package's dependencies into the Virtual Environment
-   1. You usually just need to activate the Virtual Environment and then run the command line command `poetry update` or use a programming tool's UI to install all the dependencies in the `pyproject.toml` file
+   1. Poetry: You usually just need to activate the Virtual Environment and then run the command line command `poetry update` or use a programming tool's UI to install all the dependencies in the `pyproject.toml` file
+   2. PIP: `~$ pip install -r requirements.txt` or `~$ python -m pip install -r requirements.txt`
 
 After installation, run the tests - next section - to ensure everything's working.
 
