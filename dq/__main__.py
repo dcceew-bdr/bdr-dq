@@ -89,10 +89,7 @@ def assessment_medi(g: Graph) -> Graph:
     return result_graph
 
 
-def main(args=None):
-    if args is None:  # run via entrypoint
-        args = sys.argv[1:]
-
+def cli(args=None):
     parser = argparse.ArgumentParser(
         prog="dq",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
@@ -119,7 +116,12 @@ def main(args=None):
         help="The ABIS-compliant RDF file, or an RDFLib graph object, to assess",
     )
 
-    args = parser.parse_args(args)
+    return parser.parse_args(args)
+
+
+def main(args=None):
+    if args is None:  # run via entrypoint
+        args = cli(sys.argv[1:])
 
     if args.version:
         print(__version__)
@@ -137,6 +139,7 @@ def main(args=None):
     rg += assessment_medi(g)
 
     rg.serialize(destination="results.ttl", format="longturtle")
+    print("Complete")
 
 
 if __name__ == "__main__":
