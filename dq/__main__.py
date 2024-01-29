@@ -133,8 +133,10 @@ def main(args=None):
     print("Running BDR-DQ...")
     g = load_data(args.data_to_assess)
 
-    # print(assessment_01(g).serialize(format="longturtle"))
-    print(assessment_medi(g).serialize(format="longturtle"))
+    rg = assessment_01(g)
+    rg += assessment_medi(g)
+
+    rg.serialize(destination="results.ttl", format="longturtle")
 
 
 if __name__ == "__main__":
