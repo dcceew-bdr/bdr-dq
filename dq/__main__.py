@@ -1,6 +1,6 @@
 import time
 from rdflib import Graph, URIRef, Literal, Namespace, BNode
-from rdflib.namespace import SDO, SOSA
+from rdflib.namespace import SDO, SOSA, XSD
 import argparse
 import sys
 from pathlib import Path
@@ -39,6 +39,52 @@ def assessment_01(g: Graph) -> Graph:
         result_graph.add((target, DQAF.hasDQAFResult, result_bn))
         result_graph.add((result_bn, SOSA.observedProperty, assessment_type))
         result_graph.add((result_bn, SDO.value, Literal(5)))
+
+    return result_graph
+
+
+def assessment_medi(g: Graph) -> Graph:
+    assessment_type = URIRef("http://example.com/assessment/medi")
+    result_graph = Graph()
+    result_graph.bind("dqaf", DQAF)
+
+    q1 = """
+        PREFIX schema: <https://schema.org/>
+        
+        SELECT ?person_iri 
+        WHERE {
+            ?person_iri a schema:Person .
+        }
+        """
+
+    targets = set()
+
+    for r in g.query(q1):
+        targets.add(r[0])
+
+    for target in targets:
+        result_bn = BNode()
+
+        q2 = """
+            PREFIX schema: <https://schema.org/>
+            
+            SELECT (COUNT(?name) AS ?count)
+            WHERE {
+                <xxx> schema:name ?name .
+            }
+            """.replace("xxx", target)
+
+        no_names = 0
+        for r in g.query(q2):
+            no_names = int(r[0])
+
+        result_graph.add((URIRef(target), DQAF.hasDQAFResult, result_bn))
+        result_graph.add((result_bn, SOSA.observedProperty, assessment_type))
+
+        if no_names >= 2:
+            result_graph.add((result_bn, SDO.value, Literal(True, datatype=XSD.boolean)))
+        else:
+            result_graph.add((result_bn, SDO.value, Literal(False, datatype=XSD.boolean)))
 
     return result_graph
 
@@ -87,7 +133,8 @@ def main(args=None):
     print("Running BDR-DQ...")
     g = load_data(args.data_to_assess)
 
-    print(assessment_01(g).serialize(format="longturtle"))
+    # print(assessment_01(g).serialize(format="longturtle"))
+    print(assessment_medi(g).serialize(format="longturtle"))
 
 
 if __name__ == "__main__":
