@@ -1,4 +1,4 @@
-# BDR Data Quality Assessment Tool
+# BDR Data Quality Assessment Tool.
 
 This repository contains a software tool that executes Data Quality (DQ) tests against [ABIS](https://linked.data.gov.au/def/abis) data and also documentation on the DQ Assessment Framework from which the tests are created.
 
