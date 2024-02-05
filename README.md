@@ -1,4 +1,4 @@
-# BDR Data Quality Assessment Tool
+# BDR Data Quality Assessment Tool.
 
 This repository contains a software tool that executes Data Quality (DQ) tests against [ABIS](https://linked.data.gov.au/def/abis) data and also documentation on the DQ Assessment Framework from which the tests are created.
 
@@ -15,7 +15,7 @@ Here are the major steps needed to start using this package:
 1. Download/clone this repository somewhere
 2. Install Python, if you haven't already got it
    1. 3.11+ needed
-3. Install Poetry (from the link above) in you Python environment (or just use PIP)
+3. Install Poetry (from the link above) in your Python environment (or just use PIP)
 4. Create a [Virtual Environment](https://docs.python.org/3/library/venv.html) just for this package
    1. some programming tools, like [PyCharm](https://www.jetbrains.com/pycharm/) have integrated support for this
 5. Load this package's dependencies into the Virtual Environment
@@ -47,7 +47,7 @@ To run this application, use Python on the command line or integrate this packag
 For Python on the command line, navigate to the root folder of this repository and run:
 
 ```bash
-~$ python dq -h
+~$ python -m dq -h
 ```
 
 This will print out the list of available commands.
