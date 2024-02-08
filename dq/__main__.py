@@ -43,6 +43,7 @@ def assessment_01(g: Graph) -> Graph:
     return result_graph
 
 
+
 def assessment_medi(g: Graph) -> Graph:
     assessment_type = URIRef("http://example.com/assessment/medi")
     result_graph = Graph()
@@ -118,6 +119,38 @@ def cli(args=None):
 
     return parser.parse_args(args)
 
+GEO = Namespace("http://www.opengis.net/ont/geosparql#")
+GEO = Namespace("http://www.opengis.net/ont/geosparql#")
+DQAF = Namespace("http://example.com/ns/dqaf#")
+SOSA = Namespace("http://www.w3.org/ns/sosa/")
+TIME = Namespace("http://www.w3.org/2006/time#")
+
+
+#################################################
+def dateWithinLast20Years(g: Graph) -> Graph:
+    assessment_type = URIRef("http://example.com/assessment/dateWithinLast20Years")
+    result_graph = Graph()
+    result_graph.bind("dqaf", DQAF)
+    target = URIRef("http://example.com/thingWithResult1")
+    result_bn = BNode()
+    found_date_within_range = False
+
+    for s, p, o in g.triples((None, SOSA.phenomenonTime, None)):
+        for s2, p2, date in g.triples((o, TIME.inXSDDate, None)):
+            if isinstance(date, Literal) and date.datatype == XSD.date:
+                year = date.toPython().year
+                if 2004 <= year <= 2024:
+                    found_date_within_range = True
+                    break
+        if found_date_within_range:
+            break
+
+    result_graph.add((target, DQAF.hasDQAFResult, result_bn))
+    result_graph.add((result_bn, SOSA.observedProperty, assessment_type))
+    result_graph.add((result_bn, SDO.value, Literal(found_date_within_range, datatype=XSD.boolean)))
+
+    return result_graph
+#################################################
 
 def main(args=None):
     if args is None:  # run via entrypoint
