@@ -7,6 +7,12 @@ from pathlib import Path
 from typing import Union
 from dq.defined_namespaces import DQAF
 
+from datetime import datetime
+DQAF = Namespace("http://example.com/ns/dqaf#")
+GEO = Namespace("http://www.opengis.net/ont/geosparql#")
+SOSA = Namespace("http://www.w3.org/ns/sosa/")
+TIME = Namespace("http://www.w3.org/2006/time#")
+
 __version__ = "0.0.1"
 
 
@@ -119,38 +125,76 @@ def cli(args=None):
 
     return parser.parse_args(args)
 
-GEO = Namespace("http://www.opengis.net/ont/geosparql#")
-GEO = Namespace("http://www.opengis.net/ont/geosparql#")
-DQAF = Namespace("http://example.com/ns/dqaf#")
-SOSA = Namespace("http://www.w3.org/ns/sosa/")
-TIME = Namespace("http://www.w3.org/2006/time#")
 
 
-#################################################
+
+
+
+
 def dateWithinLast20Years(g: Graph) -> Graph:
     assessment_type = URIRef("http://example.com/assessment/dateWithinLast20Years")
-    result_graph = Graph()
-    result_graph.bind("dqaf", DQAF)
-    target = URIRef("http://example.com/thingWithResult1")
-    result_bn = BNode()
-    found_date_within_range = False
+    assessment_date = datetime.now().date()  # Automatically use the current date
+
+    # Ensure the namespaces are bound for the output
+    g.bind("dqaf", DQAF)
+    g.bind("sosa", SOSA)
+    g.bind("xsd", XSD)
+    g.bind("time", TIME)
+
+    current_year = assessment_date.year
 
     for s, p, o in g.triples((None, SOSA.phenomenonTime, None)):
+        found_date_within_range = False
         for s2, p2, date in g.triples((o, TIME.inXSDDate, None)):
             if isinstance(date, Literal) and date.datatype == XSD.date:
                 year = date.toPython().year
-                if 2004 <= year <= 2024:
+                if (current_year - 20) <= year <= current_year:
                     found_date_within_range = True
                     break
-        if found_date_within_range:
-            break
 
-    result_graph.add((target, DQAF.hasDQAFResult, result_bn))
-    result_graph.add((result_bn, SOSA.observedProperty, assessment_type))
-    result_graph.add((result_bn, SDO.value, Literal(found_date_within_range, datatype=XSD.boolean)))
+        # Create a new blank node for each observation's result
+        result_bn = BNode()
+        g.add((s, DQAF.hasDQAFResult, result_bn))
+        g.add((result_bn, DQAF.assessmentDate, Literal(assessment_date, datatype=XSD.date)))
+        g.add((result_bn, SOSA.observedProperty, assessment_type))
+        g.add((result_bn, SDO.value, Literal(found_date_within_range, datatype=XSD.boolean)))
 
-    return result_graph
-#################################################
+    return g
+
+
+def check_lat_high_precision(g: Graph) -> Graph:
+    assessment_type = URIRef("http://example.com/assessment/check_lat_high_precision")
+    assessment_date = datetime.now().date()  # Automatically use the current date
+
+    # Ensure the namespaces are bound for the output
+    g.bind("dqaf", DQAF)
+    g.bind("sosa", SOSA)
+    g.bind("xsd", XSD)
+    g.bind("geo", GEO)
+    g.bind("schema", SDO)  # Assuming SDO points to the Schema.org namespace
+
+    for s, p, o in g.triples((None, GEO.asWKT, None)):
+        if isinstance(o, Literal):
+            wkt_text = str(o)
+            try:
+                lat_long = wkt_text.split('(')[-1].split(')')[0].split(' ')
+                if len(lat_long) >= 2:
+                    lat = lat_long[1]
+                    decimal_part = lat.split('.')[-1] if '.' in lat else ''
+                    high_precision = len(decimal_part) > 4
+
+                    # Create a new blank node for the result
+                    result_bn = BNode()
+                    g.add((o, DQAF.hasDQAFResult, result_bn))  # Attach result to the geometry node
+                    g.add((result_bn, DQAF.assessmentDate, Literal(assessment_date, datatype=XSD.date)))
+                    g.add((result_bn, SOSA.observedProperty, assessment_type))
+                    g.add((result_bn, SDO.value, Literal(high_precision, datatype=XSD.boolean)))
+            except IndexError:
+                continue
+
+    return g
+
+
 
 def main(args=None):
     if args is None:  # run via entrypoint
@@ -168,9 +212,10 @@ def main(args=None):
     print("Running BDR-DQ...")
     g = load_data(args.data_to_assess)
 
-    rg = assessment_01(g)
-    rg += assessment_medi(g)
-
+   # rg = assessment_01(g)
+   # rg += assessment_medi(g)
+    rg = dateWithinLast20Years(g)
+    rg += check_lat_high_precision(g)
     rg.serialize(destination="results.ttl", format="longturtle")
     print("Complete")
 
