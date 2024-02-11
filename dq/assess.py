@@ -7,6 +7,7 @@ import argparse
 import sys
 from dq.defined_namespaces import DQAF, GEO, SOSA, TIME
 
+
 def load_data(path_or_graph: Union[Path, Graph]) -> Graph:
     if isinstance(path_or_graph, Path):
         return Graph().parse(path_or_graph)
@@ -113,8 +114,11 @@ def dateWithinLast20Years(g: Graph) -> Graph:
 
     return g
 
-def check_lat_high_precision(g: Graph) -> Graph:
-    assessment_type = URIRef("http://example.com/assessment/check_lat_high_precision")
+
+
+
+def assess_coordinate_precision(g: Graph) -> Graph:
+    assessment_type = URIRef("http://example.com/assessment/assess_coordinate_precision")
     assessment_date = datetime.now().date()
 
     g.bind("dqaf", DQAF)
@@ -127,18 +131,38 @@ def check_lat_high_precision(g: Graph) -> Graph:
         if isinstance(o, Literal):
             wkt_text = str(o)
             try:
-                lat_long = wkt_text.split('(')[-1].split(')')[0].split(' ')
-                if len(lat_long) >= 2:
-                    lat = lat_long[1]
-                    decimal_part = lat.split('.')[-1] if '.' in lat else ''
-                    high_precision = len(decimal_part) > 4
+                coordinates = wkt_text.split('(')[-1].split(')')[0].split(' ')
+                if len(coordinates) >= 2:
+                    lat, long = coordinates[1], coordinates[0]
+                    lat_decimal_length = len(lat.split('.')[-1]) if '.' in lat else 0
+                    long_decimal_length = len(long.split('.')[-1]) if '.' in long else 0
 
-                    result_bn = BNode()
-                    g.add((o, DQAF.hasDQAFResult, result_bn))
-                    g.add((result_bn, DQAF.assessmentDate, Literal(assessment_date, datatype=XSD.date)))
-                    g.add((result_bn, SOSA.observedProperty, assessment_type))
-                    g.add((result_bn, SDO.value, Literal(high_precision, datatype=XSD.boolean)))
+                    lat_quality = assess_quality(lat_decimal_length)
+                    long_quality = assess_quality(long_decimal_length)
+
+                    result_bn_lat = BNode()
+                    result_bn_long = BNode()
+
+                    # Adding results for latitude
+                    g.add((o, DQAF.hasDQAFResult, result_bn_lat))
+                    g.add((result_bn_lat, DQAF.assessmentDate, Literal(assessment_date, datatype=XSD.date)))
+                    g.add((result_bn_lat, SOSA.observedProperty, assessment_type))
+                    g.add((result_bn_lat, SDO.value, Literal(f"Latitude: {lat_quality}")))
+
+                    # Adding results for longitude
+                    g.add((o, DQAF.hasDQAFResult, result_bn_long))
+                    g.add((result_bn_long, DQAF.assessmentDate, Literal(assessment_date, datatype=XSD.date)))
+                    g.add((result_bn_long, SOSA.observedProperty, assessment_type))
+                    g.add((result_bn_long, SDO.value, Literal(f"Longitude: {long_quality}")))
             except IndexError:
                 continue
 
     return g
+
+def assess_quality(decimal_length):
+    if decimal_length > 4:
+        return "HighQuality"
+    elif 2 <= decimal_length <= 4:
+        return "MediumQuality"
+    else:
+        return "LowQuality"
