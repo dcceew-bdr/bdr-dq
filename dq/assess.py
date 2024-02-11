@@ -86,8 +86,8 @@ def assessment_medi(g: Graph) -> Graph:
     return result_graph
 
 
-def dateWithinLast20Years(g: Graph) -> Graph:
-    assessment_type = URIRef("http://example.com/assessment/dateWithinLast20Years")
+def assessObservationDateRecency(g: Graph) -> Graph:
+    assessment_type = URIRef("http://example.com/assessment/assessObservationDateRecency")
     assessment_date = datetime.now().date()
 
     g.bind("dqaf", DQAF)
@@ -115,9 +115,8 @@ def dateWithinLast20Years(g: Graph) -> Graph:
     return g
 
 
-
-
-def assess_coordinate_precision(g: Graph) -> Graph:
+#####################################################
+def assess_coordinate_precision1(g: Graph) -> Graph:
     assessment_type = URIRef("http://example.com/assessment/assess_coordinate_precision")
     assessment_date = datetime.now().date()
 
@@ -159,6 +158,65 @@ def assess_coordinate_precision(g: Graph) -> Graph:
 
     return g
 
+
+from rdflib import Graph, URIRef, Literal, BNode, RDF
+from rdflib.namespace import XSD
+import re
+
+# Assuming DQAF, GEO, SOSA, TIME, and SDO namespaces are already imported as before
+
+def assess_coordinate_precision(g: Graph) -> Graph:
+    assessment_type = URIRef("http://example.com/assessment/assess_coordinate_precision")
+    assessment_date = datetime.now().date()
+
+    g.bind("dqaf", DQAF)
+    g.bind("sosa", SOSA)
+    g.bind("xsd", XSD)
+    g.bind("geo", GEO)
+    g.bind("schema", SDO)
+
+    for s, p, o in g.triples((None, GEO.hasGeometry, None)):
+        geometry = None
+        # Extracting the geometry as WKT Literal
+        for s1, p1, o1 in g.triples((o, GEO.asWKT, None)):
+            if p1 == GEO.asWKT:
+                geometry = o1
+                break
+
+        if geometry:
+            wkt_text = str(geometry)
+            # Extracting coordinates from the WKT text
+            try:
+                # Assuming the WKT format is "POINT (lon lat)"
+                match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", wkt_text)
+                if match:
+                    long, lat = match.groups()
+                    lat_decimal_length = len(lat.split('.')[-1]) if '.' in lat else 0
+                    long_decimal_length = len(long.split('.')[-1]) if '.' in long else 0
+
+                    lat_quality = assess_quality(lat_decimal_length)
+                    long_quality = assess_quality(long_decimal_length)
+
+                    result_bn_lat = BNode()
+                    result_bn_long = BNode()
+
+                    # Adding results for latitude
+                    g.add((s, DQAF.hasDQAFResult, result_bn_lat))
+                    g.add((result_bn_lat, DQAF.assessmentDate, Literal(assessment_date, datatype=XSD.date)))
+                    g.add((result_bn_lat, SOSA.observedProperty, assessment_type))
+                    g.add((result_bn_lat, SDO.value, Literal(f"Latitude: {lat_quality}")))
+
+                    # Adding results for longitude
+                    g.add((s, DQAF.hasDQAFResult, result_bn_long))
+                    g.add((result_bn_long, DQAF.assessmentDate, Literal(assessment_date, datatype=XSD.date)))
+                    g.add((result_bn_long, SOSA.observedProperty, assessment_type))
+                    g.add((result_bn_long, SDO.value, Literal(f"Longitude: {long_quality}")))
+            except IndexError:
+                continue
+
+    return g
+
+
 def assess_quality(decimal_length):
     if decimal_length > 4:
         return "HighQuality"
@@ -166,3 +224,4 @@ def assess_quality(decimal_length):
         return "MediumQuality"
     else:
         return "LowQuality"
+#####################################################

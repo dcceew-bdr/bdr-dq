@@ -7,10 +7,11 @@ from pathlib import Path
 from typing import Union
 
 from datetime import datetime
-from .assess import load_data, assessment_01, assessment_medi, dateWithinLast20Years, assess_coordinate_precision
+from .assess import load_data, assessment_01, assessment_medi, assessObservationDateRecency, assess_coordinate_precision
 from dq.defined_namespaces import DQAF, GEO, SOSA, TIME
 
 __version__ = "0.0.1"
+
 
 def cli(args=None):
     parser = argparse.ArgumentParser(
@@ -54,7 +55,7 @@ def main(args=None):
     print("Running BDR-DQ...")
     g = load_data(args.data_to_assess)
 
-    rg = dateWithinLast20Years(g)
+    rg = assessObservationDateRecency(g)
     rg = assess_coordinate_precision(g)
     rg.serialize(destination="results.ttl", format="longturtle")
 
