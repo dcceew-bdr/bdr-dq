@@ -1,14 +1,11 @@
-from rdflib import Graph, URIRef, Literal, Namespace, BNode
-from rdflib.namespace import SDO, SOSA, XSD
+from rdflib import Graph, URIRef, Literal, BNode
+from rdflib.namespace import SDO, XSD
 from datetime import datetime
-from pathlib import Path
 from typing import Union
-
-# Define or import namespaces
-DQAF = Namespace("http://example.com/ns/dqaf#")
-GEO = Namespace("http://www.opengis.net/ont/geosparql#")
-SOSA = Namespace("http://www.w3.org/ns/sosa/")
-TIME = Namespace("http://www.w3.org/2006/time#")
+from pathlib import Path
+import argparse
+import sys
+from dq.defined_namespaces import DQAF, GEO, SOSA, TIME
 
 def load_data(path_or_graph: Union[Path, Graph]) -> Graph:
     if isinstance(path_or_graph, Path):

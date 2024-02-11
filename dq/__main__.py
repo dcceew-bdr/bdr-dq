@@ -8,12 +8,7 @@ from typing import Union
 
 from datetime import datetime
 from .assess import load_data, assessment_01, assessment_medi, dateWithinLast20Years, check_lat_high_precision
-from .defined_namespaces import DQAF
-
-DQAF = Namespace("http://example.com/ns/dqaf#")
-GEO = Namespace("http://www.opengis.net/ont/geosparql#")
-SOSA = Namespace("http://www.w3.org/ns/sosa/")
-TIME = Namespace("http://www.w3.org/2006/time#")
+from dq.defined_namespaces import DQAF, GEO, SOSA, TIME
 
 __version__ = "0.0.1"
 
