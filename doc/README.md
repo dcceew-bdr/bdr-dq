@@ -13,7 +13,7 @@ Department of Climate Change, Energy and the Environment (DCCEEW)
 
 ## A Species Distribution Modelling use case
 
-Introduction on what this is.
+Introduction on what this is. Its rationale, etc.
 
 The categories of data quality checks: 1, 2, 3, etc
 
@@ -26,4 +26,5 @@ How to run 1 (info for end users)
 Further detail about 1 for technical users 
 
 * which part of the code is this at
+* future planned developments 
 * etc
