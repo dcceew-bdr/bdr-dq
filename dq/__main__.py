@@ -1,16 +1,17 @@
-import time
-from rdflib import Graph, URIRef, Literal, Namespace, BNode
-from rdflib.namespace import SDO, SOSA, XSD
 import argparse
 import sys
 from pathlib import Path
-from typing import Union
+# Inside __main__.py
+from dq.data_quality_assessment.geo.geospatial_checks import GeospatialDataQuality
 
-from datetime import datetime
-from .assess import load_data, assessment_01, assessment_medi, assessObservationDateRecency, assess_coordinate_precision
-from dq.defined_namespaces import DQAF, GEO, SOSA, TIME
+# Assuming RDFDataQualityAssessment is correctly imported from assess.py
+from dq.assess import RDFDataQualityAssessment
 
 __version__ = "0.0.1"
+
+from dq.label_manager import LabelManager
+
+from dq.query_processor import RDFQueryProcessor
 
 
 def cli(args=None):
@@ -29,7 +30,7 @@ def cli(args=None):
     parser.add_argument(
         "-s",
         "--shacl-validate",
-        help="Validate the RDF file with ABIS validation before performing quality assessment",
+        help="Validate the RDF file with SHACL validation before performing quality assessment",
         action="store_true",
     )
 
@@ -41,25 +42,42 @@ def cli(args=None):
 
     return parser.parse_args(args)
 
+
 def main(args=None):
-    if args is None:  # run via entrypoint
+    if args is None:  # If run via entrypoint
         args = cli(sys.argv[1:])
 
     if args.version:
         print(__version__)
-        exit()
+        return
 
     if args.shacl_validate:
         print("Validating input data...")
+        # Add SHACL validation logic here if necessary
 
     print("Running BDR-DQ...")
-    g = load_data(args.data_to_assess)
+    # Directly pass the data_to_assess to the class, which handles loading
+    print(args.data_to_assess)
 
-    rg = assessObservationDateRecency(g)
-    rg = assess_coordinate_precision(g)
-    rg.serialize(destination="results.ttl", format="longturtle")
+    result_filename="Results.ttl"
+
+    with open("Report.txt", "w") as report_file:
+        dq_assessment = RDFDataQualityAssessment(args.data_to_assess, report_file)
+
+        # Generate overall report
+        dq_assessment.report_analysis.generate_report()
+
+        # Perform assessments
+        dq_assessment.assess()
+
+        # Output RTL Result file: Serialize the graph with the results
+        dq_assessment.g.serialize(destination=result_filename, format="turtle")
+
+
 
     print("Complete")
+
+
 
 if __name__ == "__main__":
     main()
