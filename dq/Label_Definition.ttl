@@ -1,0 +1,88 @@
+@prefix aus_st: <http://example.org/vocab/australia_state/> .
+@prefix cor_p: <http://example.org/vocab/coordinate_precision/> .
+@prefix date_r: <http://example.org/vocab/date_recency/> .
+@prefix date_v: <http://example.org/vocab/date_validation/> .
+@prefix out_d: <http://example.org/vocab/outlier_date_assessment/> .
+@prefix out_p: <http://example.org/vocab/outlier_point_assessment/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+aus_st:Australian_Capital_Territory a skos:Concept ;
+    skos:definition "Indicates that the point is in the Australian Capital Territory, Australia's federal district, located in the southeast of the country." ;
+    skos:prefLabel "Australian_capital_territory" .
+
+aus_st:New_South_Wales a skos:Concept ;
+    skos:definition "Indicates that the point is in New South Wales, a state on the east coast of Australia." ;
+    skos:prefLabel "New_south_wales" .
+
+aus_st:Northern_Territory a skos:Concept ;
+    skos:definition "Indicates that the point is in the Northern Territory, a federal Australian territory in the center and central northern regions." ;
+    skos:prefLabel "Northern_territory" .
+
+aus_st:Outside_Australia a skos:Concept ;
+    skos:definition "Indicates that the point is outside the geographical bounds of Australia." ;
+    skos:prefLabel "Outside_australia" .
+
+aus_st:Queensland a skos:Concept ;
+    skos:definition "Indicates that the point is in Queensland, a state in northeast Australia." ;
+    skos:prefLabel "Queensland" .
+
+aus_st:South_Australia a skos:Concept ;
+    skos:definition "Indicates that the point is in South Australia, a state in the southern central part of Australia." ;
+    skos:prefLabel "South_australia" .
+
+aus_st:Tasmania a skos:Concept ;
+    skos:definition "Indicates that the point is in Tasmania, an island state off the southern coast of Australia." ;
+    skos:prefLabel "Tasmania" .
+
+aus_st:Victoria a skos:Concept ;
+    skos:definition "Indicates that the point is in Victoria, a state in southeast Australia." ;
+    skos:prefLabel "Victoria" .
+
+aus_st:Western_Australia a skos:Concept ;
+    skos:definition "Indicates that the point is in Western Australia, a state occupying the entire western third of Australia." ;
+    skos:prefLabel "Western_australia" .
+
+cor_p:High a skos:Concept ;
+    skos:definition "Indicates high precision in coordinate values if latitude or longitude of the location point has more than 4 decimal point." ;
+    skos:prefLabel "High" .
+
+cor_p:Low a skos:Concept ;
+    skos:definition "Indicates low precision in coordinate values if latitude or longitude of the location point has less than 2 decimal point." ;
+    skos:prefLabel "Low" .
+
+cor_p:Medium a skos:Concept ;
+    skos:definition "Indicates medium precision in coordinate values if latitude or longitude of the location point has between 2 and 4 decimal point." ;
+    skos:prefLabel "Medium" .
+
+date_r:outdated a skos:Concept ;
+    skos:definition "This label indicates that the observation date is more than 20 years ago, before 20 years, and may not reflect the current state or conditions." ;
+    skos:prefLabel "Outdated" .
+
+date_r:recent a skos:Concept ;
+    skos:definition "This label indicates that the observation date is within the last 20 years, making it more relevant to current contexts and studies." ;
+    skos:prefLabel "Recent" .
+
+date_v:invalid a skos:Concept ;
+    skos:definition "Indicates that the date format is invalid or unrecognized." ;
+    skos:prefLabel "Invalid" .
+
+date_v:valid a skos:Concept ;
+    skos:definition "Indicates that the date format is valid and recognized." ;
+    skos:prefLabel "Valid" .
+
+out_d:normal_date a skos:Concept ;
+    skos:definition "This label indicates that the observation date falls within the typical range, suggesting it is not an anomaly." ;
+    skos:prefLabel "Normal_date" .
+
+out_d:outlier_date a skos:Concept ;
+    skos:definition "This label indicates that the observation date significantly deviates from the typical range, suggesting it may be an anomaly." ;
+    skos:prefLabel "Outlier_date" .
+
+out_p:normal_point a skos:Concept ;
+    skos:definition "This label indicates that the observation point falls within the typical range, suggesting it is not an anomaly." ;
+    skos:prefLabel "Normal_point" .
+
+out_p:outlier_point a skos:Concept ;
+    skos:definition "This label indicates that the observation point significantly deviates from the typical range, suggesting it may be an anomaly." ;
+    skos:prefLabel "Outlier_point" .
+
