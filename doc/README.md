@@ -20,7 +20,7 @@ The categories of data quality checks: 1, 2, 3, etc
 How to run 1 (info for end users)
 
 * Show input files required (vocabulary? example ttl file with observations)
-* Show the command/s for running 1
+* Show the command/s for running 2
 * Show outputs from running the above code (results.ttl with outputs from check 1 highlighted)
 
 Further detail about 1 for technical users 
