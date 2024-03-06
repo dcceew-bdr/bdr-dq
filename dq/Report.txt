@@ -1,5 +1,5 @@
-** RDF Data Quality Assessment Report **
-========================================
+** RDF Data Quality Assessment Report**
+==========================================
 The RDF file you've provided contains 11300 triples, which are the basic units of information in RDF, composed of a subject, predicate, and object. It includes 1867 unique subjects, 36 unique predicates, and 2293 unique objects.
 =========  Unique Predicates (36)===============
  1 - time:inXSDDate: 200
