@@ -9,5 +9,4 @@ These criteria are maintained by the BDR Team:
 **BDR Team**  
 Department of Climate Change, Energy and the Environment (DCCEEW)  
 <bdr@dcceew.gov.au>  
-TEST TEST TEST
-test test test
+
