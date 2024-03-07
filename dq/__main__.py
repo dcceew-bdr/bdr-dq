@@ -2,7 +2,7 @@ import argparse
 import sys
 from pathlib import Path
 # Inside __main__.py
-from dq.data_quality_assessment.geo.geospatial_checks import GeospatialDataQuality
+
 
 # Assuming RDFDataQualityAssessment is correctly imported from assess.py
 from dq.assess import RDFDataQualityAssessment
@@ -68,7 +68,7 @@ def main(args=None):
         dq_assessment.report_analysis.generate_report()
 
         # Perform assessments
-        dq_assessment.assess()
+        dq_assessment.assessments()
 
         # Output RTL Result file: Serialize the graph with the results
         dq_assessment.g.serialize(destination=result_filename, format="turtle")

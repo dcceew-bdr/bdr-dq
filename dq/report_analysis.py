@@ -4,8 +4,6 @@ from typing import Dict
 
 from rdflib import Graph, URIRef, Literal
 
-from .defined_namespaces import uri_to_prefix
-
 
 class ReportAnalysis:
     def __init__(self, g: Graph, report_file=None):
@@ -122,9 +120,8 @@ class ReportAnalysis:
             predicate_index = 0
             for predicate, count in unique_predicates.items():
                 predicate_index += 1
-                predicate_short = uri_to_prefix(str(predicate))
 
-                print(f" {predicate_index} - {predicate_short}: {count}", file=self.report_file)
+                print(f" {predicate_index} - {str(predicate)}: {count}", file=self.report_file)
 
             sorted_namespaces = self.get_sorted_namespaces()
             print(f"========= Namespaces ({len(sorted_namespaces)})===============", file=self.report_file)
@@ -169,3 +166,4 @@ class ReportAnalysis:
             completeness = 0  # Define completeness as 0 if there are no subjects at all
 
         return completeness
+
