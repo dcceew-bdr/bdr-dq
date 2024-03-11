@@ -12,6 +12,7 @@ __version__ = "0.0.1"
 from dq.label_manager import LabelManager
 
 from dq.query_processor import RDFQueryProcessor
+from dq.usecase_manager import UseCaseManager
 
 
 def cli(args=None):
@@ -59,10 +60,13 @@ def main(args=None):
     # Directly pass the data_to_assess to the class, which handles loading
     print(args.data_to_assess)
 
-    result_filename="Results.ttl"
+    result_filename = "Results.ttl"
 
     with open("Report.txt", "w") as report_file:
         dq_assessment = RDFDataQualityAssessment(args.data_to_assess, report_file)
+
+        all_labels = dq_assessment.label_manager.create_excel_template('usecase_template.xlsx')
+        print("All Labels:", all_labels)
 
         # Generate overall report
         dq_assessment.report_analysis.generate_report()
@@ -73,10 +77,19 @@ def main(args=None):
         # Output RTL Result file: Serialize the graph with the results
         dq_assessment.g.serialize(destination=result_filename, format="turtle")
 
+        # Example usage of the usecase manager
+        excel_file_path = 'usecase_definition.xlsx'
+        results_ttl_path = 'Results.ttl'
+        output_ttl_file_path = 'Final_Usecase_Results.ttl'
 
+        manager = UseCaseManager(excel_file_path, results_ttl_path)
+        manager.read_excel()
+        manager.load_rdf_results()
+        manager.create_use_case_matrix()
+        manager.assess_use_cases()
+        manager.write_results_to_ttl(output_ttl_file_path)
 
     print("Complete")
-
 
 
 if __name__ == "__main__":

@@ -85,7 +85,7 @@ class RDFDataQualityAssessment:
 
                 total_assessments += 1
                 # Use  labels for the result
-                result_label = namespace["empty"] if date_is_not_empty else namespace["non_empty"]
+                result_label = namespace["non_empty"] if date_is_not_empty else namespace["empty"]
 
                 self._add_assessment_result(s, assess_namespace, result_label)
 

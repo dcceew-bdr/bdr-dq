@@ -1,5 +1,6 @@
 from rdflib import Graph, Namespace, Literal, URIRef
 from rdflib.namespace import SKOS, RDF
+import pandas as pd
 
 
 class LabelManager:
@@ -106,9 +107,7 @@ class LabelManager:
                     "empty": "Indicates that the date is empty.",
                     "non_empty": "Indicates that the date is not empty.",
                 },
-            }
-
-            ,
+            },
             "datum_validation": {
                 "namespace": Namespace("http://example.com/vocab/datum_validation/"),
                 "assess_namespace": URIRef("http://example.com/assess/datum_validation/"),
@@ -117,8 +116,7 @@ class LabelManager:
                     "valid": "Indicates that the datum link reference is valid and recognized.",
                     "invalid": "Indicates that the datum link reference is invalid or unrecognized.",
                 },
-            }
-            ,
+            },
             "datum_type": {
                 "namespace": Namespace("http://example.com/vocab/datum_type/"),
                 "assess_namespace": URIRef("http://example.com/assess/datum_type/"),
@@ -130,8 +128,7 @@ class LabelManager:
                     "WGS84": "Indicates that the datum is in the World Geodetic System 1984 type.",
                     "None": "Indicates that the datum is not in the AGD84, GDA2020, GDA94, or WGS84 types."
                 },
-            }
-            ,
+            },
             "date_format_validation": {
                 "namespace": Namespace("http://example.com/vocab/date_format_validation/"),
                 "assess_namespace": URIRef("http://example.com/assess/date_format_validation/"),
@@ -171,9 +168,34 @@ class LabelManager:
 
     def get_namespaces(self, namespace_key):
         if namespace_key in self.namespaces_and_labels:
-            return self.namespaces_and_labels[namespace_key]["namespace"], self.namespaces_and_labels[namespace_key]["assess_namespace"]
+            return self.namespaces_and_labels[namespace_key]["namespace"], self.namespaces_and_labels[namespace_key][
+                "assess_namespace"]
         else:
             raise KeyError(f"Namespace '{namespace_key}' not found in the namespaces_and_labels dictionary.")
+
+    def get_all_labels(self):
+        all_labels_with_prefix = list()
+        for namespace_key, namespace_info in self.namespaces_and_labels.items():
+            prefix = namespace_info['prefix']
+            labels = namespace_info['labels']
+            for label in labels.keys():
+                all_labels_with_prefix.append(f"{prefix}:{label}")
+        return all_labels_with_prefix
+
+    def create_excel_template(self, output_filename):
+        # Generate the labels list in 'prefix:label' format
+        labels_with_prefix = self.get_all_labels()
+
+        # Create a DataFrame with one column for 'Usecase' and others for each label
+        # Initially, all values except the column headers are empty
+        columns = ['Usecase'] + labels_with_prefix
+        df = pd.DataFrame(columns=columns)
+
+        # Optionally, add example data or leave it blank
+
+        # Save the DataFrame to an Excel file
+        df.to_excel(output_filename, index=False)
+        print(f"Excel template has been created: {output_filename}")
 
     def create_output_definition_file(self, output_filename):
         self.bind_custom_namespaces()
