@@ -11,8 +11,8 @@ import numpy as np
 from rdflib import Graph, URIRef, Literal, BNode
 from rdflib.namespace import NamespaceManager, SOSA, TIME, GEO, SDO, XSD, RDF
 
-from .defined_namespaces import DQAF, TERN
-from .label_manager import LabelManager
+from .defined_namespaces import DQAF, TERN, DirectoryStructure
+from .vocab_manager import VocabManager
 from .report_analysis import ReportAnalysis
 from typing import Optional
 from sklearn.cluster import KMeans
@@ -21,9 +21,10 @@ from sklearn.preprocessing import MinMaxScaler
 
 class RDFDataQualityAssessment:
     def __init__(self, g: Union[Path, Graph], report_file=None):
+        self.directory_structure=DirectoryStructure()
         self.report_file = report_file
         self.g = self.load_data(g)
-        self.label_manager = LabelManager()
+        self.label_manager = VocabManager()
         self.geo_checker = AustraliaGeographyChecker()
         self.report_analysis = ReportAnalysis(self.g, report_file)
         self.datum_checker = DatumChecker()
@@ -41,7 +42,7 @@ class RDFDataQualityAssessment:
     def assessments(self):
 
         # Add custom labels definition to the new graph and save it into new file name
-        self.label_manager.create_output_definition_file('Label_Definition.ttl')
+        self.label_manager.create_output_definition_file(os.path.join(self.directory_structure.result_base_path, 'Label_Definition.ttl'))
 
         # Bind custom labels
         self.label_manager.bind_custom_namespaces(self.g)
@@ -938,18 +939,18 @@ class GeoChecker:
 
 class AustraliaGeographyChecker:
     def __init__(self):
-        base_path = os.path.dirname(__file__)  # Gets the directory in which this script is located
-        map_base_path = os.path.join(base_path, 'map')  # Path to the 'map' directory
+        self.directory_structure=DirectoryStructure()
+
 
         self.states_shapefiles = {
-            "New_South_Wales": os.path.join(map_base_path, "new_south_wales", "cstnswcd_r.shp"),
-            "Victoria": os.path.join(map_base_path, "victoria", "cstviccd_r.shp"),
-            "Queensland": os.path.join(map_base_path, "queensland", "cstqldmd_r.shp"),
-            "Western_Australia": os.path.join(map_base_path, "western_australia", "cstwacd_r.shp"),
-            "South_Australia": os.path.join(map_base_path, "south_australia", "cstsacd_r.shp"),
-            "Tasmania": os.path.join(map_base_path, "tasmania", "csttascd_r.shp"),
-            "Northern_Territory": os.path.join(map_base_path, "northern_territory", "cstntcd_r.shp"),
-            "Australian_Capital_Territory": os.path.join(map_base_path, "australia",
+            "New_South_Wales": os.path.join(self.directory_structure.map_base_path, "new_south_wales", "cstnswcd_r.shp"),
+            "Victoria": os.path.join(self.directory_structure.map_base_path, "victoria", "cstviccd_r.shp"),
+            "Queensland": os.path.join(self.directory_structure.map_base_path, "queensland", "cstqldmd_r.shp"),
+            "Western_Australia": os.path.join(self.directory_structure.map_base_path, "western_australia", "cstwacd_r.shp"),
+            "South_Australia": os.path.join(self.directory_structure.map_base_path, "south_australia", "cstsacd_r.shp"),
+            "Tasmania": os.path.join(self.directory_structure.map_base_path, "tasmania", "csttascd_r.shp"),
+            "Northern_Territory": os.path.join(self.directory_structure.map_base_path, "northern_territory", "cstntcd_r.shp"),
+            "Australian_Capital_Territory": os.path.join(self.directory_structure.map_base_path, "australia",
                                                          "cstauscd_r.shp")
         }
 

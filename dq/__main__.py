@@ -1,6 +1,8 @@
 import argparse
 import sys
 from pathlib import Path
+import os
+
 # Inside __main__.py
 
 
@@ -9,10 +11,12 @@ from dq.assess import RDFDataQualityAssessment
 
 __version__ = "0.0.1"
 
-from dq.label_manager import LabelManager
+from dq.defined_namespaces import DirectoryStructure
+
+from dq.vocab_manager import VocabManager
 
 from dq.query_processor import RDFQueryProcessor
-from dq.usecase_manager import UseCaseManager
+from dq.usecase_manager import UseCaseManager, TurtleToExcelConverter
 
 
 def cli(args=None):
@@ -59,13 +63,17 @@ def main(args=None):
     print("Running BDR-DQ...")
     # Directly pass the data_to_assess to the class, which handles loading
     print(args.data_to_assess)
+    directory_structure = DirectoryStructure()
 
-    result_filename = "Results.ttl"
+    report_txt_file = os.path.join(directory_structure.report_base_path,
+                                   'Report.txt')
 
-    with open("Report.txt", "w") as report_file:
+    with open(report_txt_file, "w") as report_file:
         dq_assessment = RDFDataQualityAssessment(args.data_to_assess, report_file)
+        result_filename = os.path.join(dq_assessment.directory_structure.result_base_path, "Results.ttl")
 
-        all_labels = dq_assessment.label_manager.create_excel_template('usecase_template.xlsx')
+        all_labels = dq_assessment.label_manager.create_excel_template(
+            os.path.join(dq_assessment.directory_structure.template_base_path, 'usecase_template.xlsx'))
         print("All Labels:", all_labels)
 
         # Generate overall report
@@ -76,18 +84,16 @@ def main(args=None):
 
         # Output RTL Result file: Serialize the graph with the results
         dq_assessment.g.serialize(destination=result_filename, format="turtle")
+        use_case_definition_file = os.path.join(dq_assessment.directory_structure.use_case_base_path,
+                                                'usecase_definition.xlsx')
+        out_put_result_file = os.path.join(dq_assessment.directory_structure.result_base_path,
+                                           'Final_Usecase_Results.ttl')
+        output_excel_file = os.path.join(dq_assessment.directory_structure.result_base_path,
+                                         'output.xlsx')
 
-        # Example usage of the usecase manager
-        excel_file_path = 'usecase_definition.xlsx'
-        results_ttl_path = 'Results.ttl'
-        output_ttl_file_path = 'Final_Usecase_Results.ttl'
-
-        manager = UseCaseManager(excel_file_path, results_ttl_path)
-        manager.read_excel()
-        manager.load_rdf_results()
-        manager.create_use_case_matrix()
-        manager.assess_use_cases()
-        manager.write_results_to_ttl(output_ttl_file_path)
+        # Usage
+        converter = TurtleToExcelConverter(result_filename, use_case_definition_file, out_put_result_file)
+        converter.convert_to_excel(output_excel_file)
 
     print("Complete")
 

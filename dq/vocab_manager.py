@@ -3,8 +3,10 @@ from rdflib.namespace import SKOS, RDF
 import pandas as pd
 
 
-class LabelManager:
+class VocabManager:
     def __init__(self):
+
+# TODO: --Edit names....
 
         self.g = Graph()
         self.namespaces_and_labels = {
@@ -17,11 +19,12 @@ class LabelManager:
                     "outdated": "This label indicates that the observation date is more than 20 years ago, before 20 years, and may not reflect the current state or conditions.",
                 },
             },
-            "point_is_empty": {
+            "point_is_empty": { #location_complletness
                 "namespace": Namespace("http://example.com/vocab/point_is_empty/"),
                 "assess_namespace": URIRef("http://example.com/assess/point_is_empty/"),
                 "prefix": "point_is_empty",
                 "labels": {
+                    #completeness, ...
                     "empty": "This label is used to mark records where no geographic point data is provided, indicating an absence of specific latitude and longitude information in the geometry of the feature.",
                     "non_empty": "This label is applied to records that contain valid geographic point data, signifying the presence of specific latitude and longitude information in the feature's geometry.",
                 }
