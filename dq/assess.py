@@ -116,6 +116,7 @@ class RDFDataQualityAssessment:
                 self._add_assessment_result(s, assess_namespace, result_label)
 
         self.add_to_report('Date Recency Assessments', total_assessments, result_counts)
+        return total_assessments, result_counts
 
     def assess_datum_is_empty(self):
         total_assessments = 0
@@ -348,7 +349,7 @@ class RDFDataQualityAssessment:
                 if match:
                     long, lat = map(float, match.groups())
                     in_australia, state_name = self.geo_checker.is_point_in_australia_state(lat, long)
-                    assessment_result = state_name if in_australia else "Outside Australia"
+                    assessment_result = state_name if in_australia else "Outside_Australia"
                     if assessment_result not in results_count:
                         # If not found, add the state with an initial count of 0
                         results_count[assessment_result] = 0
@@ -362,6 +363,7 @@ class RDFDataQualityAssessment:
 
                     self._add_assessment_result(s, assess_namespace, result_label_uri)
         self.add_to_report(f'Point in Australia with States', total_assessments, results_count)
+        return total_assessments,results_count
 
     def __prefixed_name_to_uri(self, prefixed_name):
         """

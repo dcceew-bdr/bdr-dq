@@ -3,7 +3,7 @@ import rdflib
 from rdflib import URIRef, Literal, Namespace, BNode, SOSA, SDO, XSD
 from rdflib.namespace import RDF, RDFS, FOAF
 from .defined_namespaces import DQAF, TERN
-from vocab_manager import VocabManager
+from .vocab_manager import VocabManager
 from rdflib.namespace import DCTERMS
 
 import datetime

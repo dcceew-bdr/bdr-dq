@@ -40,9 +40,10 @@ def cli(args=None):
     )
 
     parser.add_argument(
-        "data_to_assess",
+    "--data-to-assess",
         type=Path,
         help="The ABIS-compliant RDF file, or an RDFLib graph object, to assess",
+        required=False  # Make this argument optional
     )
 
     return parser.parse_args(args)
@@ -59,6 +60,11 @@ def main(args=None):
     if args.shacl_validate:
         print("Validating input data...")
         # Add SHACL validation logic here if necessary
+
+    # Ensure that data_to_assess is provided before proceeding
+    if not hasattr(args, 'data_to_assess') or args.data_to_assess is None:
+        print("No data provided to assess.")
+        return
 
     print("Running BDR-DQ...")
     # Directly pass the data_to_assess to the class, which handles loading
