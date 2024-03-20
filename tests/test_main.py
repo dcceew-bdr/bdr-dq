@@ -93,17 +93,17 @@ def test_assess_date_recency():
     # Assertions to verify the outcome
     assert total_assessments == expected_total_assessments, f"Expected {expected_total_assessments} assessments, got {total_assessments}"
     assert result_counts[
-               'recent'] == expected_recent, f"Expected {expected_recent} recent dates, got {result_counts['recent']}"
+               'recent_20_years'] == expected_recent, f"Expected {expected_recent} recent_20_years dates, got {result_counts['recent_20_years']}"
     assert result_counts[
-               'outdated'] == expected_outdated, f"Expected {expected_outdated} outdated dates, got {result_counts['outdated']}"
+               'outdated_20_years'] == expected_outdated, f"Expected {expected_outdated} outdated_20_years dates, got {result_counts['outdated_20_years']}"
 
 
-def test_assess_point_in_australia_state():
+def test_assess_coordinate_in_australia_state():
     file_to_assess = os.path.join(os.path.dirname(__file__), 'data\chunk_1.ttl')
     g = Graph().parse(str(file_to_assess))
 
     # Actual results of the assessment
-    total_assessments, result_counts = RDFDataQualityAssessment(g, None).assess_point_in_australia_state()
+    total_assessments, result_counts = RDFDataQualityAssessment(g, None).assess_coordinate_in_australia_state()
 
     expected_total_assessments = 100
 

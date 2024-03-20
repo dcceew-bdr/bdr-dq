@@ -78,7 +78,7 @@ def main(args=None):
         dq_assessment = RDFDataQualityAssessment(args.data_to_assess, report_file)
         result_filename = os.path.join(dq_assessment.directory_structure.result_base_path, "Results.ttl")
 
-        all_labels = dq_assessment.label_manager.create_excel_template(
+        all_labels = dq_assessment.vocab_manager.create_excel_template(
             os.path.join(dq_assessment.directory_structure.template_base_path, 'usecase_template.xlsx'))
         print("All Labels:", all_labels)
 

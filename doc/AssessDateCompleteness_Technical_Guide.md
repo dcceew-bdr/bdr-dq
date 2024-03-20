@@ -66,7 +66,7 @@ rdf_data = "path/to/your/data.ttl"
 dq_assessment = RDFDataQualityAssessment(rdf_data)
 
 # Perform the date emptiness assessment
-dq_assessment.assess_date_is_empty()
+dq_assessment.assess_date_completeness()
 
 # Access and review the results
 print(dq_assessment.report_analysis)

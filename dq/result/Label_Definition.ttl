@@ -1,68 +1,108 @@
-@prefix australia_state: <http://example.com/vocab/australia_state/> .
+@prefix coordinate_completeness: <http://example.com/vocab/coordinate_completeness/> .
+@prefix coordinate_in_australia_state: <http://example.com/vocab/coordinate_in_australia_state/> .
+@prefix coordinate_outlier_irq: <http://example.com/vocab/coordinate_outlier_irq/> .
+@prefix coordinate_outlier_zscore: <http://example.com/vocab/coordinate_outlier_zscore/> .
 @prefix coordinate_precision: <http://example.com/vocab/coordinate_precision/> .
+@prefix coordinate_unusual: <http://example.com/vocab/coordinate_unusual/> .
+@prefix date_completeness: <http://example.com/vocab/date_completeness/> .
 @prefix date_format_validation: <http://example.com/vocab/date_format_validation/> .
-@prefix date_is_empty: <http://example.com/vocab/date_is_empty/> .
 @prefix date_outlier_irq: <http://example.com/vocab/date_outlier_irq/> .
 @prefix date_outlier_kmeans: <http://example.com/vocab/date_outlier_kmeans/> .
 @prefix date_recency: <http://example.com/vocab/date_recency/> .
-@prefix datum_is_empty: <http://example.com/vocab/datum_is_empty/> .
+@prefix datum_completeness: <http://example.com/vocab/datum_completeness/> .
 @prefix datum_type: <http://example.com/vocab/datum_type/> .
 @prefix datum_validation: <http://example.com/vocab/datum_validation/> .
-@prefix point_is_empty: <http://example.com/vocab/point_is_empty/> .
-@prefix point_outlier_irq: <http://example.com/vocab/point_outlier_irq/> .
-@prefix point_outlier_zscore: <http://example.com/vocab/point_outlier_zscore/> .
-@prefix point_unusual: <http://example.com/vocab/point_unusual/> .
-@prefix scientific_name_is_empty: <http://example.com/vocab/scientific_name_is_empty/> .
+@prefix scientific_name_completeness: <http://example.com/vocab/scientific_name_completeness/> .
 @prefix scientific_name_validation: <http://example.com/vocab/scientific_name_validation/> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 
-australia_state:Australian_Capital_Territory a skos:Concept ;
-    skos:definition "Indicates that the point is in the Australian Capital Territory, Australia's federal district, located in the southeast of the country." ;
+coordinate_completeness:empty a skos:Concept ;
+    skos:definition "This label is used to mark records where no geographic coordinate data is provided, indicating an absence of specific latitude and longitude information in the geometry of the feature." ;
+    skos:prefLabel "Empty" .
+
+coordinate_completeness:non_empty a skos:Concept ;
+    skos:definition "This label is applied to records that contain valid geographic coordinate data, signifying the presence of specific latitude and longitude information in the feature's geometry." ;
+    skos:prefLabel "Non_empty" .
+
+coordinate_in_australia_state:Australian_Capital_Territory a skos:Concept ;
+    skos:definition "Indicates that the coordinate is in the Australian Capital Territory, Australia's federal district, located in the southeast of the country." ;
     skos:prefLabel "Australian_capital_territory" .
 
-australia_state:New_South_Wales a skos:Concept ;
-    skos:definition "Indicates that the point is in New South Wales, a state on the east coast of Australia." ;
+coordinate_in_australia_state:New_South_Wales a skos:Concept ;
+    skos:definition "Indicates that the coordinate is in New South Wales, a state on the east coast of Australia." ;
     skos:prefLabel "New_south_wales" .
 
-australia_state:Northern_Territory a skos:Concept ;
-    skos:definition "Indicates that the point is in the Northern Territory, a federal Australian territory in the center and central northern regions." ;
+coordinate_in_australia_state:Northern_Territory a skos:Concept ;
+    skos:definition "Indicates that the coordinate is in the Northern Territory, a federal Australian territory in the center and central northern regions." ;
     skos:prefLabel "Northern_territory" .
 
-australia_state:Outside_Australia a skos:Concept ;
-    skos:definition "Indicates that the point is outside the geographical bounds of Australia." ;
+coordinate_in_australia_state:Outside_Australia a skos:Concept ;
+    skos:definition "Indicates that the coordinate is outside the geographical bounds of Australia." ;
     skos:prefLabel "Outside_australia" .
 
-australia_state:Queensland a skos:Concept ;
-    skos:definition "Indicates that the point is in Queensland, a state in northeast Australia." ;
+coordinate_in_australia_state:Queensland a skos:Concept ;
+    skos:definition "Indicates that the coordinate is in Queensland, a state in northeast Australia." ;
     skos:prefLabel "Queensland" .
 
-australia_state:South_Australia a skos:Concept ;
-    skos:definition "Indicates that the point is in South Australia, a state in the southern central part of Australia." ;
+coordinate_in_australia_state:South_Australia a skos:Concept ;
+    skos:definition "Indicates that the coordinate is in South Australia, a state in the southern central part of Australia." ;
     skos:prefLabel "South_australia" .
 
-australia_state:Tasmania a skos:Concept ;
-    skos:definition "Indicates that the point is in Tasmania, an island state off the southern coast of Australia." ;
+coordinate_in_australia_state:Tasmania a skos:Concept ;
+    skos:definition "Indicates that the coordinate is in Tasmania, an island state off the southern coast of Australia." ;
     skos:prefLabel "Tasmania" .
 
-australia_state:Victoria a skos:Concept ;
-    skos:definition "Indicates that the point is in Victoria, a state in southeast Australia." ;
+coordinate_in_australia_state:Victoria a skos:Concept ;
+    skos:definition "Indicates that the coordinate is in Victoria, a state in southeast Australia." ;
     skos:prefLabel "Victoria" .
 
-australia_state:Western_Australia a skos:Concept ;
-    skos:definition "Indicates that the point is in Western Australia, a state occupying the entire western third of Australia." ;
+coordinate_in_australia_state:Western_Australia a skos:Concept ;
+    skos:definition "Indicates that the coordinate is in Western Australia, a state occupying the entire western third of Australia." ;
     skos:prefLabel "Western_australia" .
 
+coordinate_outlier_irq:normal_coordinate a skos:Concept ;
+    skos:definition "This label indicates that the observation coordinate falls within the typical range, suggesting it is not an anomaly. (Based on IRQ Method)" ;
+    skos:prefLabel "Normal_coordinate" .
+
+coordinate_outlier_irq:outlier_coordinate a skos:Concept ;
+    skos:definition "This label indicates that the observation coordinate significantly deviates from the typical range, suggesting it may be an anomaly. (Based on IRQ Method)" ;
+    skos:prefLabel "Outlier_coordinate" .
+
+coordinate_outlier_zscore:normal_coordinate a skos:Concept ;
+    skos:definition "This label indicates that the observation coordinate falls within the typical range, suggesting it is not an anomaly. (Based on Z-Score Method)" ;
+    skos:prefLabel "Normal_coordinate" .
+
+coordinate_outlier_zscore:outlier_coordinate a skos:Concept ;
+    skos:definition "This label indicates that the observation coordinate significantly deviates from the typical range, suggesting it may be an anomaly. (Based on Z-Score Method)" ;
+    skos:prefLabel "Outlier_coordinate" .
+
 coordinate_precision:High a skos:Concept ;
-    skos:definition "Indicates high precision in coordinate values if latitude or longitude of the location point has more than 4 decimal point." ;
+    skos:definition "Indicates high precision in coordinate values if latitude and longitude of the location's coordinate has more than 4 decimal points." ;
     skos:prefLabel "High" .
 
 coordinate_precision:Low a skos:Concept ;
-    skos:definition "Indicates low precision in coordinate values if latitude or longitude of the location point has less than 2 decimal point." ;
+    skos:definition "Indicates low precision in coordinate values if either or both of the latitude or longitude of the location's coordinate has less than 2 decimal points." ;
     skos:prefLabel "Low" .
 
 coordinate_precision:Medium a skos:Concept ;
-    skos:definition "Indicates medium precision in coordinate values if latitude or longitude of the location point has between 2 and 4 decimal point." ;
+    skos:definition "Indicates medium precision in coordinate values if either or both of the latitude or longitude of the location's coordinate has between 2 and 4 decimal points." ;
     skos:prefLabel "Medium" .
+
+coordinate_unusual:unusual a skos:Concept ;
+    skos:definition "This label is applied to records where either latitude or longitude (or both) show repeating patterns in their decimal parts, suggesting that the geographic coordinate data may be inaccurate, fabricated, or otherwise atypical." ;
+    skos:prefLabel "Unusual" .
+
+coordinate_unusual:usual a skos:Concept ;
+    skos:definition "This label is assigned to records where latitude and longitude values do not exhibit any repeating patterns in their decimal parts, indicating that the geographic coordinate data is considered normal and without abnormalities or fabrication." ;
+    skos:prefLabel "Usual" .
+
+date_completeness:empty a skos:Concept ;
+    skos:definition "Indicates that the date is empty." ;
+    skos:prefLabel "Empty" .
+
+date_completeness:non_empty a skos:Concept ;
+    skos:definition "Indicates that the date is not empty." ;
+    skos:prefLabel "Non_empty" .
 
 date_format_validation:invalid a skos:Concept ;
     skos:definition "Indicates that the date format is invalid or unrecognized." ;
@@ -71,14 +111,6 @@ date_format_validation:invalid a skos:Concept ;
 date_format_validation:valid a skos:Concept ;
     skos:definition "Indicates that the date format is valid and recognized." ;
     skos:prefLabel "Valid" .
-
-date_is_empty:empty a skos:Concept ;
-    skos:definition "Indicates that the date is empty." ;
-    skos:prefLabel "Empty" .
-
-date_is_empty:non_empty a skos:Concept ;
-    skos:definition "Indicates that the date is not empty." ;
-    skos:prefLabel "Non_empty" .
 
 date_outlier_irq:normal_date a skos:Concept ;
     skos:definition "This label indicates that the observation date falls within the typical range, suggesting it is not an anomaly. (Based on IRQ Method)" ;
@@ -96,19 +128,19 @@ date_outlier_kmeans:outlier_date a skos:Concept ;
     skos:definition "This label is used to tag dates that are determined to be significantly different from the majority, based on the KMeans clustering algorithm. Such dates fall into the smallest cluster or are far from the centroids of their clusters, indicating they deviate notably from typical date values." ;
     skos:prefLabel "Outlier_date" .
 
-date_recency:outdated a skos:Concept ;
+date_recency:outdated_20_years a skos:Concept ;
     skos:definition "This label indicates that the observation date is more than 20 years ago, before 20 years, and may not reflect the current state or conditions." ;
-    skos:prefLabel "Outdated" .
+    skos:prefLabel "Outdated_20_years" .
 
-date_recency:recent a skos:Concept ;
+date_recency:recent_20_years a skos:Concept ;
     skos:definition "This label indicates that the observation date is within the last 20 years, making it more relevant to current contexts and studies." ;
-    skos:prefLabel "Recent" .
+    skos:prefLabel "Recent_20_years" .
 
-datum_is_empty:empty a skos:Concept ;
+datum_completeness:empty a skos:Concept ;
     skos:definition "Indicates that the datum link reference is empty." ;
     skos:prefLabel "Empty" .
 
-datum_is_empty:not_empty a skos:Concept ;
+datum_completeness:not_empty a skos:Concept ;
     skos:definition "Indicates that the datum link reference is not empty." ;
     skos:prefLabel "Not_empty" .
 
@@ -140,43 +172,11 @@ datum_validation:valid a skos:Concept ;
     skos:definition "Indicates that the datum link reference is valid and recognized." ;
     skos:prefLabel "Valid" .
 
-point_is_empty:empty a skos:Concept ;
-    skos:definition "This label is used to mark records where no geographic point data is provided, indicating an absence of specific latitude and longitude information in the geometry of the feature." ;
-    skos:prefLabel "Empty" .
-
-point_is_empty:non_empty a skos:Concept ;
-    skos:definition "This label is applied to records that contain valid geographic point data, signifying the presence of specific latitude and longitude information in the feature's geometry." ;
-    skos:prefLabel "Non_empty" .
-
-point_outlier_irq:normal_point a skos:Concept ;
-    skos:definition "This label indicates that the observation point falls within the typical range, suggesting it is not an anomaly. (Based on IRQ Method)" ;
-    skos:prefLabel "Normal_point" .
-
-point_outlier_irq:outlier_point a skos:Concept ;
-    skos:definition "This label indicates that the observation point significantly deviates from the typical range, suggesting it may be an anomaly. (Based on IRQ Method)" ;
-    skos:prefLabel "Outlier_point" .
-
-point_outlier_zscore:normal_point a skos:Concept ;
-    skos:definition "This label indicates that the observation point falls within the typical range, suggesting it is not an anomaly. (Based on Z-Score Method)" ;
-    skos:prefLabel "Normal_point" .
-
-point_outlier_zscore:outlier_point a skos:Concept ;
-    skos:definition "This label indicates that the observation point significantly deviates from the typical range, suggesting it may be an anomaly. (Based on Z-Score Method)" ;
-    skos:prefLabel "Outlier_point" .
-
-point_unusual:unusual a skos:Concept ;
-    skos:definition "This label is applied to records where either latitude or longitude (or both) show repeating patterns in their decimal parts, suggesting that the geographic point data may be inaccurate, fabricated, or otherwise atypical." ;
-    skos:prefLabel "Unusual" .
-
-point_unusual:usual a skos:Concept ;
-    skos:definition "This label is assigned to records where latitude and longitude values do not exhibit any repeating patterns in their decimal parts, indicating that the geographic point data is considered normal and without abnormalities." ;
-    skos:prefLabel "Usual" .
-
-scientific_name_is_empty:empty_name a skos:Concept ;
+scientific_name_completeness:empty_name a skos:Concept ;
     skos:definition "This label is used to mark records where the scientific name field is missing or contains no data, indicating a lack of specified scientific identification for the observation or entity." ;
     skos:prefLabel "Empty_name" .
 
-scientific_name_is_empty:non_empty_name a skos:Concept ;
+scientific_name_completeness:non_empty_name a skos:Concept ;
     skos:definition "This label is applied to records that have a valid scientific name provided, indicating the presence of specified scientific identification for the observation or entity." ;
     skos:prefLabel "Non_empty_name" .
 

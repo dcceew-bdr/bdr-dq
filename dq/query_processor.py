@@ -47,22 +47,3 @@ class RDFQueryProcessor:
         """
         for row in results:
             print(row.subject)
-
-
-#Usage :
- #print('Query Execution Test...')
-        # Initialize the RDF query processor
- #       rdf_processor = RDFQueryProcessor(result_filename)
- #       label_manager=LabelManager()
-
-        # Replace these URIs with the actual URIs for out_p and aus_st in your RDF data
- #       out_p_uri =  label_manager.get_namespace("outlier_point") #"http://example.org/out_p/"
- #       aus_st_uri = label_manager.get_namespace("australia_state") #"http://example.org/aus_st/"
- #       print(out_p_uri)
- #       print(aus_st_uri)
-
-        # Execute the query
- #       results = rdf_processor.execute_query(out_p_uri, aus_st_uri)
-
-        # Print the results
-#        rdf_processor.print_results(results)
