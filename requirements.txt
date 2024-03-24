@@ -5,5 +5,7 @@ numpy
 pandas
 geopandas
 shapely
+scikit-learn
+openpyxl
 
 
