@@ -96,6 +96,8 @@ def main(args=None):
                                            'Final_Usecase_Results.ttl')
         output_excel_file = os.path.join(dq_assessment.directory_structure.result_base_path,
                                          'output.xlsx')
+        dq_assessment.result_matrix_df.to_excel(os.path.join(dq_assessment.directory_structure.result_base_path,
+                                         'output1.xlsx'),sheet_name="matrix")
 
         # Usage
         converter = TurtleToExcelConverter(result_filename, use_case_definition_file, out_put_result_file)

@@ -1,13 +1,16 @@
+import datetime
+from datetime import datetime
+
 import pandas as pd
 import rdflib
 from rdflib import URIRef, Literal, Namespace, BNode, SOSA, SDO, XSD
-from rdflib.namespace import RDF, RDFS, FOAF
-from .defined_namespaces import DQAF, TERN
-from .vocab_manager import VocabManager
 from rdflib.namespace import DCTERMS
+from rdflib.namespace import RDF, RDFS
 
-import datetime
-from datetime import datetime
+from .defined_namespaces import DQAF
+from .vocab_manager import VocabManager
+
+
 def split_uri_into_prefix_and_label(graph, uri):
     """
     Splits a given URI into a prefix and a label based on the namespaces registered in the graph.
@@ -36,10 +39,10 @@ def split_uri_into_prefix_and_label(graph, uri):
     if longest_match:
         # Extract the label part of the URI by removing the namespace
         label = str(uri)[len(longest_match):]
-        return (matched_prefix, label)
+        return matched_prefix, label
     else:
         # If there's no matching namespace, return None for the prefix
-        return (None, str(uri))
+        return None, str(uri)
 
 
 def get_prefix_for_uri(graph, uri):
@@ -74,10 +77,6 @@ class UseCaseManager:
         self.label_manager = VocabManager()
         self.use_case_matrix = {}
 
-    def read_excel(self):
-        """Reads the Excel file with use case definitions into a DataFrame."""
-        self.use_cases_df = pd.read_excel(self.excel_file,sheet_name="Use case template")
-
     def load_rdf_results(self):
         """Loads the RDF data from the .ttl file."""
         self.results_graph.parse(self.results_ttl, format="turtle")
@@ -86,11 +85,13 @@ class UseCaseManager:
         """Creates a matrix based on the use case definitions and labels."""
         # No need to fetch all labels if we directly use the ones defined in the Excel file
         # Reading labels (excluding the first column which is assumed to be use case names)
-        #labels = self.use_cases_df.columns[1:]
-        use_cases=self.use_cases_df.columns[1:]
-        self.use_case_matrix ={}
+        # labels = self.use_cases_df.columns[1:]
+        # Reads the Excel file with use case definitions into a DataFrame.
+        self.use_cases_df = pd.read_excel(self.excel_file, sheet_name="Use case template")
+        use_cases = self.use_cases_df.columns[1:]
+        self.use_case_matrix = {}
         for use_case in use_cases:
-            self.use_case_matrix[use_case]= {}
+            self.use_case_matrix[use_case] = {}
         # Initialize the use case matrix with conditions from the Excel file
 
         for index, row in self.use_cases_df.iterrows():
@@ -99,15 +100,15 @@ class UseCaseManager:
                 # Set to True if the cell contains 1, False otherwise (including 0 or empty)
                 self.use_case_matrix[use_case][label] = True if row[use_case] == 1 else False
         print("Use Case Matrix")
+        filtered_dict = {}
+        for outer_key, inner_dict in self.use_case_matrix.items():
+            # Filter the inner dictionary to keep only True values
+            true_values_dict = {key: value for key, value in inner_dict.items() if value is True}
+            if true_values_dict:
+                filtered_dict[outer_key] = true_values_dict
+        print(filtered_dict)
+
         print(self.use_case_matrix)
-
-
-    def check_label_in_results(self, label):
-        """Checks if a label is present in the RDF results."""
-        for s, p, o in self.results_graph:
-            if str(p).endswith(label):  # Simplistic check; might need refinement based on actual RDF structure
-                return True
-        return False
 
     def write_results_to_ttl(self, output_ttl_file):
         """Writes the final use case results to a new .ttl file."""
@@ -135,7 +136,7 @@ class TurtleToExcelConverter:
         self.output_result_file = output_result_file
 
         self.manager = UseCaseManager(self.use_case_definition_file, self.input_result_file)
-        self.manager.read_excel()
+
         self.manager.load_rdf_results()
         self.manager.create_use_case_matrix()
 
@@ -221,7 +222,8 @@ class TurtleToExcelConverter:
 
         return df
 
-    def extract_record_number(self, record_uri):
+    @staticmethod
+    def extract_record_number(record_uri):
         try:
             return int(record_uri.split('/')[-1])
         except ValueError:
@@ -239,7 +241,7 @@ class TurtleToExcelConverter:
                 for condition, expected_value in conditions.items():
                     if expected_value:
                         column_name, condition_value = condition.split(":")
-                        # Check the values of a specific label in lower case 
+                        # Check the values of a specific label in lower case
                         actual_value = row[column_name].lower() == condition_value.lower()
 
                         # If the condition does not match the expected outcome, the use case is not satisfied
@@ -249,7 +251,7 @@ class TurtleToExcelConverter:
 
                 # Append the result for this record
                 use_case_results.append(use_case_satisfied)
-                self._add_use_case_assessment_result(use_case,row['record_id'], use_case_satisfied)
+                self._add_use_case_assessment_result(use_case, row['record_id'], use_case_satisfied)
 
             # Add the results as a new column to the DataFrame
             df[use_case] = use_case_results
@@ -258,7 +260,6 @@ class TurtleToExcelConverter:
 
         self.manager.results_graph.serialize(destination=self.output_result_file, format="turtle")
 
-
         return df
 
     def convert_to_excel(self, output_file_path):
@@ -266,8 +267,8 @@ class TurtleToExcelConverter:
         df.to_excel(output_file_path, index=False, engine='openpyxl')
 
     def _add_use_case_assessment_result(self, use_case, record_id, value, assessment_date=None):
-        subject=URIRef(f"http://example.com/use_case_assessment/{use_case}/{record_id}")
-        assessment_type=URIRef(f"http://example.com/use_case_assessment/{use_case}/")
+        subject = URIRef(f"http://example.com/use_case_assessment/{use_case}/{record_id}")
+        assessment_type = URIRef(f"http://example.com/use_case_assessment/{use_case}/")
         result_bn = BNode()
         self.manager.results_graph.add((subject, DQAF.hasDQAFResult, result_bn))
         self.manager.results_graph.add((result_bn, SOSA.observedProperty, assessment_type))

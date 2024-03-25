@@ -8,7 +8,7 @@ class VocabManager:
 
         self.g = Graph()
         self.namespaces_and_labels = {
-             "coordinate_precision": {
+            "coordinate_precision": {
                 "category": "coordinate",
                 "input_field_(RDF)": "geo:hasGeometry",
                 "simple_rule_definition": {
@@ -16,7 +16,7 @@ class VocabManager:
                     "Medium": "If either the latitude or longitude values of the location coordinate in the 'geo:hasGeometry' field have between 2 and 4 decimal places, label the record as 'Medium'. This denotes a moderate level of precision in the coordinate values, pinpointing a more specific location but not with the highest degree of accuracy.",
                     "High": "If either the latitude or longitude values of the location coordinate in the 'geo:hasGeometry' field have more than 4 decimal places, label the record as 'High'. This signifies a high level of precision in the coordinate values, indicating a very specific location with detailed geographical accuracy.",
                 },
-                 "namespace": Namespace("http://example.com/vocab/coordinate_precision/"),
+                "namespace": Namespace("http://example.com/vocab/coordinate_precision/"),
                 "assess_namespace": URIRef("http://example.com/assess/coordinate_precision/"),
                 "prefix": "coordinate_precision",
                 "labels": {
@@ -287,12 +287,40 @@ class VocabManager:
             },
         }
 
-    def get_namespaces(self, namespace_key):
+    def init_assessment(self, namespace_key):
         if namespace_key in self.namespaces_and_labels:
+            total_assessments = 0
+
+            result_counts = {}  # Initialize result counts for True and False
+            for label in self.namespaces_and_labels[namespace_key]["labels"]:
+                result_counts[label] = 0
+
             return self.namespaces_and_labels[namespace_key]["namespace"], self.namespaces_and_labels[namespace_key][
-                "assess_namespace"]
+                "assess_namespace"], result_counts, total_assessments
         else:
             raise KeyError(f"Namespace '{namespace_key}' not found in the namespaces_and_labels dictionary.")
+
+    def get_key_by_namespace(self, namespace):
+        """
+        Retrieve the key for a given namespace.
+
+        Parameters:
+        - namespace (str): The namespace to search for.
+
+        Returns:
+        - key (str): The key corresponding to the given namespace.
+
+        Raises:
+        - KeyError: If the namespace is not found.
+        """
+        # Iterate through the namespaces_and_labels dictionary
+        for key, value in self.namespaces_and_labels.items():
+            # Check if the namespace matches the one we're looking for
+            if value["namespace"] == namespace:
+                return key  # Return the key corresponding to the found namespace
+
+        # If the namespace wasn't found in any entry, raise an error
+        raise KeyError(f"Namespace '{namespace}' not found in the namespaces_and_labels dictionary.")
 
     def get_all_labels(self):
         all_labels_with_prefix = list()
@@ -317,7 +345,7 @@ class VocabManager:
         for namespace_key, namespace_info in self.namespaces_and_labels.items():
             prefix = namespace_info['prefix']
             labels = namespace_info['labels']
-            simple_rule_definition=namespace_info['simple_rule_definition']
+            simple_rule_definition = namespace_info['simple_rule_definition']
             for label in labels.keys():
                 label_definitions['Data quality assertion'].append(f"{prefix}:{label}")
                 label_definitions['Category'].append(f"{namespace_info['category']}")
@@ -335,7 +363,7 @@ class VocabManager:
         # Create a DataFrame with one column for 'Use case' and others for each label
         # Initially, all values except the column headers are empty
         # Create a DataFrame for the 'use_case' sheet
-        uu=list()
+        uu = list()
         for i in range(len(labels_with_prefix)):
             uu.append('')
         assessments_use_case = {'Data quality assertion': labels_with_prefix, 'New Use Case Name': uu}

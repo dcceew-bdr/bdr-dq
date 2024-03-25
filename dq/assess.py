@@ -1,27 +1,29 @@
 import datetime
+import os
+import re
 from datetime import datetime
 from pathlib import Path
-from typing import Union
-import os
-import geopandas as gpd
-from shapely.geometry import Point
-import re
-
-import numpy as np
-from rdflib import Graph, URIRef, Literal, BNode
-from rdflib.namespace import NamespaceManager, SOSA, TIME, GEO, SDO, XSD, RDF
-
-from .defined_namespaces import DQAF, TERN, DirectoryStructure
-from .vocab_manager import VocabManager
-from .report_analysis import ReportAnalysis
 from typing import Optional
+from typing import Union
+
+import geopandas as gpd
+import numpy as np
+import pandas as pd
+from rdflib import Graph, URIRef, Literal, BNode
+from rdflib.namespace import NamespaceManager, SOSA, TIME, GEO, SDO, XSD, RDF, RDFS
+from shapely.geometry import Point
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import MinMaxScaler
+
+from .defined_namespaces import DQAF, TERN, DirectoryStructure
+from .report_analysis import ReportAnalysis
+from .usecase_manager import TurtleToExcelConverter
+from .vocab_manager import VocabManager
 
 
 class RDFDataQualityAssessment:
     def __init__(self, g: Union[Path, Graph], report_file=None):
-        self.directory_structure=DirectoryStructure()
+        self.directory_structure = DirectoryStructure()
         self.report_file = report_file
         self.g = self.load_data(g)
         self.vocab_manager = VocabManager()
@@ -29,6 +31,15 @@ class RDFDataQualityAssessment:
         self.report_analysis = ReportAnalysis(self.g, report_file)
         self.datum_checker = DatumChecker()
         self.vocab_manager.bind_custom_namespaces(self.g)
+        # Initialize an empty DataFrame with no columns to store my data
+        columns = ['record_id']
+        assess_labels = self.vocab_manager.get_all_labels()
+        for lbl in assess_labels:
+            columns.append(lbl)
+
+        self.result_matrix_df = pd.DataFrame(columns=columns)
+        self.result_matrix_df.set_index('record_id', inplace=True, drop=False)
+        print(self.result_matrix_df)
 
     @staticmethod
     def load_data(path_or_graph: Union[Path, Graph]) -> Graph:
@@ -42,7 +53,8 @@ class RDFDataQualityAssessment:
     def assessments(self):
 
         # Add custom labels definition to the new graph and save it into new file name
-        self.vocab_manager.create_output_definition_file(os.path.join(self.directory_structure.result_base_path, 'Label_Definition.ttl'))
+        self.vocab_manager.create_output_definition_file(
+            os.path.join(self.directory_structure.result_base_path, 'Label_Definition.ttl'))
 
         # Bind custom labels
         self.vocab_manager.bind_custom_namespaces(self.g)
@@ -68,13 +80,14 @@ class RDFDataQualityAssessment:
         # TODO: Add other assessments methods
 
     def assess_date_completeness(self):
-        total_assessments = 0
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("date_completeness")
-        result_counts = {"non_empty": 0, "empty": 0}  # Initialize result counts for True and False
+        assessment_name = "date_completeness"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         for s, _, o in self.g.triples((None, SOSA.phenomenonTime, None)):
-            # Check if the subject starts with the specified URI
-            if UriChecker.check_base_uri(str(s), UriChecker.OBSERVATION):
+
+            if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
                 date_is_not_empty = False
                 for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
                     if DateChecker.is_date_not_empty(date_literal):
@@ -86,20 +99,22 @@ class RDFDataQualityAssessment:
 
                 total_assessments += 1
                 # Use  labels for the result
-                result_label = namespace["non_empty"] if date_is_not_empty else namespace["empty"]
+                result_label = "non_empty" if date_is_not_empty else "empty"
 
-                self._add_assessment_result(s, assess_namespace, result_label)
+                self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Date Completeness', total_assessments, result_counts)
 
     def assess_date_recency(self):
-        total_assessments = 0
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("date_recency")
-        result_counts = {"recent_20_years": 0, "outdated_20_years": 0}  # Initialize result counts for True and False
+        assessment_name = "date_recency"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         for s, _, o in self.g.triples((None, SOSA.phenomenonTime, None)):
-            # Check if the subject starts with the specified URI
-            if UriChecker.check_base_uri(str(s), UriChecker.OBSERVATION):
+
+            if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
                 date_within_range = False
                 for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
                     if DateChecker.is_date_recent(date_literal):
@@ -111,17 +126,19 @@ class RDFDataQualityAssessment:
 
                 total_assessments += 1
                 # Use  labels for the result
-                result_label = namespace["recent_20_years"] if date_within_range else namespace["outdated_20_years"]
+                result_label = "recent_20_years" if date_within_range else "outdated_20_years"
 
-                self._add_assessment_result(s, assess_namespace, result_label)
+                self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Date Recency', total_assessments, result_counts)
         return total_assessments, result_counts
 
     def assess_datum_completeness(self):
-        total_assessments = 0
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("datum_completeness")
-        quality_counts = {"empty": 0, "not_empty": 0}
+        assessment_name = "datum_completeness"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
             geometry = next(self.g.objects(o, GEO.asWKT), None)
@@ -130,22 +147,23 @@ class RDFDataQualityAssessment:
                 datum_is_empty = self.datum_checker.is_not_empty(str(geometry))
 
                 if datum_is_empty:
-                    quality_label = "not_empty"
+                    result_label = "not_empty"
                 else:
-                    quality_label = "empty"
+                    result_label = "empty"
 
-                quality_counts[quality_label] += 1
+                result_counts[result_label] += 1
                 total_assessments += 1
 
-                quality_label_uri = namespace[quality_label]  # Convert label to URI
-                self._add_assessment_result(s, assess_namespace, quality_label_uri)
+                self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
-        self.add_to_report('Assess Datum Completeness', total_assessments, quality_counts)
+        self.add_to_report('Assess Datum Completeness', total_assessments, result_counts)
 
     def assess_datum_validation(self):
-        total_assessments = 0
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("datum_validation")
-        quality_counts = {"Valid": 0, "Invalid": 0}
+        assessment_name = "datum_validation"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
             geometry = next(self.g.objects(o, GEO.asWKT), None)
@@ -156,22 +174,23 @@ class RDFDataQualityAssessment:
                 datum_metadata = self.datum_checker.get_datum_metadata(epsg_link)
 
                 if datum_metadata:
-                    quality_label = "Valid"
+                    result_label = "valid"
                 else:
-                    quality_label = "Invalid"
+                    result_label = "invalid"
 
-                quality_counts[quality_label] += 1
+                result_counts[result_label] += 1
                 total_assessments += 1
 
-                quality_label_uri = namespace[quality_label]  # Convert label to URI
-                self._add_assessment_result(s, assess_namespace, quality_label_uri)
+                self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
-        self.add_to_report('Assess Datum Validation', total_assessments, quality_counts)
+        self.add_to_report('Assess Datum Validation', total_assessments, result_counts)
 
     def assess_datum_type(self):
-        total_assessments = 0
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("datum_type")
-        quality_counts = {"AGD84": 0, "GDA2020": 0, "GDA94": 0, "WGS84": 0, "None": 0}
+        assessment_name = "datum_type"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
             geometry = next(self.g.objects(o, GEO.asWKT), None)
@@ -182,80 +201,67 @@ class RDFDataQualityAssessment:
                 datum_metadata = self.datum_checker.get_datum_metadata(epsg_link)
 
                 if datum_metadata:
-                    quality_label = datum_metadata["name"]
+                    result_label = datum_metadata["name"]
                 else:
-                    quality_label = "None"
+                    result_label = "None"
 
-                quality_counts[quality_label] += 1
+                result_counts[result_label] += 1
                 total_assessments += 1
 
-                quality_label_uri = namespace[quality_label]  # Convert label to URI
-                self._add_assessment_result(s, assess_namespace, quality_label_uri)
+                self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
-        self.add_to_report('Assess Datum Type', total_assessments, quality_counts)
+        self.add_to_report('Assess Datum Type', total_assessments, result_counts)
 
     def assess_coordinate_precision(self):
-        total_assessments = 0
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("coordinate_precision")
-        quality_counts = {"Low": 0, "Medium": 0, "High": 0}  # Use the new labels
+        assessment_name = "coordinate_precision"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
             geometry = next(self.g.objects(o, GEO.asWKT), None)
 
             if geometry:
-                match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
-                if match:
-                    longitude, latitude = match.groups()
-                    precision_label = GeoChecker.assess_coordinate_precision(longitude, latitude)
+                result_label = GeoChecker.extract_and_assess_coordinate_precision(geometry)
 
-                    quality_counts[
-                        precision_label] += 1  # Increment by 1 to account for both lat and long assessments together
-
+                if result_label:
+                    result_counts[result_label] += 1
                     total_assessments += 1
+                    self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
-                    precision_label_uri = namespace[precision_label.lower()]  # Convert label to URI
-
-                    # Add assessment results linking to the SKOS concepts
-                    self._add_assessment_result(s, assess_namespace, precision_label_uri)
-
-        self.add_to_report('Assess Coordinate Precision', total_assessments, quality_counts)
+        self.add_to_report('Assess Coordinate Precision', total_assessments, result_counts)
 
     def assess_coordinate_completeness(self):
-        total_assessments = 0
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("coordinate_completeness")
-        results = {"empty": 0, "non_empty": 0}  # Use new labels
+        assessment_name = "coordinate_completeness"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
             geometry = next(self.g.objects(o, GEO.asWKT), None)
 
             if geometry:
-                match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
-                if match:
-                    # Point is not empty, found longitude and latitude
-                    results["non_empty"] += 1
-                    result_label = namespace["non_empty"]
-                else:
-                    # Point is empty, did not find longitude and latitude in the expected format
-                    results["empty"] += 1
-                    result_label = namespace["empty"]
-            else:
-                # Geometry object is empty
-                results["empty"] += 1
-                result_label = namespace["empty"]
+                result_label = GeoChecker.check_geometry_completeness(geometry)
+                result_counts[result_label] += 1
 
-            total_assessments += 1
-            self._add_assessment_result(s, assess_namespace, result_label)
+                total_assessments += 1
+                self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
-        self.add_to_report(f'Assess Coordinate Completeness', total_assessments, results)
+        self.add_to_report(f'Assess Coordinate Completeness', total_assessments, result_counts)
+
     def assess_date_outlier_irq(self):
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("date_outlier_irq")
-        results = {"normal_date": 0, "outlier_date": 0}
+        assessment_name = "date_outlier_irq"
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         # Step 1 : Data gathering - Collect all observation dates
         observation_dates = []
         for s, _, o in self.g.triples((None, SOSA.phenomenonTime, None)):
-            # Check if the subject starts with the specified URI
-            if UriChecker.check_base_uri(str(s), UriChecker.OBSERVATION):
+
+            if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
                 for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
                     if date_literal.datatype == XSD.date:
                         observation_dates.append(date_literal.toPython())
@@ -267,34 +273,31 @@ class RDFDataQualityAssessment:
         Q3 = np.percentile(observation_dates, 75)
         IQR = Q3 - Q1
 
-        total_assessments = 0
         # Step 3: Tag each data point
         for s, _, o in self.g.triples((None, SOSA.phenomenonTime, None)):
-            # Check if the subject starts with the specified URI
-            if UriChecker.check_base_uri(str(s), UriChecker.OBSERVATION):
+            if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
                 for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
                     if date_literal.datatype == XSD.date:
                         observation_date = date_literal.toPython().toordinal()  # Convert date to ordinal value
                         is_outlier = observation_date < Q1 - 1.5 * IQR or observation_date > Q3 + 1.5 * IQR
-                        result_label = namespace["outlier_date"] if is_outlier else namespace["normal_date"]
-                        if is_outlier:
-                            results["outlier_date"] += 1
-                        else:
-                            results["normal_date"] += 1
+                        result_label = "outlier_date" if is_outlier else "normal_date"
+                        result_counts[result_label] += 1
 
                         total_assessments += 1
-                        self._add_assessment_result(s, assess_namespace, result_label)
+                        self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                        self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
-        self.add_to_report(f'Assess Date Outlier IRQ', total_assessments, results)
+        self.add_to_report(f'Assess Date Outlier IRQ', total_assessments, result_counts)
 
     def assess_date_outlier_kmeans(self):
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("date_outlier_kmeans")
-        results = {"normal_date": 0, "outlier_date": 0}
+        assessment_name = "date_outlier_kmeans"
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         # Step 1: Data gathering - Collect all observation dates
         observation_dates = []
         for s, _, o in self.g.triples((None, SOSA.phenomenonTime, None)):
-            if UriChecker.check_base_uri(str(s), UriChecker.OBSERVATION):
+            if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
                 for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
                     if date_literal.datatype == XSD.date:
                         observation_dates.append(date_literal.toPython())
@@ -318,28 +321,27 @@ class RDFDataQualityAssessment:
             outlier_cluster = np.argmin(np.bincount(labels))
             outliers_indices = [i for i, label in enumerate(labels) if label == outlier_cluster]
 
-            total_assessments = 0
-
             # Step 2: Tag each data point
             for index, (s, _, o) in enumerate(self.g.triples((None, SOSA.phenomenonTime, None))):
-                if UriChecker.check_base_uri(str(s), UriChecker.OBSERVATION):
+                if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
                     for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
                         if date_literal.datatype == XSD.date and index in outliers_indices:
-                            result_label = namespace["outlier_date"]
-                            results["outlier_date"] += 1
+                            result_label = "outlier_date"
                         else:
-                            result_label = namespace["normal_date"]
-                            results["normal_date"] += 1
+                            result_label = "normal_date"
 
+                        result_counts[result_label] += 1
                         total_assessments += 1
-                        self._add_assessment_result(s, assess_namespace, result_label)
+                        self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                        self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
-            self.add_to_report(f'Assess Date Outlier Kmeans', total_assessments, results)
+            self.add_to_report(f'Assess Date Outlier Kmeans', total_assessments, result_counts)
 
     def assess_coordinate_in_australia_state(self):
-        total_assessments = 0
-        results_count = {}
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("coordinate_in_australia_state")
+        assessment_name = "coordinate_in_australia_state"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
             geometry = next(self.g.objects(o, GEO.asWKT), None)
@@ -349,21 +351,19 @@ class RDFDataQualityAssessment:
                 if match:
                     long, lat = map(float, match.groups())
                     in_australia, state_name = self.geo_checker.is_point_in_australia_state(lat, long)
-                    assessment_result = state_name if in_australia else "Outside_Australia"
-                    if assessment_result not in results_count:
-                        # If not found, add the state with an initial count of 0
-                        results_count[assessment_result] = 0
+                    result_label = state_name if in_australia else "Outside_Australia"
 
-                        # Now you can safely increment the count for the state name
-                    results_count[assessment_result] += 1
+                    result_counts[result_label] += 1
 
                     total_assessments += 1
                     # Fetch the label URI from the namespace
-                    result_label_uri = namespace[assessment_result.replace(' ', '_')]
+                    result_label_uri = namespace[result_label.replace(' ', '_')]
 
                     self._add_assessment_result(s, assess_namespace, result_label_uri)
-        self.add_to_report(f'Assess Coordinate in Australia State', total_assessments, results_count)
-        return total_assessments,results_count
+                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
+
+        self.add_to_report(f'Assess Coordinate in Australia State', total_assessments, result_counts)
+        return total_assessments, result_counts
 
     def __prefixed_name_to_uri(self, prefixed_name):
         """
@@ -407,13 +407,13 @@ class RDFDataQualityAssessment:
         return str(uri)
 
     def assess_date_format_validation(self):
-        total_assessments = 0
-        result_counts = {"valid": 0, "invalid": 0}  # Initialize result counts for valid and invalid dates
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("date_format_validation")
+        assessment_name = "date_format_validation"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         for s, _, o in self.g.triples((None, SOSA.phenomenonTime, None)):
-            # Check if the subject starts with the specified URI
-            if UriChecker.check_base_uri(str(s), UriChecker.OBSERVATION):
+            if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
                 found_date_within_range = False
                 for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
                     date_str = str(date_literal)  # Convert the RDF Literal to a string
@@ -421,28 +421,21 @@ class RDFDataQualityAssessment:
                     date_check = DateChecker(date_str)
 
                     is_valid_date, detected_format = date_check.check_date_format_and_validate()
-                    # Increment counters based on the validation result
-                    if is_valid_date:
-                        result_counts["valid"] += 1
-                    else:
-                        result_counts["invalid"] += 1
 
-                    # Prepare a result node (BNode) and add the assessment result to the graph
-
+                    result_label = "valid" if is_valid_date else "invalid"
+                    result_counts[result_label] += 1
                     total_assessments += 1
 
-                    # Use  labels for the result
-                    result_label = namespace["valid"] if is_valid_date else namespace["invalid"]
-
-                    self._add_assessment_result(s, assess_namespace,
-                                                result_label)
+                    self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report(f'Assess Date Format Validation', total_assessments, result_counts)
 
     def assess_coordinate_unusual(self):
-        total_assessments = 0
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("coordinate_unusual")
-        results = {"usual": 0, "unusual": 0}
+        assessment_name = "coordinate_unusual"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
             geometry = next(self.g.objects(o, GEO.asWKT), None)
@@ -457,24 +450,21 @@ class RDFDataQualityAssessment:
 
                     # If either is unusual, mark the whole point as unusual
                     if lon_unusual or lat_unusual:
-                        results["unusual"] += 1
-                        result_label = namespace["unusual"]
+                        result_counts["unusual"] += 1
+                        result_label = "unusual"
                     else:
-                        results["usual"] += 1
-                        result_label = namespace["usual"]
+                        result_counts["usual"] += 1
+                        result_label = "usual"
                 else:
                     # If geometry is not in POINT format, default to usual
-                    results["usual"] += 1
-                    result_label = namespace["usual"]
-            else:
-                # If no geometry data, default to usual
-                results["usual"] += 1
-                result_label = namespace["usual"]
+                    result_counts["usual"] += 1
+                    result_label = "usual"
 
-            total_assessments += 1
-            self._add_assessment_result(s, assess_namespace, result_label)
+                total_assessments += 1
+                self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
-        self.add_to_report('Assess Coordinate Unusual', total_assessments, results)
+        self.add_to_report('Assess Coordinate Unusual', total_assessments, result_counts)
 
     @staticmethod
     def detect_unusual_numbers(number_str):
@@ -498,8 +488,10 @@ class RDFDataQualityAssessment:
         return 'usual'
 
     def assess_coordinate_outlier_zscore(self):
-        results = {"normal_coordinate": 0, "outlier_coordinate": 0}
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("coordinate_outlier_zscore")
+        assessment_name = "coordinate_outlier_zscore"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         # Collect latitude and longitude values
         latitudes = []
@@ -534,7 +526,6 @@ class RDFDataQualityAssessment:
             return
 
         # Step 3: Assess each point for being an outlier
-        total_assessments = 0
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
             geometry = next(self.g.objects(o, GEO.asWKT), None)
@@ -547,21 +538,20 @@ class RDFDataQualityAssessment:
                     long_z = (long - long_mean) / long_std
                     is_outlier = abs(lat_z) > 3 or abs(long_z) > 3
                     result_label = "outlier_coordinate" if is_outlier else "normal_coordinate"
-                    if is_outlier:
-                        results["outlier_coordinate"] += 1
-                    else:
-                        results["normal_coordinate"] += 1
 
                     total_assessments += 1
+                    result_counts[result_label] += 1
 
-                    result_uri = namespace[result_label.lower()]
-                    self._add_assessment_result(s, assess_namespace, result_uri)
+                    self._add_assessment_result(s, assess_namespace, namespace[result_label.lower()])
+                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
-        self.add_to_report(f'Assess Coordinate Outlier Zscore', total_assessments, results)
+        self.add_to_report(f'Assess Coordinate Outlier Zscore', total_assessments, result_counts)
 
     def assess_coordinate_outlier_irq(self):
-        results = {"normal_coordinate": 0, "outlier_coordinate": 0}
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("coordinate_outlier_irq")
+        assessment_name = "coordinate_outlier_irq"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         # Collect latitude and longitude values
         latitudes = []
@@ -593,7 +583,6 @@ class RDFDataQualityAssessment:
         long_iqr = long_q3 - long_q1
 
         # Step 3: Assess each point for being an outlier
-        total_assessments = 0
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
             geometry = next(self.g.objects(o, GEO.asWKT), None)
@@ -606,68 +595,65 @@ class RDFDataQualityAssessment:
                     long_outlier = long < long_q1 - 1.5 * long_iqr or long > long_q3 + 1.5 * long_iqr
                     is_outlier = lat_outlier or long_outlier
                     result_label = "outlier_coordinate" if is_outlier else "normal_coordinate"
-                    if is_outlier:
-                        results["outlier_coordinate"] += 1
-                    else:
-                        results["normal_coordinate"] += 1
 
                     total_assessments += 1
-                    # Assuming namespace maps labels to their URIs
-                    result_uri = namespace[result_label.lower()]
-                    self._add_assessment_result(s, assess_namespace, result_uri)
+                    result_counts[result_label] += 1
 
-        self.add_to_report(f'Assess Coordinate Outlier IRQ', total_assessments, results)
+                    self._add_assessment_result(s, assess_namespace, namespace[result_label.lower()])
+                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
+
+        self.add_to_report(f'Assess Coordinate Outlier IRQ', total_assessments, result_counts)
 
     def assess_scientific_name_completeness(self):
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("scientific_name_completeness")
-        results = {"empty_name": 0, "non_empty_name": 0}
+        assessment_name = "scientific_name_completeness"
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         # Step 1: Data gathering - Check all records for scientific name presence
-        total_assessments = 0
         for s, p, o in self.g.triples((None, RDF.value, None)):
 
             if (s, RDF.type, TERN.FeatureOfInterest) in self.g:
                 scientific_name = str(o).strip()
                 # Step 2: Tag each Feature of Interest based on scientific name being empty or not
-                result_label = namespace["empty_name"]
+
                 if scientific_name is None or str(scientific_name).strip() == "":
-                    results["empty_name"] += 1
+                    result_label = "empty_name"
                 else:
-                    result_label = namespace["non_empty_name"]
-                    results["non_empty_name"] += 1
+                    result_label = "non_empty_name"
 
+                result_counts[result_label] += 1
                 total_assessments += 1
-                # Use  labels for the result
 
-                self._add_assessment_result(s, assess_namespace, result_label)
+                self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         # Step 3: Update report
-        self.add_to_report('Assess Scientific Name Completeness', total_assessments, results)
+        self.add_to_report('Assess Scientific Name Completeness', total_assessments, result_counts)
 
     def assess_scientific_name_validation(self):
-        namespace, assess_namespace = self.vocab_manager.get_namespaces("scientific_name_validation")
-        results = {"valid_name": 0, "invalid_name": 0}
+        assessment_name = "scientific_name_validation"
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
 
         # Step 1: Data gathering - Check all records for scientific name validity
-        total_assessments = 0
         for s, p, o in self.g.triples((None, RDF.value, None)):
             if (s, RDF.type, TERN.FeatureOfInterest) in self.g:
                 scientific_name = str(o).strip()
 
                 # Step 2: Use ScientificNameChecker to assess validity
                 if scientific_name and ScientificNameChecker.is_valid_scientific_name(scientific_name):
-                    result_label = namespace["valid_name"]
-                    results["valid_name"] += 1
+                    result_label = "valid_name"
                 else:
-                    result_label = namespace["invalid_name"]
-                    results["invalid_name"] += 1
+                    result_label = "invalid_name"
 
                 total_assessments += 1
+                result_counts[result_label] += 1
                 # Use labels for the result
-                self._add_assessment_result(s, assess_namespace, result_label)
+                self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         # Step 3: Update report
-        self.add_to_report('Assess Scientific Name Validation', total_assessments, results)
+        self.add_to_report('Assess Scientific Name Validation', total_assessments, result_counts)
 
     def _add_assessment_result(self, subject, assessment_type, value, assessment_date=None):
         result_bn = BNode()
@@ -693,6 +679,27 @@ class RDFDataQualityAssessment:
             assessment_date = datetime.datetime.combine(assessment_date, datetime.time.min)
 
         self.g.add((result_bn, SOSA.resultTime, Literal(assessment_date, datatype=XSD.dateTime)))
+
+    def _add_assessment_result_to_matrix(self, subject, assessment_type, value):
+        record_id = TurtleToExcelConverter.extract_record_number(subject)
+        field_name = assessment_type + ":" + value
+
+        # Check if 'record_id' column exists and if 'record_id' value is present
+        if 'record_id' in self.result_matrix_df.columns and \
+                any(self.result_matrix_df['record_id'] == record_id):
+            # Find the row index where 'record_id' matches
+            row_index = self.result_matrix_df[self.result_matrix_df['record_id'] == record_id].index
+            # Check if the specific field_name column exists
+            if field_name not in self.result_matrix_df.columns:
+                # Add the column with default NaN values
+                self.result_matrix_df[field_name] = pd.NA
+            # Update the value
+            self.result_matrix_df.loc[row_index, field_name] = 1
+        else:
+            # Record does not exist, so create and append a new row
+            # Note: Directly appending a dictionary as a new row
+            new_row = {'record_id': record_id, field_name: 1}
+            self.result_matrix_df.loc[len(self.result_matrix_df)] = new_row
 
     def add_to_report(self, assessment_name, total_assessments, result_counts):
         if self.report_file:
@@ -938,20 +945,40 @@ class GeoChecker:
         else:
             return "High"
 
+    @staticmethod
+    def extract_and_assess_coordinate_precision(geometry: object) -> object:
+        match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
+        if match:
+            longitude, latitude = match.groups()
+            return GeoChecker.assess_coordinate_precision(longitude, latitude)
+        return None
+
+    @staticmethod
+    def check_geometry_completeness(geometry):
+        match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
+        if match:
+            # Coordinates are present, geometry is not empty
+            return "non_empty"
+        else:
+            # No coordinates found, geometry is empty
+            return "empty"
+
 
 class AustraliaGeographyChecker:
     def __init__(self):
-        self.directory_structure=DirectoryStructure()
-
+        self.directory_structure = DirectoryStructure()
 
         self.states_shapefiles = {
-            "New_South_Wales": os.path.join(self.directory_structure.map_base_path, "new_south_wales", "cstnswcd_r.shp"),
+            "New_South_Wales": os.path.join(self.directory_structure.map_base_path, "new_south_wales",
+                                            "cstnswcd_r.shp"),
             "Victoria": os.path.join(self.directory_structure.map_base_path, "victoria", "cstviccd_r.shp"),
             "Queensland": os.path.join(self.directory_structure.map_base_path, "queensland", "cstqldmd_r.shp"),
-            "Western_Australia": os.path.join(self.directory_structure.map_base_path, "western_australia", "cstwacd_r.shp"),
+            "Western_Australia": os.path.join(self.directory_structure.map_base_path, "western_australia",
+                                              "cstwacd_r.shp"),
             "South_Australia": os.path.join(self.directory_structure.map_base_path, "south_australia", "cstsacd_r.shp"),
             "Tasmania": os.path.join(self.directory_structure.map_base_path, "tasmania", "csttascd_r.shp"),
-            "Northern_Territory": os.path.join(self.directory_structure.map_base_path, "northern_territory", "cstntcd_r.shp"),
+            "Northern_Territory": os.path.join(self.directory_structure.map_base_path, "northern_territory",
+                                               "cstntcd_r.shp"),
             "Australian_Capital_Territory": os.path.join(self.directory_structure.map_base_path, "australia",
                                                          "cstauscd_r.shp")
         }
