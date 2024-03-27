@@ -1,22 +1,14 @@
 import argparse
+import os
 import sys
 from pathlib import Path
-import os
 
-# Inside __main__.py
-
-
-# Assuming RDFDataQualityAssessment is correctly imported from assess.py
 from dq.assess import RDFDataQualityAssessment
+from dq.defined_namespaces import DirectoryStructure
+from dq.scoring_manager import ScoringManager
+from dq.usecase_manager import UseCaseManager
 
 __version__ = "0.0.1"
-
-from dq.defined_namespaces import DirectoryStructure
-
-from dq.vocab_manager import VocabManager
-
-from dq.query_processor import RDFQueryProcessor
-from dq.usecase_manager import UseCaseManager, TurtleToExcelConverter
 
 
 def cli(args=None):
@@ -40,7 +32,7 @@ def cli(args=None):
     )
 
     parser.add_argument(
-    "--data-to-assess",
+        "--data-to-assess",
         type=Path,
         help="The ABIS-compliant RDF file, or an RDFLib graph object, to assess",
         required=False  # Make this argument optional
@@ -59,15 +51,12 @@ def main(args=None):
 
     if args.shacl_validate:
         print("Validating input data...")
-        # Add SHACL validation logic here if necessary
 
-    # Ensure that data_to_assess is provided before proceeding
     if not hasattr(args, 'data_to_assess') or args.data_to_assess is None:
         print("No data provided to assess.")
         return
 
     print("Running BDR-DQ...")
-    # Directly pass the data_to_assess to the class, which handles loading
     print(args.data_to_assess)
     directory_structure = DirectoryStructure()
 
@@ -82,26 +71,31 @@ def main(args=None):
             os.path.join(dq_assessment.directory_structure.template_base_path, 'usecase_template.xlsx'))
         print("All Labels:", all_labels)
 
-        # Generate overall report
         dq_assessment.report_analysis.generate_report()
 
-        # Perform assessments
         dq_assessment.assessments()
 
-        # Output RTL Result file: Serialize the graph with the results
         dq_assessment.g.serialize(destination=result_filename, format="turtle")
         use_case_definition_file = os.path.join(dq_assessment.directory_structure.use_case_base_path,
                                                 'usecase_definition.xlsx')
-        out_put_result_file = os.path.join(dq_assessment.directory_structure.result_base_path,
-                                           'Final_Usecase_Results.ttl')
-        output_excel_file = os.path.join(dq_assessment.directory_structure.result_base_path,
-                                         'output.xlsx')
+        scoring_definition_file = os.path.join(dq_assessment.directory_structure.scoring_base_path,
+                                               'assertions_score_weighting_definition.xlsx')
+        output_result_file = os.path.join(dq_assessment.directory_structure.result_base_path,
+                                          'Final_Usecase_Results.ttl')
+        dq_assessment.result_matrix_df = dq_assessment.result_matrix_df.sort_values(by='observation_id', ascending=True)
         dq_assessment.result_matrix_df.to_excel(os.path.join(dq_assessment.directory_structure.result_base_path,
-                                         'output1.xlsx'),sheet_name="matrix")
+                                                             'output1.xlsx'), sheet_name="matrix", index=None)
 
-        # Usage
-        converter = TurtleToExcelConverter(result_filename, use_case_definition_file, out_put_result_file)
-        converter.convert_to_excel(output_excel_file)
+        use_case_manager = UseCaseManager(use_case_definition_file, dq_assessment.result_matrix_df, result_filename,
+                                          output_result_file, report_file)
+        use_case_manager.assess_use_cases()
+        use_case_manager.result_matrix_df.to_excel(os.path.join(dq_assessment.directory_structure.result_base_path,
+                                                                'output2.xlsx'), sheet_name="matrix", index=None)
+        scoring_manager = ScoringManager(scoring_definition_file, dq_assessment.result_matrix_df, result_filename,
+                                         output_result_file, report_file)
+        scoring_manager.apply_scoring_methods()
+        scoring_manager.result_matrix_df.to_excel(os.path.join(dq_assessment.directory_structure.result_base_path,
+                                                               'output3.xlsx'), sheet_name="matrix", index=None)
 
     print("Complete")
 

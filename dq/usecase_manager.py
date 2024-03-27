@@ -1,226 +1,51 @@
 import datetime
 from datetime import datetime
 
+import numpy as np
 import pandas as pd
 import rdflib
-from rdflib import URIRef, Literal, Namespace, BNode, SOSA, SDO, XSD
-from rdflib.namespace import DCTERMS
-from rdflib.namespace import RDF, RDFS
+from rdflib import URIRef, Literal, BNode, SOSA, SDO, XSD
 
 from .defined_namespaces import DQAF
 from .vocab_manager import VocabManager
 
 
-def split_uri_into_prefix_and_label(graph, uri):
-    """
-    Splits a given URI into a prefix and a label based on the namespaces registered in the graph.
-
-    Args:
-        graph (rdflib.Graph): The RDF graph with registered namespaces.
-        uri (str): The full URI to split.
-
-    Returns:
-        tuple: A tuple containing the prefix (or the full namespace URI if no direct prefix match) and the label.
-    """
-    if not isinstance(uri, rdflib.URIRef):
-        uri = rdflib.URIRef(uri)
-
-    # Initialize the longest match to an empty string
-    longest_match = ""
-    matched_prefix = None
-
-    # Iterate through registered namespaces in the graph
-    for prefix, namespace in graph.namespace_manager.namespaces():
-        ns_str = str(namespace)
-        if str(uri).startswith(ns_str) and len(ns_str) > len(longest_match):
-            longest_match = ns_str
-            matched_prefix = prefix
-
-    if longest_match:
-        # Extract the label part of the URI by removing the namespace
-        label = str(uri)[len(longest_match):]
-        return matched_prefix, label
-    else:
-        # If there's no matching namespace, return None for the prefix
-        return None, str(uri)
-
-
-def get_prefix_for_uri(graph, uri):
-    """
-    Finds the prefix for a given URI based on the namespaces registered in the graph.
-
-    Args:
-        graph (rdflib.Graph): The RDF graph.
-        uri (str): The URI for which to find the prefix.
-
-    Returns:
-        str: The prefix associated with the URI, or None if not found.
-    """
-    # Convert the URI to an rdflib.URIRef object if it's not already one
-    if not isinstance(uri, rdflib.URIRef):
-        uri = rdflib.URIRef(uri)
-
-    # Iterate through registered namespaces in the graph
-    for prefix, namespace in graph.namespace_manager.namespaces():
-        if uri.startswith(namespace):
-            return prefix  # Return the prefix if the URI starts with the namespace
-
-    return None  # Return None if no matching namespace is found
-
-
 class UseCaseManager:
-    def __init__(self, excel_file, results_ttl):
-        self.excel_file = excel_file
-        self.results_ttl = results_ttl
+    def __init__(self, use_case_definition_excel_file, assess_matrix_df, results_ttl, output_result_file,
+                 report_file=None):
+        self.use_case_definition_excel_file = use_case_definition_excel_file
+        self.output_result_file = output_result_file
+        self.report_file = report_file
         self.use_cases_df = None
+        self.results_ttl = results_ttl
         self.results_graph = rdflib.Graph()
+        self.results_graph.parse(self.results_ttl, format="turtle")
         self.label_manager = VocabManager()
         self.use_case_matrix = {}
-
-    def load_rdf_results(self):
-        """Loads the RDF data from the .ttl file."""
-        self.results_graph.parse(self.results_ttl, format="turtle")
+        self.create_use_case_matrix()
+        self.result_matrix_df = assess_matrix_df
 
     def create_use_case_matrix(self):
-        """Creates a matrix based on the use case definitions and labels."""
-        # No need to fetch all labels if we directly use the ones defined in the Excel file
-        # Reading labels (excluding the first column which is assumed to be use case names)
-        # labels = self.use_cases_df.columns[1:]
-        # Reads the Excel file with use case definitions into a DataFrame.
-        self.use_cases_df = pd.read_excel(self.excel_file, sheet_name="Use case template")
-        use_cases = self.use_cases_df.columns[1:]
+        self.use_cases_df = pd.read_excel(self.use_case_definition_excel_file, sheet_name="Use case template")
+        header = 0
+        self.use_cases_df = self.use_cases_df.set_index('Data quality assertion').T.reset_index()
+
         self.use_case_matrix = {}
-        for use_case in use_cases:
-            self.use_case_matrix[use_case] = {}
-        # Initialize the use case matrix with conditions from the Excel file
 
-        for index, row in self.use_cases_df.iterrows():
-            label = row['Data quality assertion']  # Assuming the first column is named 'Data quality assertion'
-            for use_case in use_cases:
-                # Set to True if the cell contains 1, False otherwise (including 0 or empty)
-                self.use_case_matrix[use_case][label] = True if row[use_case] == 1 else False
-        print("Use Case Matrix")
-        filtered_dict = {}
-        for outer_key, inner_dict in self.use_case_matrix.items():
-            # Filter the inner dictionary to keep only True values
-            true_values_dict = {key: value for key, value in inner_dict.items() if value is True}
-            if true_values_dict:
-                filtered_dict[outer_key] = true_values_dict
-        print(filtered_dict)
+        for _, row in self.use_cases_df.iterrows():
+            use_cases_dict = row.to_dict()
+            row_name = use_cases_dict.pop('index')
+            self.use_case_matrix[row_name] = use_cases_dict
 
+        for key, subdict in self.use_case_matrix.items():
+            for subkey, value in subdict.items():
+                if value != value:
+                    self.use_case_matrix[key][subkey] = 0
+                elif value == 1.0:
+                    self.use_case_matrix[key][subkey] = 1
+
+        print("Use Case Matrix:")
         print(self.use_case_matrix)
-
-    def write_results_to_ttl(self, output_ttl_file):
-        """Writes the final use case results to a new .ttl file."""
-        new_graph = rdflib.Graph()
-
-        ns = Namespace("http://example.com/usecases/")
-        for use_case, labels in self.use_case_matrix.items():
-            use_case_uri = ns[use_case]
-            for label, result in labels.items():
-                # print(label, result)
-                if result:
-                    # Add triples to indicate a use case includes a specific label based on assessment
-                    label_uri = ns[label.replace(':', '_')]  # Simplify label to URI-safe format
-                    new_graph.add((use_case_uri, RDF.type, label_uri))
-                    new_graph.add((use_case_uri, RDFS.label, Literal(use_case)))
-                    new_graph.add((label_uri, RDFS.label, Literal(label)))
-        new_graph.serialize(destination=output_ttl_file, format='turtle')
-        print(f"Results written to {output_ttl_file}")
-
-
-class TurtleToExcelConverter:
-    def __init__(self, input_result_file, use_case_definition_file, output_result_file):
-        self.input_result_file = input_result_file
-        self.use_case_definition_file = use_case_definition_file
-        self.output_result_file = output_result_file
-
-        self.manager = UseCaseManager(self.use_case_definition_file, self.input_result_file)
-
-        self.manager.load_rdf_results()
-        self.manager.create_use_case_matrix()
-
-        # self.manager.assess_use_cases()
-        # self.manager.write_results_to_ttl(output_result_file)
-
-    def uri_to_label(self, uri):
-        # Mapping URI prefixes to meaningful labels
-        mappings = {
-            "http://createme.org/observation/individualCount/": 'Observation_Count',
-            "http://createme.org/attribute/kingdom/": 'Attribute_Kingdom',
-            "http://createme.org/observation/scientificName/": 'Observation_Scientific_Name',
-            "http://createme.org/provider/": 'Provider',
-            "http://createme.org/sample/field/": 'Sample_Field',
-            "http://createme.org/sampling/field/": 'sampling_field',
-            "http://createme.org/scientificName/": 'Scientific_Name',
-            "http://createme.org/value/individualCount/": "Individual_Count",
-            "http://createme.org/value/kingdom/": "value_kingdom",
-
-        }
-        # Check if the URI starts with one of the defined prefixes and replace accordingly
-        for prefix, label in mappings.items():
-
-            if str(uri).startswith(prefix):
-                # Return the label
-                return label  # + '_' + str(uri)[len(prefix):]
-        # Default: return the URI as is if no prefix matches
-        return str(uri)
-
-    def parse_turtle(self):
-        g = rdflib.Graph()
-        g.parse(self.input_result_file, format="turtle")
-
-        # Initialize a dictionary to hold the data for each record, keyed by record number
-        records = {}
-
-        # Extract all URIs related to records specified by dcterms:hasPart
-        for _, _, record_uri in g.triples((None, DCTERMS.hasPart, None)):
-            # Extract the record number from the URI
-            record_number = self.extract_record_number(record_uri)
-            label = self.uri_to_label(record_uri)
-
-            if record_number is not None:
-                if record_number not in records:
-                    records[record_number] = {}
-
-                # For each related URI, extract additional data and organize it under the record number
-                for subj, pred, obj in g.triples((record_uri, None, None)):
-                    # Simplify the predicate URI for use as a column header
-
-                    column_header = pred.split('/')[-1]
-                    # Store the object as data for the record, under the appropriate column
-                    # Check if obj is a literal value, a URI node, or a Blank Node
-                    if isinstance(obj, rdflib.Literal):
-                        # Literal values can be converted directly to string
-                        value = str(obj)
-                        records[record_number][label + "_" + column_header] = value
-                    elif isinstance(obj, rdflib.URIRef) or isinstance(obj, rdflib.BNode):
-                        for s2, p2, value2 in g.triples((obj, None, None)):
-
-                            prefix = get_prefix_for_uri(g, p2)
-                            if isinstance(value2, rdflib.Literal):
-                                records[record_number][label + "_" + column_header + "#" + str(prefix)] = str(value2)
-                            else:
-                                prefix2, label2 = split_uri_into_prefix_and_label(g, value2)
-                                if prefix2 is not None:
-                                    records[record_number][prefix2] = label2
-
-                                # print(label, s2, prefix, prefix2, label2)
-
-                        # For URIRefs/BNodes, you might want to handle them differently
-                        # This could involve fetching additional details from the graph,
-                        # or simply storing the URI string. Adjust as needed.
-                        # value = "Nested --> " + str(obj)  # Placeholder: adjust based on how you want to handle nodes
-
-        # Convert the records dictionary to a DataFrame
-        data = [dict(record_id=k, **v) for k, v in sorted(records.items(), key=lambda item: item[0])]
-        df = pd.DataFrame(data)
-
-        # assess use case
-        df = df.sort_values(by='record_id', ascending=True)
-        df = self.assess_use_cases(df, self.manager.use_case_matrix)
-
-        return df
 
     @staticmethod
     def extract_record_number(record_uri):
@@ -229,55 +54,80 @@ class TurtleToExcelConverter:
         except ValueError:
             return None
 
-    def assess_use_cases(self, df, use_case_matrix):
-        for use_case, conditions in use_case_matrix.items():
-            # Initialize a list to store the results for this use case across all records
+    def assess_use_cases(self):
+
+        for use_case, conditions in self.use_case_matrix.items():
+            assessment_name = "Use Case Assessment: " + use_case
+            total_assessments = 0
+            result_counts = {'True': 0, 'False': 0}
+
             use_case_results = []
+            use_case_vector, use_case_keys = dictionary_to_vector_and_keys(conditions)
+            use_case_sum = calculate_subgroup_sums(conditions)
 
-            for _, row in df.iterrows():
-                # Assume the use case is satisfied unless a condition fails
-                use_case_satisfied = True
-
-                for condition, expected_value in conditions.items():
-                    if expected_value:
-                        column_name, condition_value = condition.split(":")
-                        # Check the values of a specific label in lower case
-                        actual_value = row[column_name].lower() == condition_value.lower()
-
-                        # If the condition does not match the expected outcome, the use case is not satisfied
-                        if actual_value != expected_value:
-                            use_case_satisfied = False
-                            break  # No need to check further conditions for this record
-
-                # Append the result for this record
+            for _, row in self.result_matrix_df.iterrows():
+                total_assessments += 1
+                row_vector = [1 if row[key] == 1.0 else 0 for key in use_case_keys]
+                dot_product = np.dot(use_case_vector, row_vector)
+                use_case_satisfied = use_case_sum == dot_product
                 use_case_results.append(use_case_satisfied)
-                self._add_use_case_assessment_result(use_case, row['record_id'], use_case_satisfied)
+                label = "True" if use_case_satisfied else "False"
+                result_counts[label] += 1
 
-            # Add the results as a new column to the DataFrame
-            df[use_case] = use_case_results
+                self._add_use_case_assessment_result(use_case, row['observation_id'], use_case_satisfied)
 
-        # Output RTL Result file: Serialize the graph with the results
+            self.result_matrix_df[use_case] = use_case_results
+            self.add_to_report(assessment_name, total_assessments, result_counts)
 
-        self.manager.results_graph.serialize(destination=self.output_result_file, format="turtle")
+        self.results_graph.serialize(destination=self.output_result_file, format="turtle")
 
-        return df
-
-    def convert_to_excel(self, output_file_path):
-        df = self.parse_turtle()
-        df.to_excel(output_file_path, index=False, engine='openpyxl')
-
-    def _add_use_case_assessment_result(self, use_case, record_id, value, assessment_date=None):
-        subject = URIRef(f"http://example.com/use_case_assessment/{use_case}/{record_id}")
+    def _add_use_case_assessment_result(self, use_case, observation_id, value, assessment_date=None):
+        subject = URIRef(f"http://example.com/use_case_assessment/{use_case}/{observation_id}")
         assessment_type = URIRef(f"http://example.com/use_case_assessment/{use_case}/")
         result_bn = BNode()
-        self.manager.results_graph.add((subject, DQAF.hasDQAFResult, result_bn))
-        self.manager.results_graph.add((result_bn, SOSA.observedProperty, assessment_type))
+        self.results_graph.add((subject, DQAF.hasDQAFResult, result_bn))
+        self.results_graph.add((result_bn, SOSA.observedProperty, assessment_type))
 
-        self.manager.results_graph.add((result_bn, SDO.value, Literal(value)))
-        # Check if assessment_date is None, and replace it with date.date.now()
+        self.results_graph.add((result_bn, SDO.value, Literal(value)))
         if assessment_date is None:
             assessment_date = datetime.now()
         elif isinstance(assessment_date, datetime.date) and not isinstance(assessment_date, datetime.datetime):
             assessment_date = datetime.datetime.combine(assessment_date, datetime.time.min)
 
-        self.manager.results_graph.add((result_bn, SOSA.resultTime, Literal(assessment_date, datatype=XSD.dateTime)))
+        self.results_graph.add((result_bn, SOSA.resultTime, Literal(assessment_date, datatype=XSD.dateTime)))
+
+    def add_to_report(self, assessment_name, total_assessments, result_counts):
+        if self.report_file:
+            print(f'', file=self.report_file)
+            print(f'- {assessment_name}: {total_assessments}', file=self.report_file)
+            for quality, count in result_counts.items():
+                print(f'\t{quality}: {count}', file=self.report_file)
+
+
+def flatten_dictionary(dictionary, parent_key='', sep='_'):
+    items = []
+    for k, v in dictionary.items():
+        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        if isinstance(v, dict):
+            items.extend(flatten_dictionary(v, new_key, sep=sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
+
+
+def dictionary_to_vector_and_keys(dictionary):
+    flat_dict = flatten_dictionary(dictionary)
+    vector = [1 if v else 0 for v in flat_dict.values()]
+    keys = list(flat_dict.keys())
+    return vector, keys
+
+
+def calculate_subgroup_sums(dictionary):
+    grouped_values = {}
+    for key, value in dictionary.items():
+        main_group, _ = key.split(':', 1)
+        if main_group in grouped_values:
+            grouped_values[main_group] = max(grouped_values[main_group], value)
+        else:
+            grouped_values[main_group] = value
+    return sum(grouped_values.values())
