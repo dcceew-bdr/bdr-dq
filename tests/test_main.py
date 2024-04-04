@@ -1,65 +1,51 @@
 import os
 import shutil
 
-import pytest
-from rdflib import Graph, URIRef, Literal, SOSA
-from rdflib.namespace import SDO
-from rdflib.plugins.parsers.notation3 import BadSyntax
-# from dq.__main__ import load_data, assessment_01
-from dq.__main__ import main
-from pathlib import Path
+from rdflib import Graph
 
+from dq.__main__ import main
 from dq.assess import RDFDataQualityAssessment
 from dq.defined_namespaces import DirectoryStructure
+import pytest
+
+
+@pytest.fixture
+def dq_assessment():
+    file_to_assess = os.path.join(os.path.dirname(__file__), 'data',
+                                  'chunk_1.ttl')
+    g = Graph().parse(str(file_to_assess))
+    assessment = RDFDataQualityAssessment(g, None)
+    return assessment
 
 
 def test_version_information(monkeypatch, capsys):
-    # Simulate command-line arguments
     args = ["dq", "--version"]
     monkeypatch.setattr('sys.argv', args)
-
-    # Call the main function (which no longer is expected to raise SystemExit)
     main()
-
-    # Verify that version information is printed
     captured = capsys.readouterr()
     assert "0.0.1" in captured.out
 
 
 def test_data_to_assess_input(monkeypatch, capsys):
-    # Simulate command-line arguments including the path to your test RDF file
     file_to_assess = os.path.join(os.path.dirname(__file__), 'data\chunk_1.ttl')
 
     args = ["dq", "--data-to-assess", str(file_to_assess)]
     monkeypatch.setattr('sys.argv', args)
-
-    # Call the main function
     main()
-
-    # Capture the standard output and error
     captured = capsys.readouterr()
 
-    # Assert that the final output is as expected
     assert "Complete" in captured.out
 
 
 def test_output_files_creation(monkeypatch, tmp_path):
-    # Define the source Turtle file and the template input file paths
     source_turtle_file = os.path.join(os.path.dirname(__file__), 'data\chunk_1.ttl')
     template_input_file = tmp_path / "data" / "chunk_1.ttl"  # Example path
-
-    # Ensure the target directory exists
     template_input_file.parent.mkdir(parents=True, exist_ok=True)
 
-    # Copy the source Turtle file to the template input file
     shutil.copy(source_turtle_file, template_input_file)
-
-    # Now, simulate command-line arguments with the copied file as input
-
     args = ["dq", "--data-to-assess", str(template_input_file)]
     monkeypatch.setattr('sys.argv', args)
 
-    # Call the main function
     main()
 
     file_base_path = DirectoryStructure()
@@ -74,40 +60,115 @@ def test_output_files_creation(monkeypatch, tmp_path):
 
     ]
 
-    # Verify that all expected files have been created
     for file_path in expected_files:
         assert os.path.exists(file_path), f"File {file_path} was not created"
 
 
-def test_assess_date_recency():
-    file_to_assess = os.path.join(os.path.dirname(__file__), 'data\chunk_1.ttl')
-    g = Graph().parse(str(file_to_assess))
-
-    # Actual results of the assessment
-    total_assessments, result_counts = RDFDataQualityAssessment(g, None).assess_date_recency()
-
-    expected_total_assessments = 100
-    expected_recent = 73  # Expected number of recent dates
-    expected_outdated = 27  # Expected number of outdated dates
-
-    # Assertions to verify the outcome
-    assert total_assessments == expected_total_assessments, f"Expected {expected_total_assessments} assessments, got {total_assessments}"
-    assert result_counts[
-               'recent_20_years'] == expected_recent, f"Expected {expected_recent} recent_20_years dates, got {result_counts['recent_20_years']}"
-    assert result_counts[
-               'outdated_20_years'] == expected_outdated, f"Expected {expected_outdated} outdated_20_years dates, got {result_counts['outdated_20_years']}"
+def do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values):
+    assert total_assessments == expected_total_assessments, f"Expected {expected_total_assessments} assessments in {assessment_name}, got {total_assessments}"
+    for lbl in expected_label_values:
+        assert result_counts[lbl] == expected_label_values[
+            lbl], f"Expected {expected_label_values[lbl]} in {assessment_name}, got {result_counts[lbl]}"
 
 
-def test_assess_coordinate_in_australia_state():
-    file_to_assess = os.path.join(os.path.dirname(__file__), 'data\chunk_1.ttl')
-    g = Graph().parse(str(file_to_assess))
-
-    # Actual results of the assessment
-    total_assessments, result_counts = RDFDataQualityAssessment(g, None).assess_coordinate_in_australia_state()
+def test_assess_date_completeness(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_date_completeness()
 
     expected_total_assessments = 100
+    expected_label_values = {'empty': 0,
+                             'non_empty': 100}
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
 
-    expected_results_counts = {
+
+def test_assess_date_recency(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_date_recency()
+
+    expected_total_assessments = 100
+    expected_label_values = {'recent_20_years': 72,
+                             'outdated_20_years': 28}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+
+
+def test_assess_datum_completeness(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_datum_completeness()
+
+    expected_total_assessments = 100
+    expected_label_values = {'empty': 0,
+                             'not_empty': 100}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+
+
+def test_assess_datum_validation(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_datum_validation()
+
+    expected_total_assessments = 100
+    expected_label_values = {'valid': 100,
+                             'invalid': 0}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+
+
+def test_assess_datum_type(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_datum_type()
+
+    expected_total_assessments = 100
+    expected_label_values = {'AGD84': 0,
+                             'GDA2020': 0,
+                             'GDA94': 100,
+                             'WGS84': 0,
+                             'None': 0}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+
+
+def test_assess_coordinate_precision(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_coordinate_precision()
+
+    expected_total_assessments = 100
+    expected_label_values = {'Low': 38,
+                             'Medium': 53,
+                             'High': 9}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+
+
+def test_assess_coordinate_completeness(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_coordinate_completeness()
+
+    expected_total_assessments = 100
+    expected_label_values = {'empty': 0,
+                             'non_empty': 100}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+
+
+def test_assess_date_outlier_irq(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_date_outlier_irq()
+
+    expected_total_assessments = 100
+    expected_label_values = {'outlier_date': 0,
+                             'normal_date': 100}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+
+
+def test_assess_date_outlier_kmeans(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_date_outlier_kmeans()
+
+    expected_total_assessments = 100
+    expected_label_values = {'outlier_date': 12,
+                             'normal_date': 88}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+
+
+def test_assess_coordinate_in_australia_state(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_coordinate_in_australia_state()
+
+    expected_total_assessments = 100
+    expected_label_values = {
         "Outside_Australia": 35,
         "Northern_Territory": 11,
         "New_South_Wales": 12,
@@ -116,9 +177,71 @@ def test_assess_coordinate_in_australia_state():
         "South_Australia": 6,
         "Victoria": 1}
 
-    # Assertions to verify the outcome
-    assert total_assessments == expected_total_assessments, f"Expected {expected_total_assessments} assessments, got {total_assessments}"
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
 
-    for state, expected_count in expected_results_counts.items():
-        assert result_counts[
-                   state] == expected_count, f"Expected {expected_count} for state {state}, got {result_counts[state]}"
+
+def test_assess_date_format_validation(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_date_format_validation()
+
+    expected_total_assessments = 100
+    expected_label_values = {
+        "valid": 100,
+        "invalid": 0}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+
+
+def test_assess_coordinate_unusual(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_coordinate_unusual()
+
+    expected_total_assessments = 100
+    expected_label_values = {
+        "usual": 68,
+        "unusual": 32}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+
+
+def test_assess_coordinate_outlier_zscore(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_coordinate_outlier_zscore()
+
+    expected_total_assessments = 100
+    expected_label_values = {
+        "outlier_coordinate": 0,
+        "normal_coordinate": 100}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+
+
+def test_assess_coordinate_outlier_irq(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_coordinate_outlier_irq()
+
+    expected_total_assessments = 100
+    expected_label_values = {
+        "outlier_coordinate": 0,
+        "normal_coordinate": 100}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+
+
+def test_assess_scientific_name_completeness(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_scientific_name_completeness()
+
+    expected_total_assessments = 100
+    expected_label_values = {
+        "empty_name": 0,
+        "non_empty_name": 100}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+
+
+def test_assess_scientific_name_validation(dq_assessment):
+    assessment_name, total_assessments, result_counts = dq_assessment.assess_scientific_name_validation()
+
+    expected_total_assessments = 100
+    expected_label_values = {
+        "valid_name": 100,
+        "invalid_name": 0}
+
+    do_the_test(assessment_name, total_assessments, expected_total_assessments, result_counts, expected_label_values)
+

@@ -91,7 +91,7 @@ def main(args=None):
         use_case_manager.assess_use_cases()
         use_case_manager.result_matrix_df.to_excel(os.path.join(dq_assessment.directory_structure.result_base_path,
                                                                 'output2.xlsx'), sheet_name="matrix", index=None)
-        scoring_manager = ScoringManager(scoring_definition_file, dq_assessment.result_matrix_df, result_filename,
+        scoring_manager = ScoringManager(scoring_definition_file, dq_assessment.result_matrix_df, output_result_file,
                                          output_result_file, report_file)
         scoring_manager.apply_scoring_methods()
         scoring_manager.result_matrix_df.to_excel(os.path.join(dq_assessment.directory_structure.result_base_path,

@@ -2,45 +2,45 @@
 ========================================
 The RDF file you've provided contains 17708 triples, which are the basic units of information in RDF, composed of a subject, predicate, and object. It includes 3469 unique subjects, 39 unique predicates, and 4180 unique objects.
 =========  Unique Predicates (39)===============
- 1 - http://www.w3.org/ns/sosa/hasFeatureOfInterest: 400
- 2 - https://w3id.org/tern/ontologies/tern/resultDateTime: 400
- 3 - https://schema.org/value: 1602
- 4 - http://www.w3.org/2006/time#inXSDDateTimeStamp: 100
- 5 - https://w3id.org/tern/ontologies/tern/hasValue: 100
- 6 - https://linked.data.gov.au/def/bdr/dqaf/hasDQAFResult: 1602
- 7 - http://purl.org/dc/terms/identifier: 100
- 8 - http://www.w3.org/ns/sosa/isSampleOf: 100
- 9 - http://purl.org/dc/terms/source: 100
- 10 - http://www.w3.org/ns/sosa/hasSimpleResult: 300
- 11 - http://www.w3.org/ns/sosa/hasResult: 400
- 12 - http://www.opengis.net/ont/geosparql#sfWithin: 1
- 13 - http://www.opengis.net/ont/geosparql#asWKT: 100
- 14 - http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate: 100
- 15 - http://www.opengis.net/ont/geosparql#hasGeometry: 101
- 16 - http://www.w3.org/2004/02/skos/core#prefLabel: 100
- 17 - http://rs.tdwg.org/dwc/terms/scientificNameID: 100
- 18 - http://rdfs.org/ns/void#inDataset: 701
- 19 - http://www.w3.org/2000/01/rdf-schema#comment: 800
- 20 - http://xmlns.com/foaf/0.1/name: 64
- 21 - https://w3id.org/tern/ontologies/tern/qualifiedValue: 300
- 22 - https://w3id.org/tern/ontologies/tern/featureType: 201
- 23 - http://www.w3.org/ns/sosa/phenomenonTime: 300
- 24 - http://www.w3.org/ns/prov#wasAssociatedWith: 200
- 25 - https://w3id.org/tern/ontologies/tern/attribute: 100
- 26 - https://w3id.org/tern/ontologies/tern/locationDescription: 100
- 27 - https://w3id.org/tern/ontologies/tern/hasSimpleValue: 100
- 28 - http://www.w3.org/ns/sosa/resultTime: 1602
- 29 - http://www.w3.org/ns/sosa/observedProperty: 1902
- 30 - http://www.w3.org/ns/sosa/usedProcedure: 400
- 31 - http://www.w3.org/1999/02/22-rdf-syntax-ns#type: 2468
- 32 - http://www.w3.org/2000/01/rdf-schema#label: 500
- 33 - http://www.w3.org/1999/02/22-rdf-syntax-ns#object: 100
- 34 - http://www.w3.org/1999/02/22-rdf-syntax-ns#subject: 100
- 35 - https://w3id.org/tern/ontologies/tern/hasAttribute: 100
- 36 - http://www.w3.org/2006/time#inXSDDate: 200
- 37 - http://purl.org/dc/terms/hasPart: 1064
- 38 - http://www.w3.org/1999/02/22-rdf-syntax-ns#value: 600
- 39 - http://www.w3.org/ns/sosa/isResultOf: 100
+ 1 - http://www.w3.org/2006/time#inXSDDateTimeStamp: 100
+ 2 - http://xmlns.com/foaf/0.1/name: 64
+ 3 - http://www.w3.org/ns/sosa/phenomenonTime: 300
+ 4 - http://www.w3.org/ns/sosa/resultTime: 1602
+ 5 - http://www.w3.org/ns/sosa/hasSimpleResult: 300
+ 6 - http://www.w3.org/ns/sosa/usedProcedure: 400
+ 7 - http://www.w3.org/2000/01/rdf-schema#label: 500
+ 8 - http://www.w3.org/2000/01/rdf-schema#comment: 800
+ 9 - http://www.opengis.net/ont/geosparql#hasGeometry: 101
+ 10 - http://www.w3.org/1999/02/22-rdf-syntax-ns#subject: 100
+ 11 - http://www.w3.org/2004/02/skos/core#prefLabel: 100
+ 12 - http://www.w3.org/1999/02/22-rdf-syntax-ns#object: 100
+ 13 - http://www.w3.org/ns/prov#wasAssociatedWith: 200
+ 14 - https://w3id.org/tern/ontologies/tern/featureType: 201
+ 15 - http://www.w3.org/1999/02/22-rdf-syntax-ns#value: 600
+ 16 - https://w3id.org/tern/ontologies/tern/hasAttribute: 100
+ 17 - http://www.w3.org/ns/sosa/observedProperty: 1902
+ 18 - http://www.w3.org/1999/02/22-rdf-syntax-ns#type: 2468
+ 19 - https://linked.data.gov.au/def/bdr/dqaf/hasDQAFResult: 1602
+ 20 - https://schema.org/value: 1602
+ 21 - http://www.w3.org/ns/sosa/hasResult: 400
+ 22 - http://www.opengis.net/ont/geosparql#asWKT: 100
+ 23 - http://purl.org/dc/terms/hasPart: 1064
+ 24 - http://purl.org/dc/terms/source: 100
+ 25 - http://rdfs.org/ns/void#inDataset: 701
+ 26 - http://purl.org/dc/terms/identifier: 100
+ 27 - http://www.w3.org/1999/02/22-rdf-syntax-ns#predicate: 100
+ 28 - http://www.w3.org/ns/sosa/isSampleOf: 100
+ 29 - https://w3id.org/tern/ontologies/tern/attribute: 100
+ 30 - http://www.w3.org/2006/time#inXSDDate: 200
+ 31 - http://www.w3.org/ns/sosa/hasFeatureOfInterest: 400
+ 32 - https://w3id.org/tern/ontologies/tern/hasSimpleValue: 100
+ 33 - https://w3id.org/tern/ontologies/tern/locationDescription: 100
+ 34 - https://w3id.org/tern/ontologies/tern/hasValue: 100
+ 35 - http://www.opengis.net/ont/geosparql#sfWithin: 1
+ 36 - http://www.w3.org/ns/sosa/isResultOf: 100
+ 37 - http://rs.tdwg.org/dwc/terms/scientificNameID: 100
+ 38 - https://w3id.org/tern/ontologies/tern/resultDateTime: 400
+ 39 - https://w3id.org/tern/ontologies/tern/qualifiedValue: 300
 ========= Namespaces (166)===============
  # - Prefix (Frequency): URI 
 1- sosa (5604): http://www.w3.org/ns/sosa/ 
@@ -56,9 +56,9 @@ The RDF file you've provided contains 17708 triples, which are the basic units o
 11- No prefix (1200): http://createme.org/scientificName/ 
 12- No prefix (1100): http://createme.org/sample/field/ 
 13- No prefix (1065): http://createme.org/ 
-14- No prefix (701): http://linked.data.gov.au/def/tern-cv/ 
-15- void (701): http://rdfs.org/ns/void# 
-16- No prefix (701): https://linked.data.gov.au/dataset/bdr/dataset/ 
+14- void (701): http://rdfs.org/ns/void# 
+15- No prefix (701): https://linked.data.gov.au/dataset/bdr/dataset/ 
+16- No prefix (701): http://linked.data.gov.au/def/tern-cv/ 
 17- No prefix (700): http://createme.org/attribute/kingdom/ 
 18- time (600): http://www.w3.org/2006/time# 
 19- No prefix (600): http://createme.org/value/individualCount/ 
@@ -69,144 +69,144 @@ The RDF file you've provided contains 17708 triples, which are the basic units o
 24- No prefix (207): http://createme.org/location/ 
 25- No prefix (200): http://example.com/concept/ 
 26- No prefix (103): https://github.com/bio-org-au/api/releases/tag/ 
-27- point_unusual (101): http://example.com/vocab/point_unusual/ 
-28- No prefix (101): http://example.com/assess/point_unusual/ 
-29- point_is_empty (101): http://example.com/vocab/point_is_empty/ 
-30- No prefix (101): http://example.com/assess/point_is_empty/ 
-31- No prefix (100): http://example.com/assess/scientific_name_validation/ 
-32- No prefix (100): http://example.com/assess/australia_state/ 
-33- No prefix (100): http://example.com/assess/datum_is_empty/ 
-34- date_outlier_kmeans (100): http://example.com/vocab/date_outlier_kmeans/ 
-35- No prefix (100): http://example.com/assess/date_format_validation/ 
-36- date_format_validation (100): http://example.com/vocab/date_format_validation/ 
-37- date_recency (100): http://example.com/vocab/date_recency/ 
-38- point_outlier_zscore (100): http://example.com/vocab/point_outlier_zscore/ 
-39- date_is_empty (100): http://example.com/vocab/date_is_empty/ 
-40- skos (100): http://www.w3.org/2004/02/skos/core# 
-41- No prefix (100): http://example.com/assess/datum_validation/ 
-42- No prefix (100): http://example.com/assess/date_recency/ 
-43- No prefix (100): http://example.com/assess/scientific_name_is_empty/ 
-44- australia_state (100): http://example.com/vocab/australia_state/ 
-45- datum_type (100): http://example.com/vocab/datum_type/ 
-46- No prefix (100): http://example.com/assess/date_is_empty/ 
-47- No prefix (100): http://example.com/kingdom/ 
-48- date_outlier_irq (100): http://example.com/vocab/date_outlier_irq/ 
-49- scientific_name_is_empty (100): http://example.com/vocab/scientific_name_is_empty/ 
-50- No prefix (100): http://example.com/assess/date_outlier_kmeans/ 
-51- coordinate_precision (100): http://example.com/vocab/coordinate_precision/ 
-52- point_outlier_irq (100): http://example.com/vocab/point_outlier_irq/ 
-53- datum_validation (100): http://example.com/vocab/datum_validation/ 
-54- scientific_name_validation (100): http://example.com/vocab/scientific_name_validation/ 
-55- No prefix (100): http://example.com/assess/point_outlier_irq/ 
-56- No prefix (100): http://example.com/assess/datum_type/ 
-57- No prefix (100): http://example.com/assess/date_outlier_irq/ 
-58- No prefix (100): http://example.com/assess/point_outlier_zscore/ 
-59- No prefix (100): http://example.com/assess/coordinate_precision/ 
-60- datum_is_empty (100): http://example.com/vocab/datum_is_empty/ 
-61- No prefix (100): http://example.com/sampling-protocol/ 
-62- dwc (100): http://rs.tdwg.org/dwc/terms/ 
-63- No prefix (100): https://id.biodiversity.org.au/name/apni/ 
+27- No prefix (101): http://example.com/assess/point_unusual/ 
+28- point_is_empty (101): http://example.com/vocab/point_is_empty/ 
+29- No prefix (101): http://example.com/assess/point_is_empty/ 
+30- point_unusual (101): http://example.com/vocab/point_unusual/ 
+31- No prefix (100): http://example.com/assess/date_format_validation/ 
+32- No prefix (100): http://example.com/kingdom/ 
+33- No prefix (100): http://example.com/assess/coordinate_precision/ 
+34- scientific_name_validation (100): http://example.com/vocab/scientific_name_validation/ 
+35- No prefix (100): http://example.com/assess/point_outlier_irq/ 
+36- datum_type (100): http://example.com/vocab/datum_type/ 
+37- No prefix (100): http://example.com/assess/datum_is_empty/ 
+38- No prefix (100): http://example.com/assess/date_is_empty/ 
+39- date_outlier_irq (100): http://example.com/vocab/date_outlier_irq/ 
+40- coordinate_precision (100): http://example.com/vocab/coordinate_precision/ 
+41- No prefix (100): http://example.com/assess/date_outlier_irq/ 
+42- No prefix (100): http://example.com/assess/point_outlier_zscore/ 
+43- date_is_empty (100): http://example.com/vocab/date_is_empty/ 
+44- datum_validation (100): http://example.com/vocab/datum_validation/ 
+45- No prefix (100): http://example.com/assess/date_outlier_kmeans/ 
+46- No prefix (100): http://example.com/assess/datum_validation/ 
+47- date_outlier_kmeans (100): http://example.com/vocab/date_outlier_kmeans/ 
+48- No prefix (100): http://example.com/assess/australia_state/ 
+49- date_format_validation (100): http://example.com/vocab/date_format_validation/ 
+50- No prefix (100): http://example.com/assess/scientific_name_validation/ 
+51- No prefix (100): http://example.com/assess/scientific_name_is_empty/ 
+52- No prefix (100): http://example.com/sampling-protocol/ 
+53- dwc (100): http://rs.tdwg.org/dwc/terms/ 
+54- No prefix (100): https://id.biodiversity.org.au/name/apni/ 
+55- point_outlier_zscore (100): http://example.com/vocab/point_outlier_zscore/ 
+56- No prefix (100): http://example.com/assess/date_recency/ 
+57- point_outlier_irq (100): http://example.com/vocab/point_outlier_irq/ 
+58- date_recency (100): http://example.com/vocab/date_recency/ 
+59- scientific_name_is_empty (100): http://example.com/vocab/scientific_name_is_empty/ 
+60- skos (100): http://www.w3.org/2004/02/skos/core# 
+61- australia_state (100): http://example.com/vocab/australia_state/ 
+62- datum_is_empty (100): http://example.com/vocab/datum_is_empty/ 
+63- No prefix (100): http://example.com/assess/datum_type/ 
 64- foaf (64): http://xmlns.com/foaf/0.1/ 
-65- No prefix (18): http://createme.org/scientificName/72/ 
-66- No prefix (18): http://createme.org/scientificName/33/ 
-67- No prefix (18): http://createme.org/scientificName/29/ 
-68- No prefix (18): http://createme.org/scientificName/47/ 
-69- No prefix (18): http://createme.org/scientificName/89/ 
-70- No prefix (18): http://createme.org/scientificName/13/ 
-71- No prefix (18): http://createme.org/scientificName/59/ 
-72- No prefix (18): http://createme.org/scientificName/73/ 
-73- No prefix (18): http://createme.org/scientificName/12/ 
-74- No prefix (18): http://createme.org/scientificName/40/ 
-75- No prefix (18): http://createme.org/scientificName/21/ 
-76- No prefix (18): http://createme.org/scientificName/76/ 
-77- No prefix (18): http://createme.org/scientificName/35/ 
-78- No prefix (18): http://createme.org/scientificName/20/ 
-79- No prefix (18): http://createme.org/scientificName/63/ 
-80- No prefix (18): http://createme.org/scientificName/99/ 
-81- No prefix (18): http://createme.org/scientificName/58/ 
-82- No prefix (18): http://createme.org/scientificName/75/ 
-83- No prefix (18): http://createme.org/scientificName/4/ 
-84- No prefix (18): http://createme.org/scientificName/32/ 
-85- No prefix (18): http://createme.org/scientificName/43/ 
-86- No prefix (18): http://createme.org/scientificName/86/ 
-87- No prefix (18): http://createme.org/scientificName/51/ 
-88- No prefix (18): http://createme.org/scientificName/77/ 
-89- No prefix (18): http://createme.org/scientificName/87/ 
-90- No prefix (18): http://createme.org/scientificName/81/ 
-91- No prefix (18): http://createme.org/scientificName/52/ 
-92- No prefix (18): http://createme.org/scientificName/2/ 
-93- No prefix (18): http://createme.org/scientificName/78/ 
-94- No prefix (18): http://createme.org/scientificName/94/ 
-95- No prefix (18): http://createme.org/scientificName/23/ 
-96- No prefix (18): http://createme.org/scientificName/57/ 
-97- No prefix (18): http://createme.org/scientificName/93/ 
-98- No prefix (18): http://createme.org/scientificName/24/ 
-99- No prefix (18): http://createme.org/scientificName/39/ 
-100- No prefix (18): http://createme.org/scientificName/82/ 
-101- No prefix (18): http://createme.org/scientificName/31/ 
-102- No prefix (18): http://createme.org/scientificName/88/ 
-103- No prefix (18): http://createme.org/scientificName/48/ 
-104- No prefix (18): http://createme.org/scientificName/98/ 
-105- No prefix (18): http://createme.org/scientificName/53/ 
-106- No prefix (18): http://createme.org/scientificName/69/ 
-107- No prefix (18): http://createme.org/scientificName/70/ 
-108- No prefix (18): http://createme.org/scientificName/71/ 
-109- No prefix (18): http://createme.org/scientificName/8/ 
-110- No prefix (18): http://createme.org/scientificName/54/ 
-111- No prefix (18): http://createme.org/scientificName/100/ 
-112- No prefix (18): http://createme.org/scientificName/1/ 
-113- No prefix (18): http://createme.org/scientificName/67/ 
-114- No prefix (18): http://createme.org/scientificName/68/ 
-115- No prefix (18): http://createme.org/scientificName/56/ 
-116- No prefix (18): http://createme.org/scientificName/41/ 
-117- No prefix (18): http://createme.org/scientificName/92/ 
-118- No prefix (18): http://createme.org/scientificName/25/ 
-119- No prefix (18): http://createme.org/scientificName/44/ 
-120- No prefix (18): http://createme.org/scientificName/38/ 
-121- No prefix (18): http://createme.org/scientificName/18/ 
-122- No prefix (18): http://createme.org/scientificName/90/ 
-123- No prefix (18): http://createme.org/scientificName/3/ 
-124- No prefix (18): http://createme.org/scientificName/37/ 
+65- No prefix (18): http://createme.org/scientificName/57/ 
+66- No prefix (18): http://createme.org/scientificName/18/ 
+67- No prefix (18): http://createme.org/scientificName/73/ 
+68- No prefix (18): http://createme.org/scientificName/8/ 
+69- No prefix (18): http://createme.org/scientificName/45/ 
+70- No prefix (18): http://createme.org/scientificName/11/ 
+71- No prefix (18): http://createme.org/scientificName/7/ 
+72- No prefix (18): http://createme.org/scientificName/15/ 
+73- No prefix (18): http://createme.org/scientificName/59/ 
+74- No prefix (18): http://createme.org/scientificName/82/ 
+75- No prefix (18): http://createme.org/scientificName/23/ 
+76- No prefix (18): http://createme.org/scientificName/92/ 
+77- No prefix (18): http://createme.org/scientificName/87/ 
+78- No prefix (18): http://createme.org/scientificName/3/ 
+79- No prefix (18): http://createme.org/scientificName/4/ 
+80- No prefix (18): http://createme.org/scientificName/37/ 
+81- No prefix (18): http://createme.org/scientificName/2/ 
+82- No prefix (18): http://createme.org/scientificName/76/ 
+83- No prefix (18): http://createme.org/scientificName/63/ 
+84- No prefix (18): http://createme.org/scientificName/22/ 
+85- No prefix (18): http://createme.org/scientificName/99/ 
+86- No prefix (18): http://createme.org/scientificName/12/ 
+87- No prefix (18): http://createme.org/scientificName/55/ 
+88- No prefix (18): http://createme.org/scientificName/66/ 
+89- No prefix (18): http://createme.org/scientificName/43/ 
+90- No prefix (18): http://createme.org/scientificName/32/ 
+91- No prefix (18): http://createme.org/scientificName/51/ 
+92- No prefix (18): http://createme.org/scientificName/62/ 
+93- No prefix (18): http://createme.org/scientificName/85/ 
+94- No prefix (18): http://createme.org/scientificName/65/ 
+95- No prefix (18): http://createme.org/scientificName/78/ 
+96- No prefix (18): http://createme.org/scientificName/89/ 
+97- No prefix (18): http://createme.org/scientificName/83/ 
+98- No prefix (18): http://createme.org/scientificName/20/ 
+99- No prefix (18): http://createme.org/scientificName/79/ 
+100- No prefix (18): http://createme.org/scientificName/31/ 
+101- No prefix (18): http://createme.org/scientificName/81/ 
+102- No prefix (18): http://createme.org/scientificName/29/ 
+103- No prefix (18): http://createme.org/scientificName/33/ 
+104- No prefix (18): http://createme.org/scientificName/40/ 
+105- No prefix (18): http://createme.org/scientificName/41/ 
+106- No prefix (18): http://createme.org/scientificName/10/ 
+107- No prefix (18): http://createme.org/scientificName/80/ 
+108- No prefix (18): http://createme.org/scientificName/75/ 
+109- No prefix (18): http://createme.org/scientificName/36/ 
+110- No prefix (18): http://createme.org/scientificName/50/ 
+111- No prefix (18): http://createme.org/scientificName/60/ 
+112- No prefix (18): http://createme.org/scientificName/61/ 
+113- No prefix (18): http://createme.org/scientificName/6/ 
+114- No prefix (18): http://createme.org/scientificName/34/ 
+115- No prefix (18): http://createme.org/scientificName/67/ 
+116- No prefix (18): http://createme.org/scientificName/94/ 
+117- No prefix (18): http://createme.org/scientificName/71/ 
+118- No prefix (18): http://createme.org/scientificName/93/ 
+119- No prefix (18): http://createme.org/scientificName/77/ 
+120- No prefix (18): http://createme.org/scientificName/56/ 
+121- No prefix (18): http://createme.org/scientificName/88/ 
+122- No prefix (18): http://createme.org/scientificName/53/ 
+123- No prefix (18): http://createme.org/scientificName/84/ 
+124- No prefix (18): http://createme.org/scientificName/27/ 
 125- No prefix (18): http://createme.org/scientificName/49/ 
-126- No prefix (18): http://createme.org/scientificName/34/ 
-127- No prefix (18): http://createme.org/scientificName/60/ 
-128- No prefix (18): http://createme.org/scientificName/16/ 
-129- No prefix (18): http://createme.org/scientificName/42/ 
-130- No prefix (18): http://createme.org/scientificName/9/ 
-131- No prefix (18): http://createme.org/scientificName/17/ 
-132- No prefix (18): http://createme.org/scientificName/96/ 
-133- No prefix (18): http://createme.org/scientificName/50/ 
-134- No prefix (18): http://createme.org/scientificName/61/ 
-135- No prefix (18): http://createme.org/scientificName/26/ 
-136- No prefix (18): http://createme.org/scientificName/5/ 
-137- No prefix (18): http://createme.org/scientificName/66/ 
-138- No prefix (18): http://createme.org/scientificName/22/ 
-139- No prefix (18): http://createme.org/scientificName/55/ 
-140- No prefix (18): http://createme.org/scientificName/30/ 
-141- No prefix (18): http://createme.org/scientificName/10/ 
-142- No prefix (18): http://createme.org/scientificName/36/ 
-143- No prefix (18): http://createme.org/scientificName/64/ 
-144- No prefix (18): http://createme.org/scientificName/97/ 
+126- No prefix (18): http://createme.org/scientificName/72/ 
+127- No prefix (18): http://createme.org/scientificName/26/ 
+128- No prefix (18): http://createme.org/scientificName/44/ 
+129- No prefix (18): http://createme.org/scientificName/30/ 
+130- No prefix (18): http://createme.org/scientificName/28/ 
+131- No prefix (18): http://createme.org/scientificName/1/ 
+132- No prefix (18): http://createme.org/scientificName/46/ 
+133- No prefix (18): http://createme.org/scientificName/54/ 
+134- No prefix (18): http://createme.org/scientificName/74/ 
+135- No prefix (18): http://createme.org/scientificName/35/ 
+136- No prefix (18): http://createme.org/scientificName/16/ 
+137- No prefix (18): http://createme.org/scientificName/69/ 
+138- No prefix (18): http://createme.org/scientificName/47/ 
+139- No prefix (18): http://createme.org/scientificName/68/ 
+140- No prefix (18): http://createme.org/scientificName/39/ 
+141- No prefix (18): http://createme.org/scientificName/91/ 
+142- No prefix (18): http://createme.org/scientificName/64/ 
+143- No prefix (18): http://createme.org/scientificName/58/ 
+144- No prefix (18): http://createme.org/scientificName/48/ 
 145- No prefix (18): http://createme.org/scientificName/19/ 
-146- No prefix (18): http://createme.org/scientificName/83/ 
-147- No prefix (18): http://createme.org/scientificName/79/ 
-148- No prefix (18): http://createme.org/scientificName/27/ 
-149- No prefix (18): http://createme.org/scientificName/84/ 
-150- No prefix (18): http://createme.org/scientificName/11/ 
-151- No prefix (18): http://createme.org/scientificName/46/ 
-152- No prefix (18): http://createme.org/scientificName/7/ 
-153- No prefix (18): http://createme.org/scientificName/6/ 
-154- No prefix (18): http://createme.org/scientificName/28/ 
-155- No prefix (18): http://createme.org/scientificName/74/ 
-156- No prefix (18): http://createme.org/scientificName/80/ 
-157- No prefix (18): http://createme.org/scientificName/95/ 
-158- No prefix (18): http://createme.org/scientificName/85/ 
-159- No prefix (18): http://createme.org/scientificName/45/ 
-160- No prefix (18): http://createme.org/scientificName/15/ 
-161- No prefix (18): http://createme.org/scientificName/62/ 
-162- No prefix (18): http://createme.org/scientificName/14/ 
-163- No prefix (18): http://createme.org/scientificName/65/ 
-164- No prefix (18): http://createme.org/scientificName/91/ 
+146- No prefix (18): http://createme.org/scientificName/9/ 
+147- No prefix (18): http://createme.org/scientificName/52/ 
+148- No prefix (18): http://createme.org/scientificName/24/ 
+149- No prefix (18): http://createme.org/scientificName/96/ 
+150- No prefix (18): http://createme.org/scientificName/100/ 
+151- No prefix (18): http://createme.org/scientificName/97/ 
+152- No prefix (18): http://createme.org/scientificName/70/ 
+153- No prefix (18): http://createme.org/scientificName/17/ 
+154- No prefix (18): http://createme.org/scientificName/5/ 
+155- No prefix (18): http://createme.org/scientificName/38/ 
+156- No prefix (18): http://createme.org/scientificName/25/ 
+157- No prefix (18): http://createme.org/scientificName/13/ 
+158- No prefix (18): http://createme.org/scientificName/98/ 
+159- No prefix (18): http://createme.org/scientificName/86/ 
+160- No prefix (18): http://createme.org/scientificName/90/ 
+161- No prefix (18): http://createme.org/scientificName/42/ 
+162- No prefix (18): http://createme.org/scientificName/95/ 
+163- No prefix (18): http://createme.org/scientificName/21/ 
+164- No prefix (18): http://createme.org/scientificName/14/ 
 165- No prefix (1): https://sws.geonames.org/2077456/ 
 166- bdrm (1): https://linked.data.gov.au/def/bdr-msg/ 
 
@@ -304,6 +304,6 @@ The RDF file you've provided contains 17708 triples, which are the basic units o
 	False: 94
 
 - Scoring Method Applying: BDR_General_Weight: 100
-	Max: 7.200000000000001
-	Min: 4.6000000000000005
-	Avg: 6.144
+	Max: 1.0
+	Min: 0.6389
+	Avg: 0.853322

@@ -91,6 +91,7 @@ class RDFDataQualityAssessment:
                 self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Date Completeness', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
 
     def assess_date_recency(self):
         assessment_name = "date_recency"
@@ -115,7 +116,7 @@ class RDFDataQualityAssessment:
                 self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Date Recency', total_assessments, result_counts)
-        return total_assessments, result_counts
+        return assessment_name, total_assessments, result_counts
 
     def assess_datum_completeness(self):
         assessment_name = "datum_completeness"
@@ -137,6 +138,7 @@ class RDFDataQualityAssessment:
                 self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Datum Completeness', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
 
     def assess_datum_validation(self):
         assessment_name = "datum_validation"
@@ -158,6 +160,7 @@ class RDFDataQualityAssessment:
                 self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Datum Validation', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
 
     def assess_datum_type(self):
         assessment_name = "datum_type"
@@ -181,6 +184,7 @@ class RDFDataQualityAssessment:
                 self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Datum Type', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
 
     def assess_coordinate_precision(self):
         assessment_name = "coordinate_precision"
@@ -201,6 +205,7 @@ class RDFDataQualityAssessment:
                     self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Coordinate Precision', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
 
     def assess_coordinate_completeness(self):
         assessment_name = "coordinate_completeness"
@@ -220,6 +225,7 @@ class RDFDataQualityAssessment:
                 self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report(f'Assess Coordinate Completeness', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
 
     def assess_date_outlier_irq(self):
         assessment_name = "date_outlier_irq"
@@ -254,6 +260,7 @@ class RDFDataQualityAssessment:
                         self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report(f'Assess Date Outlier IRQ', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
 
     def assess_date_outlier_kmeans(self):
         assessment_name = "date_outlier_kmeans"
@@ -296,6 +303,7 @@ class RDFDataQualityAssessment:
                         self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
             self.add_to_report(f'Assess Date Outlier Kmeans', total_assessments, result_counts)
+            return assessment_name, total_assessments, result_counts
 
     def assess_coordinate_in_australia_state(self):
         assessment_name = "coordinate_in_australia_state"
@@ -322,7 +330,7 @@ class RDFDataQualityAssessment:
                     self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report(f'Assess Coordinate in Australia State', total_assessments, result_counts)
-        return total_assessments, result_counts
+        return assessment_name, total_assessments, result_counts
 
     def __prefixed_name_to_uri(self, prefixed_name):
         prefix, _, local_part = prefixed_name.partition(':')
@@ -364,6 +372,7 @@ class RDFDataQualityAssessment:
                     self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report(f'Assess Date Format Validation', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
 
     def assess_coordinate_unusual(self):
         assessment_name = "coordinate_unusual"
@@ -383,6 +392,7 @@ class RDFDataQualityAssessment:
                 self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Coordinate Unusual', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
 
     @staticmethod
     def detect_unusual_numbers(number_str):
@@ -450,6 +460,7 @@ class RDFDataQualityAssessment:
                     self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report(f'Assess Coordinate Outlier Zscore', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
 
     def assess_coordinate_outlier_irq(self):
         assessment_name = "coordinate_outlier_irq"
@@ -502,6 +513,7 @@ class RDFDataQualityAssessment:
                     self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report(f'Assess Coordinate Outlier IRQ', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
 
     def assess_scientific_name_completeness(self):
         assessment_name = "scientific_name_completeness"
@@ -525,6 +537,7 @@ class RDFDataQualityAssessment:
                 self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Scientific Name Completeness', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
 
     def assess_scientific_name_validation(self):
         assessment_name = "scientific_name_validation"
@@ -546,10 +559,12 @@ class RDFDataQualityAssessment:
                 self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Scientific Name Validation', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
 
     def _add_assessment_result(self, subject, assessment_type, value, assessment_date=None):
         result_bn = BNode()
         self.g.add((subject, DQAF.hasDQAFResult, result_bn))
+
         self.g.add((result_bn, SOSA.observedProperty, assessment_type))
 
         if isinstance(value, URIRef):

@@ -80,6 +80,7 @@ class UseCaseManager:
             self.add_to_report(assessment_name, total_assessments, result_counts)
 
         self.results_graph.serialize(destination=self.output_result_file, format="turtle")
+        print(self.output_result_file)
 
     def _add_use_case_assessment_result(self, use_case, observation_id, value, assessment_date=None):
         subject = URIRef(f"http://example.com/use_case_assessment/{use_case}/{observation_id}")
