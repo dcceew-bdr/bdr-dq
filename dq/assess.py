@@ -14,6 +14,7 @@ from rdflib.namespace import NamespaceManager, SOSA, TIME, GEO, SDO, XSD, RDF, R
 from shapely.geometry import Point
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import silhouette_score
 
 from .defined_namespaces import DQAF, TERN, DirectoryStructure
 from .report_analysis import ReportAnalysis
@@ -47,7 +48,7 @@ class RDFDataQualityAssessment:
 
         # Add custom labels definition to the new graph and save it into new file name
         self.vocab_manager.create_output_definition_file(
-            os.path.join(self.directory_structure.result_base_path, 'Label_Definition.ttl'))
+            os.path.join(self.directory_structure.result_base_path, 'vocab_Definition.ttl'))
 
         self.vocab_manager.bind_custom_namespaces(self.g)
 
@@ -68,7 +69,6 @@ class RDFDataQualityAssessment:
         self.assess_datum_type()
         self.assess_datum_validation()
 
-
     def assess_date_completeness(self):
         assessment_name = "date_completeness"
 
@@ -76,9 +76,9 @@ class RDFDataQualityAssessment:
             assessment_name)
 
         for s, _, o in self.g.triples((None, SOSA.phenomenonTime, None)):
-            if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
+            if self.has_relevant_comment(s, "NSL name match Observation"):
                 date_is_not_empty = False
-                for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
+                for _, _, date_literal in self.g.triples((o, TIME.inXSDDateTimeStamp, None)):
                     if DateChecker.is_date_not_empty(date_literal):
                         date_is_not_empty = True
                     break  # Assuming only one date per observation; remove if multiple dates need assessment
@@ -100,10 +100,10 @@ class RDFDataQualityAssessment:
             assessment_name)
 
         for s, _, o in self.g.triples((None, SOSA.phenomenonTime, None)):
+            if self.has_relevant_comment(s, "NSL name match Observation"):
 
-            if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
                 date_within_range = False
-                for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
+                for _, _, date_literal in self.g.triples((o, TIME.inXSDDateTimeStamp, None)):
                     if DateChecker.is_date_recent(date_literal):
                         date_within_range = True
                     break  # Assuming only one date per observation; remove if multiple dates need assessment
@@ -125,17 +125,18 @@ class RDFDataQualityAssessment:
             assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
-            geometry = next(self.g.objects(o, GEO.asWKT), None)
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
 
-            if geometry:
-                datum_is_empty = self.datum_checker.is_not_empty(str(geometry))
-                result_label = "not_empty" if datum_is_empty else "empty"
+                if geometry:
+                    datum_is_empty = self.datum_checker.is_not_empty(str(geometry))
+                    result_label = "not_empty" if datum_is_empty else "empty"
 
-                result_counts[result_label] += 1
-                total_assessments += 1
+                    result_counts[result_label] += 1
+                    total_assessments += 1
 
-                self._add_assessment_result(s, assess_namespace, namespace[result_label])
-                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
+                    self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Datum Completeness', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
@@ -147,17 +148,18 @@ class RDFDataQualityAssessment:
             assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
-            geometry = next(self.g.objects(o, GEO.asWKT), None)
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
 
-            if geometry:
-                epsg_link = self.datum_checker.extract_epsg_link(str(geometry))
-                datum_metadata = self.datum_checker.get_datum_metadata(epsg_link)
-                result_label = "valid" if datum_metadata else "invalid"
+                if geometry:
+                    epsg_link = self.datum_checker.extract_epsg_link(str(geometry))
+                    datum_metadata = self.datum_checker.get_datum_metadata(epsg_link)
+                    result_label = "valid" if datum_metadata else "invalid"
 
-                result_counts[result_label] += 1
-                total_assessments += 1
-                self._add_assessment_result(s, assess_namespace, namespace[result_label])
-                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
+                    result_counts[result_label] += 1
+                    total_assessments += 1
+                    self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Datum Validation', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
@@ -169,22 +171,31 @@ class RDFDataQualityAssessment:
             assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
-            geometry = next(self.g.objects(o, GEO.asWKT), None)
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
 
-            if geometry:
-                epsg_link = self.datum_checker.extract_epsg_link(str(geometry))
-                datum_metadata = self.datum_checker.get_datum_metadata(epsg_link)
+                if geometry:
+                    epsg_link = self.datum_checker.extract_epsg_link(str(geometry))
+                    datum_metadata = self.datum_checker.get_datum_metadata(epsg_link)
 
-                result_label = datum_metadata["name"] if datum_metadata else "None"
+                    result_label = datum_metadata["name"] if datum_metadata else "None"
 
-                result_counts[result_label] += 1
-                total_assessments += 1
+                    result_counts[result_label] += 1
+                    total_assessments += 1
 
-                self._add_assessment_result(s, assess_namespace, namespace[result_label])
-                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
+                    self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Datum Type', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
+
+    def has_relevant_comment(self, s, rel_comment):
+        found_relevant_comment = False
+        for _, _, comment in self.g.triples((s, RDFS.comment, None)):
+            if rel_comment in str(comment):
+                found_relevant_comment = True
+                break
+        return found_relevant_comment
 
     def assess_coordinate_precision(self):
         assessment_name = "coordinate_precision"
@@ -193,16 +204,17 @@ class RDFDataQualityAssessment:
             assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
-            geometry = next(self.g.objects(o, GEO.asWKT), None)
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
 
-            if geometry:
-                result_label = GeoChecker.extract_and_assess_coordinate_precision(geometry)
+                if geometry:
+                    result_label = GeoChecker.extract_and_assess_coordinate_precision(geometry)
 
-                if result_label:
-                    result_counts[result_label] += 1
-                    total_assessments += 1
-                    self._add_assessment_result(s, assess_namespace, namespace[result_label])
-                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
+                    if result_label:
+                        result_counts[result_label] += 1
+                        total_assessments += 1
+                        self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                        self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Coordinate Precision', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
@@ -214,15 +226,16 @@ class RDFDataQualityAssessment:
             assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
-            geometry = next(self.g.objects(o, GEO.asWKT), None)
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
 
-            if geometry:
-                result_label = GeoChecker.check_geometry_completeness(geometry)
-                result_counts[result_label] += 1
+                if geometry:
+                    result_label = GeoChecker.check_geometry_completeness(geometry)
+                    result_counts[result_label] += 1
 
-                total_assessments += 1
-                self._add_assessment_result(s, assess_namespace, namespace[result_label])
-                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
+                    total_assessments += 1
+                    self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report(f'Assess Coordinate Completeness', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
@@ -234,11 +247,12 @@ class RDFDataQualityAssessment:
 
         observation_dates = []
         for s, _, o in self.g.triples((None, SOSA.phenomenonTime, None)):
+            if self.has_relevant_comment(s, "NSL name match Observation"):
 
-            if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
-                for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
-                    if date_literal.datatype == XSD.date:
-                        observation_dates.append(date_literal.toPython())
+                for _, _, date_literal in self.g.triples((o, TIME.inXSDDateTimeStamp, None)):
+                    if date_literal.datatype in [XSD.dateTime, XSD.dateTimeStamp]:
+                        datetime_obj = datetime.fromisoformat(date_literal)
+                        observation_dates.append(datetime_obj.date())
 
         observation_dates = np.array(
             [date.toordinal() for date in observation_dates])
@@ -247,10 +261,11 @@ class RDFDataQualityAssessment:
         IQR = Q3 - Q1
 
         for s, _, o in self.g.triples((None, SOSA.phenomenonTime, None)):
-            if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
-                for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
-                    if date_literal.datatype == XSD.date:
-                        observation_date = date_literal.toPython().toordinal()  # Convert date to ordinal value
+            if self.has_relevant_comment(s, "NSL name match Observation"):
+                for _, _, date_literal in self.g.triples((o, TIME.inXSDDateTimeStamp, None)):
+                    if date_literal.datatype in [XSD.dateTime, XSD.dateTimeStamp]:
+                        datetime_obj = datetime.fromisoformat(date_literal)
+                        observation_date = datetime_obj.date().toordinal()  # Convert date to ordinal value
                         is_outlier = observation_date < Q1 - 1.5 * IQR or observation_date > Q3 + 1.5 * IQR
                         result_label = "outlier_date" if is_outlier else "normal_date"
                         result_counts[result_label] += 1
@@ -269,10 +284,11 @@ class RDFDataQualityAssessment:
 
         observation_dates = []
         for s, _, o in self.g.triples((None, SOSA.phenomenonTime, None)):
-            if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
-                for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
-                    if date_literal.datatype == XSD.date:
-                        observation_dates.append(date_literal.toPython())
+            if self.has_relevant_comment(s, "NSL name match Observation"):
+                for _, _, date_literal in self.g.triples((o, TIME.inXSDDateTimeStamp, None)):
+                    if date_literal.datatype in [XSD.dateTime, XSD.dateTimeStamp]:
+                        datetime_obj = datetime.fromisoformat(date_literal)
+                        observation_dates.append(datetime_obj.date())
 
         if observation_dates:
             base_date = min(observation_dates)
@@ -281,8 +297,23 @@ class RDFDataQualityAssessment:
             scaler = MinMaxScaler()
             scaled_dates = scaler.fit_transform(numeric_dates)
 
-            n_clusters = 5
-            kmeans = KMeans(n_clusters=n_clusters, random_state=42)
+            best_k = 2
+            best_score = -1
+
+            if len(np.unique(scaled_dates)) > 1:
+                for k in range(2, min(len(scaled_dates), 10)):
+                    kmeans = KMeans(n_clusters=k, random_state=42)
+                    labels = kmeans.fit_predict(scaled_dates)
+                    if len(set(labels)) > 1:
+                        score = silhouette_score(scaled_dates, labels)
+                        if score > best_score:
+                            best_k = k
+                            best_score = score
+                    else:
+                        break  # Break the loop if only one cluster has been formed
+
+            print('Best K for kmeans as the number of clusters is ', best_k)
+            kmeans = KMeans(n_clusters=best_k, random_state=42)
             kmeans.fit(scaled_dates)
             labels = kmeans.labels_
 
@@ -290,9 +321,9 @@ class RDFDataQualityAssessment:
             outliers_indices = [i for i, label in enumerate(labels) if label == outlier_cluster]
 
             for index, (s, _, o) in enumerate(self.g.triples((None, SOSA.phenomenonTime, None))):
-                if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
-                    for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
-                        if date_literal.datatype == XSD.date and index in outliers_indices:
+                if self.has_relevant_comment(s, "NSL name match Observation"):
+                    for _, _, date_literal in self.g.triples((o, TIME.inXSDDateTimeStamp, None)):
+                        if date_literal.datatype == XSD.dateTimeStamp and index in outliers_indices:
                             result_label = "outlier_date"
                         else:
                             result_label = "normal_date"
@@ -312,22 +343,23 @@ class RDFDataQualityAssessment:
             assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
-            geometry = next(self.g.objects(o, GEO.asWKT), None)
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
 
-            if geometry:
-                match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
-                if match:
-                    long, lat = map(float, match.groups())
-                    in_australia, state_name = self.geo_checker.is_point_in_australia_state(lat, long)
-                    result_label = state_name if in_australia else "Outside_Australia"
+                if geometry:
+                    match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
+                    if match:
+                        long, lat = map(float, match.groups())
+                        in_australia, state_name = self.geo_checker.is_point_in_australia_state(lat, long)
+                        result_label = state_name if in_australia else "Outside_Australia"
 
-                    result_counts[result_label] += 1
+                        result_counts[result_label] += 1
 
-                    total_assessments += 1
-                    result_label_uri = namespace[result_label.replace(' ', '_')]
+                        total_assessments += 1
+                        result_label_uri = namespace[result_label.replace(' ', '_')]
 
-                    self._add_assessment_result(s, assess_namespace, result_label_uri)
-                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
+                        self._add_assessment_result(s, assess_namespace, result_label_uri)
+                        self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report(f'Assess Coordinate in Australia State', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
@@ -358,11 +390,11 @@ class RDFDataQualityAssessment:
             assessment_name)
 
         for s, _, o in self.g.triples((None, SOSA.phenomenonTime, None)):
-            if self.g.value(s, RDFS.comment) == Literal("individualCount-observation"):
+            if self.has_relevant_comment(s, "NSL name match Observation"):
                 found_date_within_range = False
-                for _, _, date_literal in self.g.triples((o, TIME.inXSDDate, None)):
+                for _, _, date_literal in self.g.triples((o, TIME.inXSDDateTimeStamp, None)):
                     date_str = str(date_literal)
-                    date_check = DateChecker(date_str)
+                    date_check = DateChecker(date_str[:10])
                     is_valid_date, detected_format = date_check.check_date_format_and_validate()
                     result_label = "valid" if is_valid_date else "invalid"
                     result_counts[result_label] += 1
@@ -381,15 +413,16 @@ class RDFDataQualityAssessment:
             assessment_name)
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
-            geometry = next(self.g.objects(o, GEO.asWKT), None)
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
 
-            if geometry:
-                result_label = GeoChecker.unusual_check(geometry)
+                if geometry:
+                    result_label = GeoChecker.unusual_check(geometry)
 
-                result_counts[result_label] += 1
-                total_assessments += 1
-                self._add_assessment_result(s, assess_namespace, namespace[result_label])
-                self._add_assessment_result_to_matrix(s, assessment_name, result_label)
+                    result_counts[result_label] += 1
+                    total_assessments += 1
+                    self._add_assessment_result(s, assess_namespace, namespace[result_label])
+                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report('Assess Coordinate Unusual', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
@@ -417,14 +450,15 @@ class RDFDataQualityAssessment:
         latitudes = []
         longitudes = []
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
-            geometry = next(self.g.objects(o, GEO.asWKT), None)
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
 
-            if geometry:
-                match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
-                if match:
-                    long, lat = map(float, match.groups())
-                    latitudes.append(lat)
-                    longitudes.append(long)
+                if geometry:
+                    match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
+                    if match:
+                        long, lat = map(float, match.groups())
+                        latitudes.append(lat)
+                        longitudes.append(long)
 
         if not latitudes or not longitudes:
             print("No valid geographic points found.")
@@ -442,22 +476,23 @@ class RDFDataQualityAssessment:
             return
 
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
-            geometry = next(self.g.objects(o, GEO.asWKT), None)
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
 
-            if geometry:
-                match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
-                if match:
-                    long, lat = map(float, match.groups())
-                    lat_z = (lat - lat_mean) / lat_std
-                    long_z = (long - long_mean) / long_std
-                    is_outlier = abs(lat_z) > 3 or abs(long_z) > 3
-                    result_label = "outlier_coordinate" if is_outlier else "normal_coordinate"
+                if geometry:
+                    match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
+                    if match:
+                        long, lat = map(float, match.groups())
+                        lat_z = (lat - lat_mean) / lat_std
+                        long_z = (long - long_mean) / long_std
+                        is_outlier = abs(lat_z) > 3 or abs(long_z) > 3
+                        result_label = "outlier_coordinate" if is_outlier else "normal_coordinate"
 
-                    total_assessments += 1
-                    result_counts[result_label] += 1
+                        total_assessments += 1
+                        result_counts[result_label] += 1
 
-                    self._add_assessment_result(s, assess_namespace, namespace[result_label.lower()])
-                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
+                        self._add_assessment_result(s, assess_namespace, namespace[result_label.lower()])
+                        self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report(f'Assess Coordinate Outlier Zscore', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
@@ -471,14 +506,15 @@ class RDFDataQualityAssessment:
         latitudes = []
         longitudes = []
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
-            geometry = next(self.g.objects(o, GEO.asWKT), None)
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
 
-            if geometry:
-                match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
-                if match:
-                    long, lat = map(float, match.groups())
-                    latitudes.append(lat)
-                    longitudes.append(long)
+                if geometry:
+                    match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
+                    if match:
+                        long, lat = map(float, match.groups())
+                        latitudes.append(lat)
+                        longitudes.append(long)
 
         if not latitudes or not longitudes:
             print("No valid geographic points found.")
@@ -493,24 +529,24 @@ class RDFDataQualityAssessment:
         lat_iqr = lat_q3 - lat_q1
         long_iqr = long_q3 - long_q1
 
-
         for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
-            geometry = next(self.g.objects(o, GEO.asWKT), None)
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
 
-            if geometry:
-                match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
-                if match:
-                    long, lat = map(float, match.groups())
-                    lat_outlier = lat < lat_q1 - 1.5 * lat_iqr or lat > lat_q3 + 1.5 * lat_iqr
-                    long_outlier = long < long_q1 - 1.5 * long_iqr or long > long_q3 + 1.5 * long_iqr
-                    is_outlier = lat_outlier or long_outlier
-                    result_label = "outlier_coordinate" if is_outlier else "normal_coordinate"
+                if geometry:
+                    match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
+                    if match:
+                        long, lat = map(float, match.groups())
+                        lat_outlier = lat < lat_q1 - 1.5 * lat_iqr or lat > lat_q3 + 1.5 * lat_iqr
+                        long_outlier = long < long_q1 - 1.5 * long_iqr or long > long_q3 + 1.5 * long_iqr
+                        is_outlier = lat_outlier or long_outlier
+                        result_label = "outlier_coordinate" if is_outlier else "normal_coordinate"
 
-                    total_assessments += 1
-                    result_counts[result_label] += 1
+                        total_assessments += 1
+                        result_counts[result_label] += 1
 
-                    self._add_assessment_result(s, assess_namespace, namespace[result_label.lower()])
-                    self._add_assessment_result_to_matrix(s, assessment_name, result_label)
+                        self._add_assessment_result(s, assess_namespace, namespace[result_label.lower()])
+                        self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report(f'Assess Coordinate Outlier IRQ', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
@@ -611,9 +647,10 @@ class DateChecker:
 
     @staticmethod
     def is_date_recent(date_literal, years_back=20):
-        if date_literal.datatype == XSD.date:
+        if date_literal.datatype in [XSD.dateTime, XSD.dateTimeStamp]:
+            datetime_obj = datetime.fromisoformat(date_literal)
             current_year = datetime.now().year
-            date_year = date_literal.toPython().year
+            date_year = datetime_obj.date().year
             return (current_year - years_back) <= date_year <= current_year
         return False
 
@@ -676,13 +713,12 @@ class DatumChecker:
 
     def get_datum_metadata(self, link: str) -> Optional[dict]:
         # Define a regular expression pattern to match the EPSG link format
-        pattern = r"http://www.opengis.net/def/crs/EPSG/9.9.1/(\d+)"
+        patterns = [r"http://www.opengis.net/def/crs/EPSG/9.9.1/(\d+)", r"http://www.opengis.net/def/crs/EPSG/0/(\d+)"]
 
-        if re.match(pattern, link):
-            epsg_code = int(link.split("/")[-1])
-
-            return self.datum_metadata.get(epsg_code)
-
+        for pattern in patterns:
+            if re.match(pattern, link):
+                epsg_code = int(link.split("/")[-1])
+                return self.datum_metadata.get(epsg_code)
         return None
 
     def get_datum_metadata_from_asWKT(self, graph, uri):
@@ -766,6 +802,7 @@ class GeoChecker:
         else:
             return "empty"
 
+
 class AustraliaGeographyChecker:
     def __init__(self):
         self.directory_structure = DirectoryStructure()
@@ -802,10 +839,9 @@ class ScientificNameChecker:
     def __init__(self):
         pass
 
-     #   self.nsl_df=pd.read_csv(f'nsl\APNI-names-2024-03-27-4556.csv')
+    #   self.nsl_df=pd.read_csv(f'nsl\APNI-names-2024-03-27-4556.csv')
 
-
-    #def check_name(self, name):
+    # def check_name(self, name):
     #    self.nsl_df.any( )
 
     def check_empty(self, data):

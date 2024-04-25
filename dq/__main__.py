@@ -2,6 +2,7 @@ import argparse
 import os
 import sys
 from pathlib import Path
+from rdflib import Graph
 
 from dq.assess import RDFDataQualityAssessment
 from dq.defined_namespaces import DirectoryStructure
@@ -57,14 +58,40 @@ def main(args=None):
         return
 
     print("Running BDR-DQ...")
-    print(args.data_to_assess)
+
     directory_structure = DirectoryStructure()
 
     report_txt_file = os.path.join(directory_structure.report_base_path,
                                    'Report.txt')
+    input_data_to_assess = args.data_to_assess
+    is_chunk = True
+    if is_chunk:
+        # new function
+        combined_graph = Graph()
+
+        # Load each TTL file into separate RDF graphs and merge them
+        ttl_files = ['chunk_1.ttl', 'chunk_2.ttl', 'chunk_3.ttl', 'chunk_4.ttl']
+        print('Combining the chunk files...')
+        for ttl_file in ttl_files:
+            graph = Graph()
+            ttl_file_path = os.path.join(directory_structure.input_base_path, ttl_file)
+            print(ttl_file_path)
+            graph.parse(ttl_file_path, format='ttl')
+            combined_graph += graph
+
+        # Save the combined graph into a TTL file
+        combined_ttl_file_path = os.path.join(directory_structure.input_base_path, 'combined_graph.ttl')
+        combined_graph.serialize(destination=combined_ttl_file_path, format='turtle')
+
+        combined_graph = Graph()
+        combined_graph.parse(combined_ttl_file_path, format='turtle')
+
+        input_data_to_assess = combined_graph
+
+    print(input_data_to_assess)
 
     with open(report_txt_file, "w") as report_file:
-        dq_assessment = RDFDataQualityAssessment(args.data_to_assess, report_file)
+        dq_assessment = RDFDataQualityAssessment(input_data_to_assess, report_file)
         result_filename = os.path.join(dq_assessment.directory_structure.result_base_path, "Results.ttl")
 
         all_labels = dq_assessment.vocab_manager.create_excel_template(

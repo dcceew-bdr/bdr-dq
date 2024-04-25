@@ -27,3 +27,5 @@ class DirectoryStructure:
         self.use_case_base_path = os.path.join(self.base_path, 'use_case')  # Path to the 'use_case' directory
         self.report_base_path = os.path.join(self.base_path, 'report')  # Path to the 'report' directory
         self.scoring_base_path = os.path.join(self.base_path, 'score')  # Path to the 'score' directory
+        self.input_base_path = os.path.join(self.base_path, 'input')  # Path to the 'input' directory
+        self.document_base_path = os.path.join(self.base_path, 'doc')  # Path to the 'doc' directory
