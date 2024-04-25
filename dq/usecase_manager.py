@@ -1,6 +1,6 @@
 import datetime
 from datetime import datetime
-
+import re
 import numpy as np
 import pandas as pd
 import rdflib
@@ -49,10 +49,27 @@ class UseCaseManager:
 
     @staticmethod
     def extract_record_number(record_uri):
-        try:
-            return int(record_uri.split('/')[-1])
-        except ValueError:
-            return None
+        patterns = [r"http://createme.org/attribute/basisOfRecord/(\d+)",
+         r"http://createme.org/attribute/kingdom/(\d+)",
+         r"http://createme.org/observation/scientificName/(\d+)",
+         r"http://createme.org/sample/field/(\d+)",
+         r"http://createme.org/sample/specimen/(\d+)",
+         r"http://createme.org/sampling/field/(\d+)",
+         r"http://createme.org/sampling/specimen/(\d+)",
+         r"http://createme.org/scientificName/(\d+)",
+         r"http://createme.org/scientificName/(\d+)/observationNameMatch",
+         r"http://createme.org/scientificName/(\d+)/taxon",
+         r"http://createme.org/value/basisOfRecord/(\d+)",
+         r"http://createme.org/value/kingdom/(\d+)"]
+
+        for pattern in patterns:
+            match = re.match(pattern, record_uri)
+            if match:
+                try:
+                    return int(match.group(1))
+                except ValueError:
+                    return None
+        return None
 
     def assess_use_cases(self):
 
