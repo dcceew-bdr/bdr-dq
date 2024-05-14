@@ -1,8 +1,12 @@
-# Understanding Data Quality Assessment Scoring in Python
+# Understanding Data Quality Assessment Numeric Scoring in Python
 
 ## Introduction
 
-This document aims to explain a Python code file that helps in assessing the quality of data through scoring. This code is designed to manage scoring definitions, apply scoring methods to actual data, and generate reports based on the assessment results. 
+This document aims to explain a Python code file that helps in assessing the overall quality of data through numeric scoring of records (fitness-for-purpose FFP, assessment), using weights determined by the data curator for a particular purpose (i.e. a particular FFP profile). 
+
+This code is designed to manage scoring definitions, apply scoring methods to actual data, and generate reports based on the assessment results. 
+
+There is also a way to assess the FFP of data using categorical scores, see (link to documentation when ready) for more information.
 
 ## Overview
 
