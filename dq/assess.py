@@ -13,8 +13,10 @@ from rdflib import Graph, URIRef, Literal, BNode
 from rdflib.namespace import NamespaceManager, SOSA, TIME, GEO, SDO, XSD, RDF, RDFS
 from shapely.geometry import Point
 from sklearn.cluster import KMeans
+from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import silhouette_score
+from sklearn.covariance import EllipticEnvelope
 
 from .defined_namespaces import DQAF, TERN, DirectoryStructure
 from .report_analysis import ReportAnalysis
@@ -57,6 +59,8 @@ class RDFDataQualityAssessment:
         self.assess_coordinate_unusual()
         self.assess_coordinate_in_australia_state()
         self.assess_coordinate_outlier_irq()
+        self.assess_coordinate_outlier_isolation_forest()
+        self.assess_coordinate_outlier_robust_covariance()
         self.assess_coordinate_outlier_zscore()
         self.assess_date_recency()
         self.assess_date_format_validation()
@@ -313,6 +317,7 @@ class RDFDataQualityAssessment:
                         break  # Break the loop if only one cluster has been formed
 
             print('Best K for kmeans as the number of clusters is ', best_k)
+
             kmeans = KMeans(n_clusters=best_k, random_state=42)
             kmeans.fit(scaled_dates)
             labels = kmeans.labels_
@@ -549,6 +554,116 @@ class RDFDataQualityAssessment:
                         self._add_assessment_result_to_matrix(s, assessment_name, result_label)
 
         self.add_to_report(f'Assess Coordinate Outlier IRQ', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
+
+    def assess_coordinate_outlier_isolation_forest(self):
+        assessment_name = "coordinate_outlier_isolation_forest"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
+
+        coordinates = []
+        for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
+
+                if geometry:
+                    match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
+                    if match:
+                        long, lat = map(float, match.groups())
+                        coordinates.append([lat, long])
+
+        if not coordinates:
+            print("No valid geographic points found.")
+            return
+
+        if len(coordinates) < 4:
+            print("Insufficient data for outlier analysis.")
+            return
+
+        clf = IsolationForest(contamination=0.1, random_state=42)
+
+        clf.fit(coordinates)
+
+        outlier_predictions = clf.predict(coordinates)
+
+        for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
+
+                if geometry:
+                    match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
+                    if match:
+                        long, lat = map(float, match.groups())
+                        coordinate = [lat, long]
+                        is_outlier = outlier_predictions[coordinates.index(coordinate)] == -1
+                        result_label = "outlier_coordinate" if is_outlier else "normal_coordinate"
+
+                        total_assessments += 1
+                        result_counts[result_label] += 1
+
+                        self._add_assessment_result(s, assess_namespace, namespace[result_label.lower()])
+                        self._add_assessment_result_to_matrix(s, assessment_name, result_label)
+
+        self.add_to_report(f'Assess Coordinate Outlier Isolation Forest', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
+
+    def assess_coordinate_outlier_robust_covariance(self):
+        assessment_name = "coordinate_outlier_robust_covariance"
+
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
+
+        coordinates = []
+        for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
+
+                if geometry:
+                    match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
+                    if match:
+                        long, lat = map(float, match.groups())
+                        coordinates.append([lat, long])
+
+        if not coordinates:
+            print("No valid geographic points found.")
+            return
+
+        if len(coordinates) < 4:
+            print("Insufficient data for outlier analysis.")
+            return
+
+
+        coordinates = np.array(coordinates)
+
+
+        cov_estimator = EllipticEnvelope(contamination=0.1, random_state=42)
+
+        cov_estimator.fit(coordinates)
+
+        outlier_predictions = cov_estimator.predict(coordinates)
+
+        for s, _, o in self.g.triples((None, GEO.hasGeometry, None)):
+            if self.has_relevant_comment(s, "field-sampling"):
+                geometry = next(self.g.objects(o, GEO.asWKT), None)
+
+                if geometry:
+                    match = re.search(r"POINT \(([^ ]+) ([^ ]+)\)", str(geometry))
+                    if match:
+                        long, lat = map(float, match.groups())
+                        coordinate = [lat, long]
+                        coordinate_index = np.where((coordinates == coordinate).all(axis=1))[0]
+                        if len(coordinate_index) > 0:
+                            is_outlier = outlier_predictions[coordinate_index[0]] == -1
+                            result_label = "outlier_coordinate" if is_outlier else "normal_coordinate"
+
+                            total_assessments += 1
+                            result_counts[result_label] += 1
+
+                            self._add_assessment_result(s, assess_namespace, namespace[result_label.lower()])
+                            self._add_assessment_result_to_matrix(s, assessment_name, result_label)
+
+        self.add_to_report(f'Assess Coordinate Outlier Robust Covariance', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
     def assess_scientific_name_completeness(self):

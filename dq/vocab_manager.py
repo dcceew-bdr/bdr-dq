@@ -103,6 +103,39 @@ class VocabManager:
                     "normal_coordinate": "If the geographic coordinate data (latitude and/or longitude) from the 'geo:hasGeometry' field falls within the typical range, as determined by the Interquartile Range (IRQ) method—meaning the point's coordinate values are within the bounds set by Q1 - 1.5IQR and Q3 + 1.5IQR for both latitude and longitude—label the record as 'normal_point'. This suggests the observation point does not significantly deviate from the expected geographic location range, indicating it is not considered an anomaly.",
                 },
             },
+            "coordinate_outlier_isolation_forest": {
+                "category": "coordinate",
+                "input_field_(RDF)": "geo:hasGeometry",
+                "namespace": Namespace("http://example.com/vocab/coordinate_outlier_isolation_forest/"),
+                "assess_namespace": URIRef("http://example.com/assess/coordinate_outlier_isolation_forest/"),
+                "prefix": "coordinate_outlier_isolation_forest",
+                "labels": {
+                    "outlier_coordinate": "This label indicates that the observation coordinate significantly deviates from the typical range, suggesting it may be an anomaly. (Based on Isolation Forest Method)",
+                    "normal_coordinate": "This label indicates that the observation coordinate falls within the typical range, suggesting it is not an anomaly. (Based on Isolation Forest Method)",
+                },
+                "expanded_rule_definition": {
+                    "outlier_coordinate": "If the geographic coordinate data (latitude and/or longitude) from the 'geo:hasGeometry' field is identified as an outlier by the Isolation Forest algorithm—meaning it falls outside the typical range of coordinates—label the record as 'outlier_point'. This indicates the observation point is considered an anomaly, significantly deviating from the common geographic location range.",
+                    "normal_coordinate": "If the geographic coordinate data (latitude and/or longitude) from the 'geo:hasGeometry' field is not identified as an outlier by the Isolation Forest algorithm—meaning it falls within the typical range of coordinates—label the record as 'normal_point'. This suggests the observation point does not significantly deviate from the expected geographic location range, indicating it is not considered an anomaly.",
+                },
+            }
+            ,
+            "coordinate_outlier_robust_covariance": {
+                "category": "coordinate",
+                "input_field_(RDF)": "geo:hasGeometry",
+                "namespace": Namespace("http://example.com/vocab/coordinate_outlier_robust_covariance/"),
+                "assess_namespace": URIRef("http://example.com/assess/coordinate_outlier_robust_covariance/"),
+                "prefix": "coordinate_outlier_robust_covariance",
+                "labels": {
+                    "outlier_coordinate": "This label indicates that the observation coordinate significantly deviates from the typical range, suggesting it may be an anomaly. (Based on Robust Covariance Method)",
+                    "normal_coordinate": "This label indicates that the observation coordinate falls within the typical range, suggesting it is not an anomaly. (Based on Robust Covariance Method)",
+                },
+                "expanded_rule_definition": {
+                    "outlier_coordinate": "If the geographic coordinate data (latitude and/or longitude) from the 'geo:hasGeometry' field is identified as an outlier by the Robust Covariance algorithm—meaning it falls outside the typical range of coordinates—label the record as 'outlier_point'. This indicates the observation point is considered an anomaly, significantly deviating from the common geographic location range.",
+                    "normal_coordinate": "If the geographic coordinate data (latitude and/or longitude) from the 'geo:hasGeometry' field is not identified as an outlier by the Robust Covariance algorithm—meaning it falls within the typical range of coordinates—label the record as 'normal_point'. This suggests the observation point does not significantly deviate from the expected geographic location range, indicating it is not considered an anomaly.",
+                },
+            }
+
+            ,
 
             "coordinate_outlier_zscore": {
                 "category": "coordinate",

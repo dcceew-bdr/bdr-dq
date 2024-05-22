@@ -56,11 +56,26 @@ class ScoringManager:
 
             scoring_results = []
             scoring_vector, scoring_keys = dictionary_to_vector_and_keys(conditions)
-            min_score = 0.0
-            max_score = calculate_subgroup_max_score(conditions)
+
+
+            for _, row in self.result_matrix_df.iterrows():
+
+                row_vector = [1 if row[key] == 1.0 else 0 for key in scoring_keys]
+                dot_product = np.dot(scoring_vector, row_vector)
+                formatted_mapped_value = f"{dot_product:.4f}"
+
+                scoring_results.append(float(formatted_mapped_value))
+
+
+            min_score = min(scoring_results)
+            max_score = max(scoring_results)
+
+            print('Scoring Min, Max', min_score,max_score)
             if max_score == min_score:
                 raise ValueError("max_score must be greater than min_score")
 
+
+            scoring_results = []
             for _, row in self.result_matrix_df.iterrows():
                 total_assessments += 1
                 row_vector = [1 if row[key] == 1.0 else 0 for key in scoring_keys]
@@ -77,6 +92,8 @@ class ScoringManager:
             result_counts['Min'] = min(scoring_results)
             result_counts['Avg'] = sum(scoring_results) / len(scoring_results) if scoring_results != 0 else 'NA'
             result_counts['Max'] = max(scoring_results)
+
+
 
             self.add_to_report(assessment_name, total_assessments, result_counts)
 
@@ -129,6 +146,16 @@ def calculate_subgroup_max_score(dictionary):
         main_group, _ = key.split(':', 1)
         if main_group in grouped_values:
             grouped_values[main_group] = max(grouped_values[main_group], value)
+        else:
+            grouped_values[main_group] = value
+    return sum(grouped_values.values())
+
+def calculate_subgroup_min_score(dictionary):
+    grouped_values = {}
+    for key, value in dictionary.items():
+        main_group, _ = key.split(':', 1)
+        if main_group in grouped_values:
+            grouped_values[main_group] = min(grouped_values[main_group], value)
         else:
             grouped_values[main_group] = value
     return sum(grouped_values.values())
