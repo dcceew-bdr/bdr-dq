@@ -55,15 +55,14 @@ def data_quality_assessment_page():
                 , assessment.assess_datum_type
                 , assessment.assess_datum_validation]
 
-            # st.write(choice)
-
             assessment_results_df = pd.DataFrame(columns=['Assessment Name', 'Total Assessments', 'Result Counts'])
             df_display = st.empty()
-            df_display.dataframe(assessment_results_df)
+
+            df_display.dataframe(assessment_results_df,hide_index=True)
 
             for assess in assessments_functions:
                 assessment_name, total_assessments, result_counts = assess()
-                # result_table_str = dict_to_visual_table(result_counts)
+
                 new_row_df = pd.DataFrame({
                     'Assessment Name': [assessment_name],
                     'Total Assessments': [total_assessments],
@@ -71,6 +70,7 @@ def data_quality_assessment_page():
                 })
                 assessment_results_df = pd.concat([assessment_results_df, new_row_df], ignore_index=True)
                 df_display.dataframe(assessment_results_df)
+
 
     else:
         st.write("Please upload a dataset to begin assessment.")

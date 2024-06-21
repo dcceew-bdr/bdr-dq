@@ -1,10 +1,10 @@
 import streamlit as st
 
 # Setting the page title and layout
-st.set_page_config(page_title="Data Quality and Geographical Checker", layout="wide")
+st.set_page_config(page_title="Data Quality Framework Assessment", layout="wide")
 
 # Title for your application
-st.title("Data Quality and Geographical Checker")
+st.title("Data Quality Framework Assessment")
 
 # Introduction
 st.markdown("""
