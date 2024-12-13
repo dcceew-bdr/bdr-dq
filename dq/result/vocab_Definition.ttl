@@ -14,6 +14,8 @@
 @prefix datum_completeness: <http://example.com/vocab/datum_completeness/> .
 @prefix datum_type: <http://example.com/vocab/datum_type/> .
 @prefix datum_validation: <http://example.com/vocab/datum_validation/> .
+@prefix duplicate_value_combination: <http://example.com/vocab/duplicate/> .
+@prefix geo_spatial_accuracy_precision: <http://example.com/vocab/geo_spatial_accuracy_precision/> .
 @prefix scientific_name_completeness: <http://example.com/vocab/scientific_name_completeness/> .
 @prefix scientific_name_validation: <http://example.com/vocab/scientific_name_validation/> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
@@ -189,6 +191,22 @@ datum_validation:invalid a skos:Concept ;
 datum_validation:valid a skos:Concept ;
     skos:definition "Indicates that the datum link reference is valid and recognized." ;
     skos:prefLabel "Valid" .
+
+duplicate_value_combination:inferred_duplicate a skos:Concept ;
+    skos:definition "Indicates that the record has a combination of values across multiple fields that are identical to other records." ;
+    skos:prefLabel "Inferred_duplicate" .
+
+duplicate_value_combination:inferred_nonduplicate a skos:Concept ;
+    skos:definition "Indicates that the record has a unique combination of values across multiple fields that is not shared by other records." ;
+    skos:prefLabel "Inferred_nonduplicate" .
+
+geo_spatial_accuracy_precision:high_precision a skos:Concept ;
+    skos:definition "Indicates that the spatial accuracy is high, meaning the value of coordinateUncertaintyInMeters is less than or equal to 10,000 meters." ;
+    skos:prefLabel "High_precision" .
+
+geo_spatial_accuracy_precision:low_precision a skos:Concept ;
+    skos:definition "Indicates that the spatial accuracy is low, either because the value of coordinateUncertaintyInMeters is empty or exceeds 10,000 meters." ;
+    skos:prefLabel "Low_precision" .
 
 scientific_name_completeness:empty_name a skos:Concept ;
     skos:definition "This label is used to mark records where the scientific name field is missing or contains no data, indicating a lack of specified scientific identification for the observation or entity." ;

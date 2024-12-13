@@ -169,6 +169,37 @@ class VocabManager:
                 },
             },
 
+            "duplicate": {
+                "category": "data_quality",
+                "input_field_(RDF)": "various_fields",  # Since multiple predicates can be used
+                "namespace": Namespace("http://example.com/vocab/duplicate/"),
+                "assess_namespace": URIRef("http://example.com/assess/duplicate/"),
+                "prefix": "duplicate_value_combination",
+                "labels": {
+                    "inferred_duplicate": "Indicates that the record has a combination of values across multiple fields that are identical to other records.",
+                    "inferred_nonduplicate": "Indicates that the record has a unique combination of values across multiple fields that is not shared by other records.",
+                },
+                "expanded_rule_definition": {
+                    "inferred_duplicate": "If the record has a combination of values across the specified fields that is identical to other records in the dataset, label it as 'duplicate_combination'. This implies redundancy in data values for multiple records.",
+                    "inferred_nonduplicate": "If the record has a unique combination of values across the specified fields, label it as 'unique_combination'. This means that no other records share this exact combination.",
+                },
+            },
+            "geo_spatial_accuracy_precision": {
+                "category": "geo",
+                "input_field_(RDF)": "geo:hasMetricSpatialAccuracy",
+                "namespace": Namespace("http://example.com/vocab/geo_spatial_accuracy_precision/"),
+                "assess_namespace": URIRef("http://example.com/assess/geo_spatial_accuracy_precision/"),
+                "prefix": "geo_spatial_accuracy_precision",
+                "labels": {
+                    "low_precision": "Indicates that the spatial accuracy is low, either because the value of coordinateUncertaintyInMeters is empty or exceeds 10,000 meters.",
+                    "high_precision": "Indicates that the spatial accuracy is high, meaning the value of coordinateUncertaintyInMeters is less than or equal to 10,000 meters.",
+                },
+                "expanded_rule_definition": {
+                    "low_precision": "If the 'coordinateUncertaintyInMeters' field is empty or its value exceeds 10,000, label the record as 'low_precision'. This indicates that the precision of the spatial accuracy is insufficient.",
+                    "high_precision": "If the 'coordinateUncertaintyInMeters' field contains a value of 10,000 or less, label the record as 'high_precision'. This indicates that the precision of the spatial accuracy is adequate.",
+                },
+            },
+
             "date_format_validation": {
                 "category": "date",
                 "input_field_(RDF)": "sosa:phenomenonTime",

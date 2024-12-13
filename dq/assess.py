@@ -9,7 +9,7 @@ from typing import Union
 import geopandas as gpd
 import numpy as np
 import pandas as pd
-
+from collections import defaultdict
 
 from rdflib import Graph, URIRef, Literal, BNode
 from rdflib.namespace import NamespaceManager, SOSA, TIME, GEO, SDO, XSD, RDF, RDFS
@@ -27,7 +27,7 @@ from .vocab_manager import VocabManager
 
 
 class RDFDataQualityAssessment:
-    def __init__(self, g: Union[Path, Graph], report_file=None):
+    def __init__(self, g: Union[Path, Graph], report_file=None, duplicate_predicates_to_check=None):
         self.directory_structure = DirectoryStructure()
         self.report_file = report_file
         self.g = self.load_data(g)
@@ -36,6 +36,7 @@ class RDFDataQualityAssessment:
         self.report_analysis = ReportAnalysis(self.g, report_file)
         self.datum_checker = DatumChecker()
         self.vocab_manager.bind_custom_namespaces(self.g)
+        self.duplicate_predicates_to_check = duplicate_predicates_to_check
         columns = ['observation_id'] + self.vocab_manager.get_all_labels()
         self.result_matrix_df = pd.DataFrame(columns=columns)
         self.data_type = {
@@ -62,6 +63,11 @@ class RDFDataQualityAssessment:
             os.path.join(self.directory_structure.result_base_path, 'vocab_Definition.ttl'))
 
         self.vocab_manager.bind_custom_namespaces(self.g)
+
+        if self.duplicate_predicates_to_check:
+            self.assess_duplicate_value_combination(self.duplicate_predicates_to_check)
+
+        self.assess_geo_spatial_accuracy_precision()
 
         self.assess_coordinate_precision()
         self.assess_coordinate_completeness()
@@ -127,7 +133,8 @@ class RDFDataQualityAssessment:
                             total_assessments += 1
 
                             self._add_assessment_result(procedure, assess_namespace, namespace[result_label])
-                            self._add_assessment_result_to_matrix(procedure, assessment_name, result_label, "date",str(date_literal))
+                            self._add_assessment_result_to_matrix(procedure, assessment_name, result_label, "date",
+                                                                  str(date_literal))
 
                 self._add_assessment_result(observation, assess_namespace, namespace[result_label])
                 self._add_assessment_result_to_matrix(observation, assessment_name, result_label)
@@ -157,6 +164,85 @@ class RDFDataQualityAssessment:
                 self._add_assessment_result_to_matrix(observation, assessment_name, result_label)
 
         self.add_to_report('Assess Date Recency', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
+
+    def assess_duplicate(self, predicates):
+        """
+        Assess duplicate value combinations across all subjects based on specified predicates.
+
+        :param predicates: A list of predicates (as URIRefs) to check for duplicate value combinations.
+        :return: assessment_name, total_assessments, result_counts
+        """
+        assessment_name = "duplicate"
+
+        # Initialize assessment details
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
+
+        # Dictionary to track combinations of values
+        value_combinations = defaultdict(list)
+
+        # Iterate through all subjects in the RDF graph
+        for subject in self.g.subjects():
+            values = []
+
+            # Collect values for specified predicates
+            for predicate in predicates:
+                obj = next(self.g.objects(subject, predicate), None)
+                values.append(str(obj) if obj else None)
+
+            # Only consider value tuples where all fields are present (i.e., none of them are None)
+            if None not in values:
+                value_tuple = tuple(values)
+                value_combinations[value_tuple].append(subject)
+
+        # Identify duplicates and mark them
+        for value_tuple, subjects in value_combinations.items():
+            if len(subjects) > 1:
+                result_label = "inferred_duplicate"
+                result_counts[result_label] += len(subjects)
+                total_assessments += len(subjects)
+
+                # Mark each duplicate subject in the RDF graph
+                for subject in subjects:
+                    self._add_assessment_result(subject, assess_namespace, namespace[result_label])
+                    self._add_assessment_result_to_matrix(subject, assessment_name, result_label)
+
+        # Add to report
+        self.add_to_report('Assess Duplicate Value ', total_assessments, result_counts)
+        return assessment_name, total_assessments, result_counts
+
+    def assess_geo_spatial_accuracy_precision(self):
+        """
+        Assess geo:hasMetricSpatialAccuracy precision based on coordinateUncertaintyInMeters.
+
+        :return: assessment_name, total_assessments, result_counts
+        """
+        assessment_name = "geo_spatial_accuracy_precision"
+
+        # Initialize assessment details
+        namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
+            assessment_name)
+
+        for observation, _, _ in self.g.triples((None, RDF.type, TERN.Observation)):
+            for _, _, sample in self.g.triples((observation, SOSA.hasFeatureOfInterest, None)):
+                if (sample, RDF.type, TERN.Sample) in self.g:
+                    for _, _, procedure in self.g.triples((sample, SOSA.isResultOf, None)):
+                        geometry_node = next(self.g.objects(procedure, GEO.hasMetricSpatialAccuracy), None)
+                        if geometry_node is None or float(geometry_node) > 10000:
+                            result_label = "low_precision"
+                        else:
+                            result_label = "high_precision"
+                    # Increment counters and mark assessment results in RDF graph
+                    result_counts[result_label] += 1
+                    total_assessments += 1
+
+                    # Mark assessment result for the subject
+                    self._add_assessment_result(observation, assess_namespace, namespace[result_label])
+                    self._add_assessment_result_to_matrix(observation, assessment_name, result_label)
+
+        # Add to report
+        self.add_to_report('Assess Geo Spatial Accuracy Precision', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
     def assess_datum_completeness(self):
@@ -256,7 +342,8 @@ class RDFDataQualityAssessment:
                         for _, _, geometry_node in self.g.triples((procedure, GEO.hasGeometry, None)):
                             geometry = next(self.g.objects(geometry_node, GEO.asWKT), None)
                             if geometry:
-                                result_label,  longitude, latitude = GeoChecker.extract_and_assess_coordinate_precision(geometry)
+                                result_label, longitude, latitude = GeoChecker.extract_and_assess_coordinate_precision(
+                                    geometry)
 
                                 if result_label:
                                     result_counts[result_label] += 1
@@ -290,9 +377,10 @@ class RDFDataQualityAssessment:
                                 if match:
                                     long, lat = map(float, match.groups())
                                 else:
-                                    long, lat = 0,0
-                                geometry_point = str(long)+', '+str(lat)
-                                self._add_assessment_result_to_matrix(observation, assessment_name, result_label,"location",geometry_point)
+                                    long, lat = 0, 0
+                                geometry_point = str(long) + ', ' + str(lat)
+                                self._add_assessment_result_to_matrix(observation, assessment_name, result_label,
+                                                                      "location", geometry_point)
 
         self.add_to_report(f'Assess Coordinate Completeness', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
@@ -303,7 +391,7 @@ class RDFDataQualityAssessment:
             assessment_name)
 
         observation_dates = []
-        date_type_test=False
+        date_type_test = False
 
         for s, _, o in self.g.triples((None, RDF.type, TERN.Observation)):
             for _, _, ot in self.g.triples((s, TIME.hasTime, None)):
@@ -311,7 +399,7 @@ class RDFDataQualityAssessment:
                     if date_literal.datatype in [XSD.dateTime, XSD.dateTimeStamp]:
                         datetime_obj = datetime.fromisoformat(date_literal)
                         observation_dates.append(datetime_obj.date())
-                        date_type_test=True
+                        date_type_test = True
                     else:
                         if date_literal.datatype in [XSD.gYear]:
                             datetime_obj = int(date_literal)
@@ -424,14 +512,15 @@ class RDFDataQualityAssessment:
                                                 result_label = "normal_date"
 
                                             result_counts[result_label] += 1
-                                            self._add_assessment_result(observation, assess_namespace, namespace[result_label])
-                                            self._add_assessment_result_to_matrix(observation, assessment_name, result_label)
+                                            self._add_assessment_result(observation, assess_namespace,
+                                                                        namespace[result_label])
+                                            self._add_assessment_result_to_matrix(observation, assessment_name,
+                                                                                  result_label)
 
                                             index_counter += 1
                                         except ValueError:
                                             index_counter += 1
                                             continue  # Skip invalid or incorrectly formatted date literals
-
 
             self.add_to_report(f'Assess Date Outlier Kmeans', total_assessments, result_counts)
             return assessment_name, total_assessments, result_counts
@@ -597,7 +686,8 @@ class RDFDataQualityAssessment:
                                     total_assessments += 1
                                     result_counts[result_label] += 1
 
-                                    self._add_assessment_result(observation, assess_namespace, namespace[result_label.lower()])
+                                    self._add_assessment_result(observation, assess_namespace,
+                                                                namespace[result_label.lower()])
                                     self._add_assessment_result_to_matrix(observation, assessment_name, result_label)
 
         self.add_to_report(f'Assess Coordinate Outlier Zscore', total_assessments, result_counts)
@@ -655,7 +745,8 @@ class RDFDataQualityAssessment:
                                     total_assessments += 1
                                     result_counts[result_label] += 1
 
-                                    self._add_assessment_result(observation, assess_namespace, namespace[result_label.lower()])
+                                    self._add_assessment_result(observation, assess_namespace,
+                                                                namespace[result_label.lower()])
                                     self._add_assessment_result_to_matrix(observation, assessment_name, result_label)
 
         self.add_to_report(f'Assess Coordinate Outlier IRQ', total_assessments, result_counts)
@@ -711,7 +802,8 @@ class RDFDataQualityAssessment:
                                     total_assessments += 1
                                     result_counts[result_label] += 1
 
-                                    self._add_assessment_result(observation, assess_namespace, namespace[result_label.lower()])
+                                    self._add_assessment_result(observation, assess_namespace,
+                                                                namespace[result_label.lower()])
                                     self._add_assessment_result_to_matrix(observation, assessment_name, result_label)
 
         self.add_to_report(f'Assess Coordinate Outlier Isolation Forest', total_assessments, result_counts)
@@ -770,8 +862,10 @@ class RDFDataQualityAssessment:
                                         total_assessments += 1
                                         result_counts[result_label] += 1
 
-                                        self._add_assessment_result(observation, assess_namespace, namespace[result_label.lower()])
-                                        self._add_assessment_result_to_matrix(observation, assessment_name, result_label)
+                                        self._add_assessment_result(observation, assess_namespace,
+                                                                    namespace[result_label.lower()])
+                                        self._add_assessment_result_to_matrix(observation, assessment_name,
+                                                                              result_label)
 
         self.add_to_report(f'Assess Coordinate Outlier Robust Covariance', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts

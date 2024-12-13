@@ -64,7 +64,7 @@ def main(args=None):
     report_txt_file = os.path.join(directory_structure.report_base_path,
                                    'Report.txt')
     input_data_to_assess = args.data_to_assess
-    is_chunk = True
+    is_chunk = False
     if is_chunk:
         # new function
         combined_graph = Graph()
