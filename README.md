@@ -59,7 +59,7 @@ Documentation on the Data Quality Assessment Framework which this tool test for 
 
 ## License & Rights
 
-This software and the other resources in this repository are licensed for reuse using the [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) license, a copy of the deed of which is held in the LICENSE file in this repository.
+This software and the other resources in this repository are licensed for reuse using the [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) license, a copy of the deed of which is held in the LICENSE file in this repository..
 
 ## Contact
 
