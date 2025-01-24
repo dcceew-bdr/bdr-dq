@@ -89,6 +89,7 @@ class RDFDataQualityAssessment:
         self.assess_datum_validation()
 
     def assess_date_completeness(self):
+        # TODO confirm if this is covered in existing DIP validation, if not can be implemented as SPARQL query
         assessment_name = "date_completeness"
 
         namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
@@ -112,7 +113,9 @@ class RDFDataQualityAssessment:
         self.add_to_report('Assess Date Completeness', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # This can be implemented in SPARQL
     def assess_date_recency(self):
+
         assessment_name = "date_recency"
 
         namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
@@ -142,6 +145,7 @@ class RDFDataQualityAssessment:
         self.add_to_report('Assess Date Recency', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # This can be implemented in SPARQL
     def assess_date_recency_old(self):
         assessment_name = "date_recency"
 
@@ -166,6 +170,7 @@ class RDFDataQualityAssessment:
         self.add_to_report('Assess Date Recency', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # Not sure this is necessary; RDF triplestores deduplicate data
     def assess_duplicate(self, predicates):
         """
         Assess duplicate value combinations across all subjects based on specified predicates.
@@ -212,6 +217,7 @@ class RDFDataQualityAssessment:
         self.add_to_report('Assess Duplicate Value ', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # This can be implemented in SPARQL
     def assess_geo_spatial_accuracy_precision(self):
         """
         Assess geo:hasMetricSpatialAccuracy precision based on coordinateUncertaintyInMeters.
@@ -245,6 +251,7 @@ class RDFDataQualityAssessment:
         self.add_to_report('Assess Geo Spatial Accuracy Precision', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # This can be implemented in SPARQL
     def assess_datum_completeness(self):
         assessment_name = "datum_completeness"
 
@@ -270,6 +277,7 @@ class RDFDataQualityAssessment:
         self.add_to_report('Assess Datum Completeness', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # Keep in Python
     def assess_datum_validation(self):
         assessment_name = "datum_validation"
 
@@ -295,6 +303,7 @@ class RDFDataQualityAssessment:
         self.add_to_report('Assess Datum Validation', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # Keep in Python
     def assess_datum_type(self):
         assessment_name = "datum_type"
 
@@ -321,6 +330,7 @@ class RDFDataQualityAssessment:
         self.add_to_report('Assess Datum Type', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # This can be implemented in SPARQL
     def has_relevant_comment(self, s, rel_comment):
         found_relevant_comment = False
         for _, _, comment in self.g.triples((s, RDFS.comment, None)):
@@ -329,6 +339,7 @@ class RDFDataQualityAssessment:
                 break
         return found_relevant_comment
 
+    # Keep in Python
     def assess_coordinate_precision(self):
         assessment_name = "coordinate_precision"
 
@@ -355,6 +366,8 @@ class RDFDataQualityAssessment:
         self.add_to_report('Assess Coordinate Precision', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # This can be implemented in SPARQL
+    # Can we assume that the geometry is always a point?
     def assess_coordinate_completeness(self):
         assessment_name = "coordinate_completeness"
 
@@ -385,6 +398,10 @@ class RDFDataQualityAssessment:
         self.add_to_report(f'Assess Coordinate Completeness', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # Keep in Python
+    # Input can be from SPARQL
+    # Might be worth confirming the distribution of dates in submissions, this could produce a large number of
+    # outliers which represent good data
     def assess_date_outlier_irq(self):
         assessment_name = "date_outlier_irq"
         namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
@@ -444,6 +461,9 @@ class RDFDataQualityAssessment:
         self.add_to_report(f'Assess Date Outlier IRQ', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # Keep in Python
+    # Might be worth checking the output with as close to real data if we haven't already, to see if the data is
+    # clustered, and if so, are data points outside the clusters (outliers) good data.
     def assess_date_outlier_kmeans(self):
         assessment_name = "date_outlier_kmeans"
         namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
@@ -525,6 +545,7 @@ class RDFDataQualityAssessment:
             self.add_to_report(f'Assess Date Outlier Kmeans', total_assessments, result_counts)
             return assessment_name, total_assessments, result_counts
 
+    # This can be implemented in SPARQL
     def assess_coordinate_in_australia_state(self):
         assessment_name = "coordinate_in_australia_state"
 
@@ -553,6 +574,7 @@ class RDFDataQualityAssessment:
         self.add_to_report(f'Assess Coordinate in Australia State', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # Minor FYI there is an RDFLib function for this: g.namespace_manager.expand_curie(curie)
     def __prefixed_name_to_uri(self, prefixed_name):
         prefix, _, local_part = prefixed_name.partition(':')
         for ns_prefix, namespace in self.g.namespaces():
@@ -560,6 +582,8 @@ class RDFDataQualityAssessment:
                 return URIRef(namespace + local_part)
         return URIRef(prefixed_name)  # Return the original prefixed name as a URIRef if no matching prefix is found
 
+    # Minor FYI there is an RDFLib function for this: g.compute_qname(uri) (namespace must be bound in the graph's
+    # namespace manager)
     def __uri_to_prefixed_name(self, uri):
         if not isinstance(uri, URIRef):
             raise ValueError("uri must be an instance of URIRef")
@@ -572,6 +596,8 @@ class RDFDataQualityAssessment:
 
         return str(uri)
 
+    # Keep in Python
+    # Input can be from SPARQL
     def assess_date_format_validation(self):
         assessment_name = "date_format_validation"
 
@@ -595,6 +621,9 @@ class RDFDataQualityAssessment:
         self.add_to_report(f'Assess Date Format Validation', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # Keep in Python
+    # Input can be from SPARQL
+    # Can we assume all geometries are points
     def assess_coordinate_unusual(self):
         assessment_name = "coordinate_unusual"
 
@@ -633,6 +662,8 @@ class RDFDataQualityAssessment:
                     return 'unusual'
         return 'usual'
 
+    # Keep in Python
+    # Input can be from SPARQL
     def assess_coordinate_outlier_zscore(self):
         assessment_name = "coordinate_outlier_zscore"
         namespace, assess_namespace, result_counts, total_assessments = self.vocab_manager.init_assessment(
@@ -693,6 +724,8 @@ class RDFDataQualityAssessment:
         self.add_to_report(f'Assess Coordinate Outlier Zscore', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # Keep in Python
+    # Input can be from SPARQL
     def assess_coordinate_outlier_irq(self):
         assessment_name = "coordinate_outlier_irq"
 
@@ -752,6 +785,8 @@ class RDFDataQualityAssessment:
         self.add_to_report(f'Assess Coordinate Outlier IRQ', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # Keep in Python
+    # Input can be from SPARQL
     def assess_coordinate_outlier_isolation_forest(self):
         assessment_name = "coordinate_outlier_isolation_forest"
 
@@ -809,6 +844,8 @@ class RDFDataQualityAssessment:
         self.add_to_report(f'Assess Coordinate Outlier Isolation Forest', total_assessments, result_counts)
         return assessment_name, total_assessments, result_counts
 
+    # Keep in Python
+    # Input can be from SPARQL
     def assess_coordinate_outlier_robust_covariance(self):
         assessment_name = "coordinate_outlier_robust_covariance"
 
