@@ -1,0 +1,16 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+
+SELECT ?observation ?hasNonEmptyPoint
+WHERE {
+    ?observation rdf:type tern:Observation .
+    BIND(EXISTS {
+            ?observation sosa:hasFeatureOfInterest ?sample .
+            ?sample rdf:type tern:Sample .
+            ?sample sosa:isResultOf/geo:hasGeometry/geo:asWKT ?wkt .
+            FILTER(REGEX(STR(?wkt), "POINT\\s*\\([^\\s]+\\s+[^\\s]+\\)"))
+        } AS ?hasNonEmptyPointBool)
+    BIND(IF(?hasNonEmptyPointBool, "non_empty", "empty") AS ?hasNonEmptyPoint)
+}
