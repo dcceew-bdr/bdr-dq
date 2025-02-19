@@ -1,0 +1,44 @@
+assess_coordinate_precision
+
+-------------------------------------------------------
+PREFIX tern: <http://example.com/tern#>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?observation ?wkt ?precision ?lonPrecision ?latPrecision ?lonStr ?latStr
+WHERE {
+  ?observation a tern:Observation .
+  ?observation sosa:hasFeatureOfInterest ?sample .
+  ?sample a tern:Sample .
+  ?sample sosa:isResultOf ?procedure .
+  ?procedure geo:hasGeometry ?geometry .
+  ?geometry geo:asWKT ?wkt .
+  
+  # Extract longitude and latitude strings using a regular expression
+  BIND(REPLACE(?wkt, "^POINT \\(([-+]?\\d+\\.\\d+)[ ]+([-+]?\\d+\\.\\d+)\\)$", "$1") AS ?lonStr)
+  BIND(REPLACE(?wkt, "^POINT \\(([-+]?\\d+\\.\\d+)[ ]+([-+]?\\d+\\.\\d+)\\)$", "$2") AS ?latStr)
+  
+  # Extract the decimal parts from the coordinate strings
+  BIND(STRAFTER(?lonStr, ".") AS ?lonDec)
+  BIND(STRAFTER(?latStr, ".") AS ?latDec)
+  
+  # Determine the number of digits after the decimal point
+  BIND(STRLEN(?lonDec) AS ?lonPrecision)
+  BIND(STRLEN(?latDec) AS ?latPrecision)
+  
+  # Assign a precision level:
+  # - "High" if both lon and lat have >4 decimals
+  # - "Low" if either has <2 decimals
+  # - Otherwise "Medium"
+  BIND(
+    IF( (xsd:integer(?lonPrecision) > 4 && xsd:integer(?latPrecision) > 4),
+        "High",
+        IF( (xsd:integer(?lonPrecision) < 2 || xsd:integer(?latPrecision) < 2),
+            "Low",
+            "Medium"
+        )
+    ) AS ?precision
+  )
+}
+-------------------------------------------------------

@@ -1,0 +1,29 @@
+assess_coordinate_unusual
+
+-------------------------------------------------------
+PREFIX tern: <http://example.com/tern#>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?observation ?wkt 
+       (IF((REGEX(?lonDec, "([0-9])\\1\\1") || REGEX(?latDec, "([0-9])\\1\\1")),
+           "unusual", "usual") AS ?coordinateUnusual)
+       ?lonStr ?latStr ?lonDec ?latDec
+WHERE {
+  ?observation a tern:Observation .
+  ?observation sosa:hasFeatureOfInterest ?sample .
+  ?sample a tern:Sample .
+  ?sample sosa:isResultOf ?procedure .
+  ?procedure geo:hasGeometry ?geometry .
+  ?geometry geo:asWKT ?wkt .
+
+  # Extract longitude and latitude as strings from a WKT literal formatted as "POINT (lon lat)"
+  BIND(REPLACE(?wkt, "^POINT \\(([-+]?\\d+\\.\\d+)[ ]+([-+]?\\d+\\.\\d+)\\)$", "$1") AS ?lonStr)
+  BIND(REPLACE(?wkt, "^POINT \\(([-+]?\\d+\\.\\d+)[ ]+([-+]?\\d+\\.\\d+)\\)$", "$2") AS ?latStr)
+
+  # Extract the decimal parts (everything after the dot)
+  BIND(STRAFTER(?lonStr, ".") AS ?lonDec)
+  BIND(STRAFTER(?latStr, ".") AS ?latDec)
+}
+-------------------------------------------------------

@@ -1,0 +1,13 @@
+assess_scientific_name_validation
+
+-------------------------------------------------------
+PREFIX tern: <http://example.com/tern#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?feature ?name 
+       (IF(BOUND(?name) && REGEX(STR(?name), "^[A-Z][a-z]+\\s[a-z]+"), "valid_name", "invalid_name") AS ?nameValidation)
+WHERE {
+  ?feature a tern:FeatureOfInterest .
+  OPTIONAL { ?feature rdf:value ?name . }
+}
+-------------------------------------------------------

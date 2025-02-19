@@ -1,0 +1,21 @@
+assess_date_recency
+-------------------------------------------------------
+PREFIX tern: <http://example.com/tern#>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX time: <http://www.w3.org/2006/time#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?observation ?date 
+       (IF(?dateValue >= "2005-01-01"^^xsd:date, "recent_20_years", "outdated_20_years") AS ?dateRecency)
+WHERE {
+  ?observation a tern:Observation .
+  ?observation sosa:hasFeatureOfInterest ?sample .
+  ?sample a tern:Sample .
+  ?sample sosa:isResultOf ?procedure .
+  ?procedure time:hasTime ?ot .
+  ?ot time:inXSDgYear ?date .
+  
+  # Cast the date literal to xsd:date for comparison
+  BIND(xsd:date(?date) AS ?dateValue)
+}
+-------------------------------------------------------
