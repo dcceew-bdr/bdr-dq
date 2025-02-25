@@ -1,0 +1,18 @@
+assess_date_completeness
+
+-------------------------------------------------------
+PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
+PREFIX time: <http://www.w3.org/2006/time#>
+
+
+SELECT ?observation 
+       (IF(BOUND(?dateLiteral) && STRLEN(STR(?dateLiteral)) > 0, "non_empty", "empty") AS ?dateCompleteness)
+WHERE {
+  ?observation a tern:Observation .
+  ?observation time:hasTime ?timeNode .
+  OPTIONAL {
+    ?timeNode time:inXSDgYear ?dateLiteral .
+  }
+}
+
+-------------------------------------------------------

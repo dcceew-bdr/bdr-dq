@@ -1,0 +1,17 @@
+assess_date_format_validation
+-------------------------------------------------------
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX time: <http://www.w3.org/2006/time#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?observation ?dateLiteral 
+       (IF(REGEX(?dateStr, "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"), "valid", "invalid") AS ?dateFormatValidation)
+WHERE {
+  ?observation sosa:phenomenonTime ?timeNode .
+  ?timeNode time:inXSDDateTimeStamp ?dateLiteral .
+  ?observation rdfs:comment ?comment .
+  FILTER(CONTAINS(STR(?comment), "NSL name match Observation"))
+  
+  BIND(SUBSTR(STR(?dateLiteral), 1, 10) AS ?dateStr)
+}
+-------------------------------------------------------

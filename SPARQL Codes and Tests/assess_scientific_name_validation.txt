@@ -1,0 +1,14 @@
+assess_scientific_name_validation
+
+-------------------------------------------------------
+PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+
+SELECT ?observation ?name 
+       (IF(BOUND(?name) && REGEX((STR(?name)), "^[A-Z]+\\s[A-Z]+$"), "valid_name", "invalid_name") AS ?nameValidation)
+WHERE {
+  ?observation a tern:Observation .
+  OPTIONAL { ?observation sosa:hasSimpleResult ?name . }
+}
