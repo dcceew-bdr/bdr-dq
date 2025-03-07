@@ -1,0 +1,14 @@
+PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX time: <http://www.w3.org/2006/time#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?observation ?date
+WHERE {
+  ?observation a tern:Observation .
+  ?observation sosa:hasFeatureOfInterest ?sample .
+  ?sample a tern:Sample .
+  ?sample sosa:isResultOf ?procedure .
+  ?procedure time:hasTime ?ot .
+  ?ot time:inXSDgYear ?date .
+}
