@@ -1,0 +1,8 @@
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+
+SELECT ?observation ?lon ?lat
+WHERE {
+    ?observation geo:hasGeometry/geo:asWKT ?geometry_wkt .
+    BIND(REPLACE(STR(?geometry_wkt), ".*POINT \\(([^ ]+) ([^ ]+)\\).*", "$1") AS ?lon)
+    BIND(REPLACE(STR(?geometry_wkt), ".*POINT \\(([^ ]+) ([^ ]+)\\).*", "$2") AS ?lat)
+}
