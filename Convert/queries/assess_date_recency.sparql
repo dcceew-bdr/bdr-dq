@@ -2,7 +2,7 @@ PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
 PREFIX time: <http://www.w3.org/2006/time#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
-SELECT ?observation ?date ?date_category
+SELECT ?observation ?date ?is_recent
 WHERE {
   ?observation a tern:Observation .
   ?observation time:hasTime ?ot .
@@ -10,5 +10,5 @@ WHERE {
 
   BIND(xsd:integer(STR(?date)) AS ?year)
 
-  BIND(IF(?year >= 1900, "recent_20_years", "outdated_20_years") AS ?date_category)
+  BIND(IF(?year >= 1900, "recent_20_years", "outdated_20_years") AS ?is_recent)
 }
