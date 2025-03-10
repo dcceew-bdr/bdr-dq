@@ -17,7 +17,7 @@ def test_graph():
 
 @pytest.fixture
 def query():
-    with open("queries/assess_date_recency.sparql", "r") as file:
+    with open("../../DQAF/queries/assess_date_recency.sparql", "r") as file:
         return file.read()
 
 def test_date_recency_check(test_graph, query):

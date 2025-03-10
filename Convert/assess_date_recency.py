@@ -7,7 +7,7 @@ def assess_date_recency():
     with open(data_file, "rb") as f:
         store.load(f, format="text/turtle")
 
-    with open("queries/assess_date_recency.sparql", "r") as file:
+    with open("../../DQAF/queries/assess_date_recency.sparql", "r") as file:
         query = file.read()
 
     results = store.query(query)
