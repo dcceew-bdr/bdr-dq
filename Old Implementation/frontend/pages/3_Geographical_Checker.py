@@ -1,10 +1,8 @@
 import sys
-from pathlib import Path
-from typing import Union
 import streamlit as st
 import folium
 from streamlit_folium import st_folium
-from rdflib import Graph, RDF, URIRef
+from rdflib import Graph, RDF
 from rdflib.namespace import Namespace, SOSA, GEO
 import os
 import re
