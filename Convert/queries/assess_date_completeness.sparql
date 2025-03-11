@@ -1,0 +1,12 @@
+PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
+PREFIX time: <http://www.w3.org/2006/time#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?observation ?date ?assess_date_completeness
+WHERE {
+  ?observation a tern:Observation .
+  ?observation time:hasTime ?ot .
+  ?ot time:inXSDgYear ?date .
+
+  BIND(IF(BOUND(?date), "empty", "non_empty") AS ?assess_date_completeness)
+}

@@ -19,7 +19,6 @@ from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import silhouette_score
 from sklearn.covariance import EllipticEnvelope
-
 from .defined_namespaces import DQAF, TERN, DirectoryStructure
 from .report_analysis import ReportAnalysis
 from .usecase_manager import UseCaseManager
