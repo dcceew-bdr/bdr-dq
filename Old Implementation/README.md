@@ -29,13 +29,13 @@ After installation, run the tests - next section - to ensure everything's workin
 This package uses the [pytest](https://pytest.org) Python testing framework for its internal testing. The test suite for this package is contained in the `tests/` directory of this repository and may be executed, after Python environment setup and package dependency and pytest installation, like this:
 
 ```bash
-~$ pytest -W ignore tests
+~$ pytest -W ignore test_type1: SPARQL query returns DQ results
 ```
 
 or, if you haven't made pytest executable, like this:
 
 ```bash
-~$ python -m pytest -W ignore tests
+~$ python -m pytest -W ignore test_type1: SPARQL query returns DQ results
 ```
 
 You should then see all the tests run and, hopefully, pass. If they do, your copy of BDR DQ is ready for development!

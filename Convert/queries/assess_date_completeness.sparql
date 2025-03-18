@@ -1,12 +1,26 @@
+# Define namespaces (like giving short names for long URLs)
 PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
 PREFIX time: <http://www.w3.org/2006/time#>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
-SELECT ?observation ?date ?assess_date_completeness
+# Select two things:
+# 1. The observation (data point)
+# 2. The completeness status of its date (whether it has a date or not)
+SELECT ?observation ?assess_date_completeness
 WHERE {
+  # Look for data points (observations) in the dataset
   ?observation a tern:Observation .
-  ?observation time:hasTime ?ot .
-  ?ot time:inXSDgYear ?date .
 
-  BIND(IF(BOUND(?date), "empty", "non_empty") AS ?assess_date_completeness)
+  # Make sure we only select observations from a specific part of the dataset
+  FILTER(STRSTARTS(STR(?observation), "http://createme.org/observation/scientificName/"))
+
+  # Try to find a time (date) linked to each observation (this is optional)
+  OPTIONAL {
+    ?observation time:hasTime ?ot .  # Find the time record
+    ?ot time:inXSDgYear ?date .       # Get the actual year from that time record
+  }
+
+  # Check if the observation has a date
+  # If yes → label it as "non_empty"
+  # If no → label it as "empty"
+  BIND(IF(BOUND(?date), "non_empty", "empty") AS ?assess_date_completeness)
 }

@@ -7,14 +7,14 @@ from pyoxigraph import Store
 def assess_date_recency():
     # Create an RDF store to load and process data.
     store = Store()
-    data_file = "chunk_1.ttl"  # Input data file containing observations.
+    data_file = "../test_data/chunk_1.ttl"  # Input data file containing observations.
 
     # Load the RDF data from the file.
     with open(data_file, "rb") as f:
         store.load(f, format="text/turtle")
 
     # Read the SPARQL query that evaluates date recency.
-    with open("../../DQAF/queries/assess_date_recency.sparql", "r") as file:
+    with open("../queries/assess_date_recency.sparql", "r") as file:
         query = file.read()
 
     # Run the query on the loaded data.

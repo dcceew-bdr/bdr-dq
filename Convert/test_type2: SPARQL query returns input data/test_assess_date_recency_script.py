@@ -1,4 +1,4 @@
-# This script tests the `assess_date_recency.py` script to ensure it works correctly.
+# This script test_type1: SPARQL query returns DQ results the `assess_date_recency.py` script to ensure it works correctly.
 
 import subprocess
 import pytest
@@ -6,7 +6,7 @@ import pytest
 
 def test_date_recency_script():
     # Run the `assess_date_recency.py` script as a subprocess.
-    result = subprocess.run(["python", "assess_date_recency.py"], capture_output=True, text=True)
+    result = subprocess.run(["python", "../functions/assess_date_recency.py"], capture_output=True, text=True)
 
     # Capture the script's output and split it into separate lines.
     output_lines = result.stdout.strip().split("\n")

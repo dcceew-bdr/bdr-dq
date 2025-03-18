@@ -1,16 +1,15 @@
 from rdflib import Graph, Namespace, Literal
 from rdflib.namespace import RDF, XSD, TIME
 
-# This script creates a small test dataset in RDF format.
-# The dataset includes observations with dates to check if they are recent or outdated.
-
-from rdflib import Graph, Namespace, Literal
-from rdflib.namespace import RDF, XSD, TIME
-
 # Define the namespace for observations.
 TERN = Namespace("https://w3id.org/tern/ontologies/tern/")
 
 def create_test_graph():
+    """
+    Creates an RDF graph with test data for date recency checks.
+    Returns the RDF graph serialized in Turtle format instead of saving to a file.
+    """
+
     # Create an empty RDF graph to store test data.
     g = Graph()
 
@@ -27,10 +26,10 @@ def create_test_graph():
     # Add the third observation without a date (to test missing date scenarios).
     g.add((TERN["observation3"], RDF.type, TERN.Observation))
 
-    # Save the generated test data into a Turtle (.ttl) file.
-    g.serialize("test_data.ttl", format="turtle")
-    print("Test data saved.")
+    # Return the RDF data serialized in Turtle format.
+    return g.serialize(format="turtle")
 
-# Run the function to create and save the test dataset.
+# Run the function and print the generated test data.
 if __name__ == "__main__":
-    create_test_graph()
+    turtle_data = create_test_graph()
+    print(turtle_data)
