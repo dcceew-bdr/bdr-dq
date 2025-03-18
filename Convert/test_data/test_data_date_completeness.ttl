@@ -1,0 +1,13 @@
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://createme.org/observation/scientificName/obs_missing_date> a <http://createme.org/observation/scientificName/Observation> ;
+    time:hasTime <http://createme.org/observation/scientificName/time2> .
+
+<http://createme.org/observation/scientificName/obs_no_date> a <http://createme.org/observation/scientificName/Observation> .
+
+<http://createme.org/observation/scientificName/obs_with_date> a <http://createme.org/observation/scientificName/Observation> ;
+    time:hasTime <http://createme.org/observation/scientificName/time1> .
+
+<http://createme.org/observation/scientificName/time1> time:inXSDgYear "2023"^^xsd:gYear .
+
