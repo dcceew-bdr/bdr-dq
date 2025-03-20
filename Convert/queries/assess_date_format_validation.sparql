@@ -1,0 +1,25 @@
+# Define the necessary prefixes for namespaces used in the dataset
+PREFIX sosa: <http://www.w3.org/ns/sosa/>  # Standard ontology for observations
+PREFIX time: <http://www.w3.org/2006/time#>  # Time ontology for handling dates
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  # Ontology for structured comments
+
+# Select the observation, its date, and the validation result
+SELECT ?observation ?dateLiteral
+       (IF(REGEX(?dateStr, "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"), "valid", "invalid") AS ?dateFormatValidation)
+WHERE {
+
+  # Find observations that have a time reference
+  ?observation sosa:phenomenonTime ?timeNode .
+
+  # Get the date value associated with the observation
+  ?timeNode time:inXSDDateTimeStamp ?dateLiteral .
+
+  # Ensure the observation has a comment, used to filter relevant records
+  ?observation rdfs:comment ?comment .
+
+  # Only include observations that contain the phrase "NSL name match Observation" in the comment
+  FILTER(CONTAINS(STR(?comment), "NSL name match Observation"))
+
+  # Extract only the first 10 characters of the date string (YYYY-MM-DD format)
+  BIND(SUBSTR(STR(?dateLiteral), 1, 10) AS ?dateStr)
+}

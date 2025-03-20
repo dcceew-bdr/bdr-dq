@@ -6,14 +6,14 @@ OBS = Namespace("http://createme.org/observation/scientificName/")
 
 def create_date_completeness_test_data():
     """
-    This function creates test data to check if observations have a date.
+    This function creates test_dq data to check if observations have a date.
 
     - "obs_with_date" → Has a valid date (should be labeled "non_empty").
     - "obs_no_date" → No date at all (should be labeled "empty").
     - "obs_missing_date" → Has a time reference but no actual date (should be "empty").
     """
 
-    # Create an empty RDF graph (like a database to store the test data)
+    # Create an empty RDF graph (like a database to store the test_dq data)
     g = Graph()
 
     # ===== Observation 1: Has a valid date (should be labeled "non_empty") =====
@@ -32,7 +32,7 @@ def create_date_completeness_test_data():
     # Return the RDF data serialized in Turtle format instead of writing to a file
     return g.serialize(format="turtle")
 
-# Run the function and print the generated test data.
+# Run the function and print the generated test_dq data.
 if __name__ == "__main__":
     turtle_data = create_date_completeness_test_data()
     print(turtle_data)

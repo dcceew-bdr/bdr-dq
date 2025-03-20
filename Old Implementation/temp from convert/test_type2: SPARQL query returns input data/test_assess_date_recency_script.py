@@ -1,4 +1,4 @@
-# This script test: SPARQL query returns DQ results the `assess_date_recency.py` script to ensure it works correctly.
+# This script test_dq: SPARQL query returns DQ results the `assess_date_recency.py` script to ensure it works correctly.
 
 import subprocess
 import pytest

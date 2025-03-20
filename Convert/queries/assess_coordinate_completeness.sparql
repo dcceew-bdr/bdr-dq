@@ -1,0 +1,27 @@
+# This query checks if both latitude and longitude are provided for observations.
+# It assigns "non_empty" if coordinate data exists and "empty" if it is missing.
+
+PREFIX sosa: <http://www.w3.org/ns/sosa/>  # Standard ontology for observations
+PREFIX tern: <https://w3id.org/tern/ontologies/tern/>  # TERN ontology for samples and observations
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>  # Ontology for geographic locations
+
+SELECT ?observation
+       (IF(BOUND(?wkt), "non_empty", "empty")
+        AS ?assess_coordinate_completeness)
+WHERE {
+  # Select all observations
+  ?observation a tern:Observation .
+
+  # Find the related sample that the observation refers to
+  ?observation sosa:hasFeatureOfInterest ?sample .
+  ?sample a tern:Sample .
+
+  # Get the procedure that generated this sample
+  ?sample sosa:isResultOf ?procedure .
+
+  # Get the geometry of the procedure
+  ?procedure geo:hasGeometry ?geometry .
+
+  # Check if there is a WKT (Well-Known Text) representation for the coordinates
+  OPTIONAL { ?geometry geo:asWKT ?wkt . }
+}

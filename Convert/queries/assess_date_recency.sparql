@@ -22,6 +22,6 @@ WHERE {
   BIND(xsd:integer(STR(?date)) AS ?year)
 
   # Determine if the observation is "recent" or "outdated".
-  # Here, the threshold for "recent" is set at 1900 instead of 20 years from today due to our test data, in future should set it 2005.
+  # Here, the threshold for "recent" is set at 1900 instead of 20 years from today due to our test_dq data, in future should set it 2005.
   BIND(IF(?year >= 1900, "recent_20_years", "outdated_20_years") AS ?is_recent)
 }

@@ -6,16 +6,16 @@ from pyoxigraph import Store  # Import Store to handle RDF data
 
 def test_date_completeness_check():
     """
-    This test follows these steps:
-    1. Load the RDF test data (dataset of observations).
+    This test_dq follows these steps:
+    1. Load the RDF test_dq data (dataset of observations).
     2. Load and run the SPARQL query that checks if observations have dates.
     3. Extract the results and check if they match the expected values.
     """
 
-    # === Step 1: Load the RDF test data ===
-    data_file = "test_data/test_data_date_completeness.ttl"  # File with test data
+    # === Step 1: Load the RDF test_dq data ===
+    data_file = "test_data/test_data_date_completeness.ttl"  # File with test_dq data
 
-    # Check if the test data file exists; if not, stop the test.
+    # Check if the test_dq data file exists; if not, stop the test_dq.
     if not os.path.exists(data_file):
         raise FileNotFoundError(f"Error: Test data file '{data_file}' not found.")
 
@@ -34,7 +34,7 @@ def test_date_completeness_check():
     # === Step 2: Load the SPARQL query ===
     query_file = "../../Convert/queries/assess_date_completeness.sparql"  # File containing the SPARQL query
 
-    # Check if the SPARQL query file exists; if not, stop the test.
+    # Check if the SPARQL query file exists; if not, stop the test_dq.
     if not os.path.exists(query_file):
         raise FileNotFoundError(f"Error: SPARQL query file '{query_file}' not found.")
 
@@ -42,7 +42,7 @@ def test_date_completeness_check():
     with open(query_file, "r") as file:
         query = file.read()
 
-    # === Step 3: Run the query on the test RDF data ===
+    # === Step 3: Run the query on the test_dq RDF data ===
     results = store.query(query)
 
     # === Step 4: Extract results from the query ===
@@ -56,9 +56,9 @@ def test_date_completeness_check():
     print("\n=== Extracted Results from SPARQL Query ===")
     print(extracted_results)
 
-    # === Step 5: Verify the test results ===
+    # === Step 5: Verify the test_dq results ===
 
-    # Expected results based on test data:
+    # Expected results based on test_dq data:
     expected_results = {
         "http://createme.org/observation/scientificName/obs_with_date": "non_empty",  # Has a date
         "http://createme.org/observation/scientificName/obs_no_date": "empty",  # No date
