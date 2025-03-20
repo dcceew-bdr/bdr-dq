@@ -23,7 +23,7 @@ def test_date_recency_check():
     store.load(turtle_data.encode("utf-8"), format="text/turtle")
 
     # === Step 2: Load the SPARQL query ===
-    query_file = "../queries/assess_date_recency.sparql"
+    query_file = "../../Convert/queries/assess_date_recency.sparql"
 
     try:
         with open(query_file, "r") as file:
@@ -43,7 +43,13 @@ def test_date_recency_check():
     # Print extracted results for debugging.
     print("\nExtracted Results from SPARQL Query:", extracted_results)
 
-    # === Step 5: Verify only requested test cases using `is_recent` ===
+    # === Step 5: Verify the test results using `is_recent` instead of `date` ===
+
+    # Observation1 (2022) should be classified as "recent_20_years".
+    assert "https://w3id.org/tern/ontologies/tern/observation1" in extracted_results, \
+        f"Observation1 missing. Extracted results: {extracted_results}"
+    assert extracted_results["https://w3id.org/tern/ontologies/tern/observation1"] == "recent_20_years", \
+        f"Observation1 incorrectly classified. Extracted results: {extracted_results}"
 
     # Observation2 (1800) should be classified as "outdated_20_years".
     assert "https://w3id.org/tern/ontologies/tern/observation2" in extracted_results, \

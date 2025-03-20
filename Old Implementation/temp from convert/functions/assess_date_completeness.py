@@ -9,7 +9,7 @@ def assess_date_completeness():
 
     # Define the file paths for the dataset and the SPARQL query
     data_file = "../test_data/chunk_1.ttl"  # RDF dataset file (Turtle format)
-    query_file = "../queries/assess_date_completeness.sparql"  # SPARQL query file
+    query_file = "../../../Convert/queries/assess_date_completeness.sparql"  # SPARQL query file
 
     # Check if the data file exists; if not, show an error and stop the program
     if not os.path.exists(data_file):

@@ -13,7 +13,7 @@ def test_date_completeness_check():
     """
 
     # === Step 1: Load the RDF test data ===
-    data_file = "../test_data/test_data_date_completeness.ttl"  # File with test data
+    data_file = "test_data/test_data_date_completeness.ttl"  # File with test data
 
     # Check if the test data file exists; if not, stop the test.
     if not os.path.exists(data_file):
@@ -32,7 +32,7 @@ def test_date_completeness_check():
         print(triple)  # Show each data entry in the dataset
 
     # === Step 2: Load the SPARQL query ===
-    query_file = "../queries/assess_date_completeness.sparql"  # File containing the SPARQL query
+    query_file = "../../Convert/queries/assess_date_completeness.sparql"  # File containing the SPARQL query
 
     # Check if the SPARQL query file exists; if not, stop the test.
     if not os.path.exists(query_file):

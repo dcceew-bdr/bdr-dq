@@ -4,7 +4,6 @@ from rdflib.namespace import RDF, XSD, TIME  # Import common RDF namespaces
 # Define a namespace (like a category for data) for observations
 OBS = Namespace("http://createme.org/observation/scientificName/")
 
-
 def create_date_completeness_test_data():
     """
     This function creates test data to check if observations have a date.
@@ -30,11 +29,10 @@ def create_date_completeness_test_data():
     g.add((OBS["obs_missing_date"], TIME.hasTime, OBS["time2"]))  # Time reference exists
     # ⚠ No `time:inXSDgYear` property for time2, meaning the date is missing
 
-    # Save the generated test data into a Turtle (.ttl) file (a format used for RDF data)
-    g.serialize("../test_data/test_data_date_completeness.ttl", format="turtle")
-    print("Test data saved in 'test_data_date_completeness.ttl'.")
+    # Return the RDF data serialized in Turtle format instead of writing to a file
+    return g.serialize(format="turtle")
 
-
-# If this script is run directly, execute the function
+# Run the function and print the generated test data.
 if __name__ == "__main__":
-    create_date_completeness_test_data()
+    turtle_data = create_date_completeness_test_data()
+    print(turtle_data)

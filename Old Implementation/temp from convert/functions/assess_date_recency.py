@@ -14,7 +14,7 @@ def assess_date_recency():
         store.load(f, format="text/turtle")
 
     # Read the SPARQL query that evaluates date recency.
-    with open("../queries/assess_date_recency.sparql", "r") as file:
+    with open("../../../Convert/queries/assess_date_recency.sparql", "r") as file:
         query = file.read()
 
     # Run the query on the loaded data.
