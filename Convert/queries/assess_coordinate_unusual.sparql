@@ -1,0 +1,49 @@
+# Check if coordinates (latitude or longitude) have unusual decimal patterns
+# Example of unusual: 145.111111 (same number repeating), 145.123123123 (pattern repeating)
+
+PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT
+  ?observation         # The observation URI
+  ?lonStr              # Longitude as a string
+  ?latStr              # Latitude as a string
+  (IF(
+     # If the decimal part of longitude OR latitude has 3 repeating digits
+     REGEX(?lonDec, "([0-9])\\1\\1") ||
+     REGEX(?latDec, "([0-9])\\1\\1"),
+     "unusual",        # Then label as "unusual"
+     "usual"           # Otherwise, label as "usual"
+   ) AS ?coordinate_unusual)
+WHERE {
+  # Step 1: Get observation and related geometry
+  ?observation a tern:Observation .
+  ?observation sosa:hasFeatureOfInterest ?sample .
+  ?sample a tern:Sample .
+  ?sample sosa:isResultOf ?procedure .
+  ?procedure geo:hasGeometry ?geometry .
+  ?geometry geo:asWKT ?wkt .   # Get WKT format of the location
+
+  # Step 2: Remove CRS prefix if it exists (like <http://...>)
+  BIND(
+    IF(STRSTARTS(STR(?wkt), "<"),
+       SUBSTR(STR(?wkt), STRLEN(STRBEFORE(STR(?wkt), ">")) + 3),
+       STR(?wkt)
+    ) AS ?wktNoCRS
+  )
+
+  # Step 3: Get longitude and latitude from WKT
+  # Example WKT: POINT (145.55686 -37.924)
+  BIND(REPLACE(?wktNoCRS,
+       "^POINT\\s*\\(([-+]?\\d+\\.\\d+)[\\s]+([-+]?\\d+\\.\\d+)\\)$",
+       "$1") AS ?lonStr)    # Extract longitude
+  BIND(REPLACE(?wktNoCRS,
+       "^POINT\\s*\\(([-+]?\\d+\\.\\d+)[\\s]+([-+]?\\d+\\.\\d+)\\)$",
+       "$2") AS ?latStr)    # Extract latitude
+
+  # Step 4: Get decimal part (after dot ".")
+  BIND(STRAFTER(?lonStr, ".") AS ?lonDec)
+  BIND(STRAFTER(?latStr, ".") AS ?latDec)
+}

@@ -1,30 +1,35 @@
 import pytest
 from pyoxigraph import Store
+from Convert.test_data_generation.data_generation_date_recency import create_test_graph as create_recency_test_graph
+from Convert.test_data_generation.data_generation_date_completeness import create_date_completeness_test_data
 
-from Convert.test_data_generation.data_generation_date_recency import create_test_graph
 
-
-def test_date_recency_check():
+@pytest.mark.parametrize("query_file, generate_data_function, expected_results", [
+    ("../queries/assess_date_recency.sparql", create_recency_test_graph, {
+        "https://w3id.org/tern/ontologies/tern/observation1": "recent_20_years",
+        "https://w3id.org/tern/ontologies/tern/observation2": "outdated_20_years"
+    }),
+    ("../queries/assess_date_completeness.sparql", create_date_completeness_test_data, {
+        "http://createme.org/observation/scientificName/obs_with_date": "non_empty",
+        "http://createme.org/observation/scientificName/obs_no_date": "empty",
+        "http://createme.org/observation/scientificName/obs_missing_date": "empty"
+    })
+])
+def test_dq_assessments(query_file, generate_data_function, expected_results):
     """
-    Steps in this test_dq:
-    1. Generate RDF test_dq data using `create_test_graph()`.
-    2. Load the RDF data into an in-memory RDF store.
-    3. Load and run the SPARQL query that checks if observations are recent or outdated.
-    4. Extract the results and check if they match expected values.
+    Generic test function to assess multiple SPARQL queries on generated RDF test data.
     """
 
-    # === Step 1: Generate and load RDF test_dq data ===
-    turtle_data = create_test_graph()  # Get the RDF data in Turtle format
+    # === Step 1: Generate RDF test data ===
+    turtle_data = generate_data_function()  # Get the RDF data in Turtle format
 
-    # Create an RDF store (storage system for the test_dq data)
+    # Create an RDF store (storage system for the test data)
     store = Store()
 
     # Load the generated RDF data directly into the store
     store.load(turtle_data.encode("utf-8"), format="text/turtle")
 
     # === Step 2: Load the SPARQL query ===
-    query_file = "../../Convert/queries/assess_date_recency.sparql"
-
     try:
         with open(query_file, "r") as file:
             query = file.read()
@@ -36,27 +41,16 @@ def test_date_recency_check():
 
     # === Step 4: Extract results from the query ===
     extracted_results = {
-        str(row["observation"]).strip("<>"): row["is_recent"].value
-        for row in results if row["is_recent"] is not None
+        str(row["observation"]).strip("<>"): row["is_recent"].value if "is_recent" in row else row[
+            "assess_date_completeness"].value
+        for row in results if "is_recent" in row or "assess_date_completeness" in row
     }
 
     # Print extracted results for debugging.
-    print("\nExtracted Results from SPARQL Query:", extracted_results)
+    print(f"\nExtracted Results from {query_file}:", extracted_results)
 
-    # === Step 5: Verify the test_dq results using `is_recent` instead of `date` ===
-
-    # Observation1 (2022) should be classified as "recent_20_years".
-    assert "https://w3id.org/tern/ontologies/tern/observation1" in extracted_results, \
-        f"Observation1 missing. Extracted results: {extracted_results}"
-    assert extracted_results["https://w3id.org/tern/ontologies/tern/observation1"] == "recent_20_years", \
-        f"Observation1 incorrectly classified. Extracted results: {extracted_results}"
-
-    # Observation2 (1800) should be classified as "outdated_20_years".
-    assert "https://w3id.org/tern/ontologies/tern/observation2" in extracted_results, \
-        f"Observation2 missing. Extracted results: {extracted_results}"
-    assert extracted_results["https://w3id.org/tern/ontologies/tern/observation2"] == "outdated_20_years", \
-        f"Observation2 incorrectly classified. Extracted results: {extracted_results}"
-
-    # Observation3 has no date and should not appear in the results.
-    assert "https://w3id.org/tern/ontologies/tern/observation3" not in extracted_results, \
-        f"Observation3 should not be present but found: {extracted_results}"
+    # === Step 5: Verify test results ===
+    for obs, expected_value in expected_results.items():
+        assert obs in extracted_results, f"Observation {obs} is missing. Extracted results: {extracted_results}"
+        assert extracted_results[obs] == expected_value, \
+            f"Observation {obs} incorrectly classified. Expected: {expected_value}, Got: {extracted_results.get(obs, 'MISSING')}"
