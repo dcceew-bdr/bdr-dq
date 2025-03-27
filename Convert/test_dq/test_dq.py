@@ -5,18 +5,14 @@ from Convert.test_data_generation.data_generation_date_completeness import creat
 
 
 @pytest.mark.parametrize("query_file, generate_data_function, expected_results", [
-    # ("../queries/assess_date_recency.rq", create_recency_test_graph, {
-    #     "https://w3id.org/tern/ontologies/tern/observation1": "recent_20_years",
-    #     "https://w3id.org/tern/ontologies/tern/observation2": "outdated_20_years"
-    # })
-    # ("../queries/assess_date_completeness.sparql", create_date_completeness_test_data, {
-    #     "http://createme.org/observation/scientificName/obs_with_date": "non_empty",
-    #     "http://createme.org/observation/scientificName/obs_no_date": "empty",
-    #     "http://createme.org/observation/scientificName/obs_missing_date": "empty"
-    # }),
-    ("../queries/assess_date_recency.rq", create_recency_test_graph, {
+    ("../queries/assess_date_recency.sparql", create_recency_test_graph, {
         "https://w3id.org/tern/ontologies/tern/observation1": "recent_20_years",
         "https://w3id.org/tern/ontologies/tern/observation2": "outdated_20_years"
+    }),
+    ("../queries/assess_date_completeness.sparql", create_date_completeness_test_data, {
+        "http://createme.org/observation/scientificName/obs_with_date": "non_empty",
+        "http://createme.org/observation/scientificName/obs_no_date": "empty",
+        "http://createme.org/observation/scientificName/obs_missing_date": "empty"
     })
 ])
 def test_dq_assessments(query_file, generate_data_function, expected_results):
@@ -44,21 +40,21 @@ def test_dq_assessments(query_file, generate_data_function, expected_results):
     store.update(query)
     results = store.query(
         named_graphs=[NamedNode("https://linked.data.gov.au/def/bdr/dqaf/fullResults")],
-        query=\
-        """
-        PREFIX dqaf: <https://linked.data.gov.au/def/bdr/dqaf/>
-        PREFIX sosa: <http://www.w3.org/ns/sosa/>
-        PREFIX schema: <https://schema.org/>
-        
-        SELECT ?observation ?assessment ?result {
-        GRAPH <https://linked.data.gov.au/def/bdr/dqaf/fullResults>
-            { 
-                ?observation <https://linked.data.gov.au/def/bdr/dqaf/hasResult> ?result_bn .
-                ?result_bn sosa:observedProperty ?assessment ;
-                    schema:value ?result .
+        query= \
+            """
+            PREFIX dqaf: <https://linked.data.gov.au/def/bdr/dqaf/>
+            PREFIX sosa: <http://www.w3.org/ns/sosa/>
+            PREFIX schema: <https://schema.org/>
+    
+            SELECT ?observation ?assessment ?result {
+            GRAPH <https://linked.data.gov.au/def/bdr/dqaf/fullResults>
+                { 
+                    ?observation <https://linked.data.gov.au/def/bdr/dqaf/hasResult> ?result_bn .
+                    ?result_bn sosa:observedProperty ?assessment ;
+                        schema:value ?result .
+                }
             }
-        }
-        """
+            """
     )
     print('')
 

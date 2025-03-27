@@ -1,27 +1,54 @@
-# Definition: This query checks the recency of observation dates, categorizing them as either "recent" or "outdated."
-# - "recent_20_years": If the observation date falls within the last 20 years.
-# - "outdated_20_years": If the observation date is older than 20 years.
+# ====================================================================================
+# Purpose:
+# This query evaluates how recent each observation's date is by checking the year.
+# It assigns a result value:
+#   - "recent_20_years"    → if the year is greater than or equal to 2005
+#   - "outdated_20_years"  → if the year is older than 2005
+#
+# This threshold represents "within the last 20 years" assuming current year = 2025.
+# ====================================================================================
 
-# Define prefixes for namespaces used in the dataset.
-PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
-PREFIX time: <http://www.w3.org/2006/time#>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+# =============================
+# Step 1: Define common prefixes
+# =============================
+PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>           # Observation ontology
+PREFIX time:   <http://www.w3.org/2006/time#>                     # Time ontology
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>                # XML Schema datatypes
+PREFIX dqaf:   <http://example.com/def/dqaf/>                    # DQAF-specific terms
+PREFIX sosa:   <http://www.w3.org/ns/sosa/>                      # Sensor Observation terms
+PREFIX schema: <http://schema.org/>                              # For schema:value
 
-SELECT ?observation ?date ?is_recent
+# ========================================
+# Step 2: Insert the assessment results
+# ========================================
+INSERT {
+  GRAPH dqaf:fullResults {
+    ?observation dqaf:hasResult [
+      sosa:observedProperty <http://example.com/assess/date_recency/> ;  # Type of assessment
+      schema:value ?is_recent                                             # Result: "recent_20_years" or "outdated_20_years"
+    ]
+  }
+}
+
+# ========================================
+# Step 3: Match observations and classify
+# ========================================
 WHERE {
-  # Retrieve all observations from the dataset.
+  # Match all observation resources
   ?observation a tern:Observation .
 
-  # Find the associated time record for each observation.
+  # Find associated time information
   ?observation time:hasTime ?ot .
 
-  # Extract the year of the observation date.
+  # Extract the year (e.g., 2022, 1800)
   ?ot time:inXSDgYear ?date .
 
-  # Convert the date (string) into an integer for comparison.
+  # Convert the year to integer for comparison
   BIND(xsd:integer(STR(?date)) AS ?year)
 
-  # Determine if the observation is "recent" or "outdated".
-  # Here, the threshold for "recent" is set at 1900 instead of 20 years from today due to our test_dq data, in future should set it 2005.
-  BIND(IF(?year >= 1900, "recent_20_years", "outdated_20_years") AS ?is_recent)
+  # Assign label based on whether the year is recent (≥2005) or outdated
+  BIND(
+    IF(?year >= 2005, "recent_20_years", "outdated_20_years")
+    AS ?is_recent
+  )
 }
