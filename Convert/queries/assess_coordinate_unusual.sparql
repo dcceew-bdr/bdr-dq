@@ -1,3 +1,4 @@
+
 # Check if coordinates (latitude or longitude) have unusual decimal patterns
 # Example of unusual: 145.111111 (same number repeating), 145.123123123 (pattern repeating)
 
