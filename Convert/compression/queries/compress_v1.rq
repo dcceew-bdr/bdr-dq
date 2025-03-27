@@ -1,0 +1,97 @@
+PREFIX schema: <https://schema.org/>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX dqaf: <https://linked.data.gov.au/def/bdr/dqaf/>
+
+CONSTRUCT { ?uri dqaf:hasCompressedResults ?final_results }
+WHERE {
+  SELECT ?uri (CONCAT("{\"r\":\"", STR(?run_id), "\",", ?concat_results, "}") AS ?final_results) {
+    VALUES ?run_id { UNDEF }
+    {
+      SELECT ?uri (GROUP_CONCAT(?assessment_2_result; separator=",") as ?concat_results) {
+        VALUES (?assessment ?abbrev_assessment) {
+			( <http://example.com/vocab/coordinate_completeness> 1 )
+			( <http://example.com/vocab/coordinate_in_australia_state> 2 )
+			( <http://example.com/vocab/coordinate_outlier_irq> 3 )
+			( <http://example.com/vocab/coordinate_outlier_isolation_forest> 4 )
+			( <http://example.com/vocab/coordinate_outlier_robust_covariance> 5 )
+			( <http://example.com/vocab/coordinate_outlier_zscore> 6 )
+			( <http://example.com/vocab/coordinate_precision> 7 )
+			( <http://example.com/vocab/coordinate_unusual> 8 )
+			( <http://example.com/vocab/date_completeness> 9 )
+			( <http://example.com/vocab/date_format_validation> 10 )
+			( <http://example.com/vocab/date_outlier_irq> 11 )
+			( <http://example.com/vocab/date_outlier_kmeans> 12 )
+			( <http://example.com/vocab/date_recency> 13 )
+			( <http://example.com/vocab/datum_completeness> 14 )
+			( <http://example.com/vocab/datum_type> 15 )
+			( <http://example.com/vocab/datum_validation> 16 )
+			( <http://example.com/vocab/duplicate> 17 )
+			( <http://example.com/vocab/geo_spatial_accuracy_precision> 18 )
+			( <http://example.com/vocab/scientific_name_completeness> 19 )
+			( <http://example.com/vocab/scientific_name_validation> 20 )}
+        VALUES (?result ?abbrev_result) {
+			( <http://example.com/vocab/coordinate_completeness/empty> 1 )
+			( <http://example.com/vocab/coordinate_completeness/non_empty> 2 )
+			( <http://example.com/vocab/coordinate_in_australia_state/Australian_Capital_Territory> 3 )
+			( <http://example.com/vocab/coordinate_in_australia_state/New_South_Wales> 4 )
+			( <http://example.com/vocab/coordinate_in_australia_state/Northern_Territory> 5 )
+			( <http://example.com/vocab/coordinate_in_australia_state/Outside_Australia> 6 )
+			( <http://example.com/vocab/coordinate_in_australia_state/Queensland> 7 )
+			( <http://example.com/vocab/coordinate_in_australia_state/South_Australia> 8 )
+			( <http://example.com/vocab/coordinate_in_australia_state/Tasmania> 9 )
+			( <http://example.com/vocab/coordinate_in_australia_state/Victoria> 10 )
+			( <http://example.com/vocab/coordinate_in_australia_state/Western_Australia> 11 )
+			( <http://example.com/vocab/coordinate_outlier_irq/normal_coordinate> 12 )
+			( <http://example.com/vocab/coordinate_outlier_irq/outlier_coordinate> 13 )
+			( <http://example.com/vocab/coordinate_outlier_isolation_forest/normal_coordinate> 14 )
+			( <http://example.com/vocab/coordinate_outlier_isolation_forest/outlier_coordinate> 15 )
+			( <http://example.com/vocab/coordinate_outlier_robust_covariance/normal_coordinate> 16 )
+			( <http://example.com/vocab/coordinate_outlier_robust_covariance/outlier_coordinate> 17 )
+			( <http://example.com/vocab/coordinate_outlier_zscore/normal_coordinate> 18 )
+			( <http://example.com/vocab/coordinate_outlier_zscore/outlier_coordinate> 19 )
+			( <http://example.com/vocab/coordinate_precision/High> 20 )
+			( <http://example.com/vocab/coordinate_precision/Low> 21 )
+			( <http://example.com/vocab/coordinate_precision/Medium> 22 )
+			( <http://example.com/vocab/coordinate_unusual/unusual> 23 )
+			( <http://example.com/vocab/coordinate_unusual/usual> 24 )
+			( <http://example.com/vocab/date_completeness/empty> 25 )
+			( <http://example.com/vocab/date_completeness/non_empty> 26 )
+			( <http://example.com/vocab/date_format_validation/invalid> 27 )
+			( <http://example.com/vocab/date_format_validation/valid> 28 )
+			( <http://example.com/vocab/date_outlier_irq/normal_date> 29 )
+			( <http://example.com/vocab/date_outlier_irq/outlier_date> 30 )
+			( <http://example.com/vocab/date_outlier_kmeans/normal_date> 31 )
+			( <http://example.com/vocab/date_outlier_kmeans/outlier_date> 32 )
+			( <http://example.com/vocab/date_recency/outdated_20_years> 33 )
+			( <http://example.com/vocab/date_recency/recent_20_years> 34 )
+			( <http://example.com/vocab/datum_completeness/empty> 35 )
+			( <http://example.com/vocab/datum_completeness/not_empty> 36 )
+			( <http://example.com/vocab/datum_type/AGD84> 37 )
+			( <http://example.com/vocab/datum_type/GDA2020> 38 )
+			( <http://example.com/vocab/datum_type/GDA94> 39 )
+			( <http://example.com/vocab/datum_type/None> 40 )
+			( <http://example.com/vocab/datum_type/WGS84> 41 )
+			( <http://example.com/vocab/datum_validation/invalid> 42 )
+			( <http://example.com/vocab/datum_validation/valid> 43 )
+			( <http://example.com/vocab/duplicate/inferred_duplicate> 44 )
+			( <http://example.com/vocab/duplicate/inferred_nonduplicate> 45 )
+			( <http://example.com/vocab/geo_spatial_accuracy_precision/high_precision> 46 )
+			( <http://example.com/vocab/geo_spatial_accuracy_precision/low_precision> 47 )
+			( <http://example.com/vocab/scientific_name_completeness/empty_name> 48 )
+			( <http://example.com/vocab/scientific_name_completeness/non_empty_name> 49 )
+			( <http://example.com/vocab/scientific_name_validation/invalid_name> 50 )
+			( <http://example.com/vocab/scientific_name_validation/valid_name> 51 )}
+        { GRAPH <https://linked.data.gov.au/def/bdr/dqaf/fullResults> {
+              ?uri dqaf:hasDQAFResult
+                      [
+                          sosa:observedProperty ?assessment ;
+                          schema:value ?result
+                      ]
+          }
+        }
+        BIND(CONCAT("\"", STR(?abbrev_assessment), "\":\"", STR(?abbrev_result), "\"") AS ?assessment_2_result)
+      }
+      GROUP BY ?uri
+    }
+  }
+}

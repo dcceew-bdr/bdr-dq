@@ -1,0 +1,26 @@
+PREFIX schema: <https://schema.org/>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX dqaf: <https://linked.data.gov.au/def/bdr/dqaf/>
+
+CONSTRUCT { ?uri dqaf:hasCompressedResults ?final_results }
+WHERE {
+  SELECT ?uri (CONCAT("{\"r\":\"", STR(?run_id), "\",", ?concat_results, "}") AS ?final_results) {
+    VALUES ?run_id { UNDEF }
+    {
+      SELECT ?uri (GROUP_CONCAT(?assessment_2_result; separator=",") as ?concat_results) {
+        VALUES (?assessment ?abbrev_assessment) { ( UNDEF UNDEF ) }
+        VALUES (?result ?abbrev_result) { ( UNDEF UNDEF ) }
+        { GRAPH <https://linked.data.gov.au/def/bdr/dqaf/fullResults> {
+              ?uri dqaf:hasDQAFResult
+                      [
+                          sosa:observedProperty ?assessment ;
+                          schema:value ?result
+                      ]
+          }
+        }
+        BIND(CONCAT("\"", STR(?abbrev_assessment), "\":\"", STR(?abbrev_result), "\"") AS ?assessment_2_result)
+      }
+      GROUP BY ?uri
+    }
+  }
+}

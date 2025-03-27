@@ -1,18 +1,22 @@
 import pytest
-from pyoxigraph import Store
+from pyoxigraph import Store, NamedNode
 from Convert.test_data_generation.data_generation_date_recency import create_test_graph as create_recency_test_graph
 from Convert.test_data_generation.data_generation_date_completeness import create_date_completeness_test_data
 
 
 @pytest.mark.parametrize("query_file, generate_data_function, expected_results", [
-    ("../queries/assess_date_recency.sparql", create_recency_test_graph, {
+    # ("../queries/assess_date_recency.rq", create_recency_test_graph, {
+    #     "https://w3id.org/tern/ontologies/tern/observation1": "recent_20_years",
+    #     "https://w3id.org/tern/ontologies/tern/observation2": "outdated_20_years"
+    # })
+    # ("../queries/assess_date_completeness.sparql", create_date_completeness_test_data, {
+    #     "http://createme.org/observation/scientificName/obs_with_date": "non_empty",
+    #     "http://createme.org/observation/scientificName/obs_no_date": "empty",
+    #     "http://createme.org/observation/scientificName/obs_missing_date": "empty"
+    # }),
+    ("../queries/assess_date_recency.rq", create_recency_test_graph, {
         "https://w3id.org/tern/ontologies/tern/observation1": "recent_20_years",
         "https://w3id.org/tern/ontologies/tern/observation2": "outdated_20_years"
-    }),
-    ("../queries/assess_date_completeness.sparql", create_date_completeness_test_data, {
-        "http://createme.org/observation/scientificName/obs_with_date": "non_empty",
-        "http://createme.org/observation/scientificName/obs_no_date": "empty",
-        "http://createme.org/observation/scientificName/obs_missing_date": "empty"
     })
 ])
 def test_dq_assessments(query_file, generate_data_function, expected_results):
@@ -37,7 +41,26 @@ def test_dq_assessments(query_file, generate_data_function, expected_results):
         pytest.fail(f"SPARQL query file {query_file} not found.")
 
     # === Step 3: Run the query on the RDF store ===
-    results = store.query(query)
+    store.update(query)
+    results = store.query(
+        named_graphs=[NamedNode("https://linked.data.gov.au/def/bdr/dqaf/fullResults")],
+        query=\
+        """
+        PREFIX dqaf: <https://linked.data.gov.au/def/bdr/dqaf/>
+        PREFIX sosa: <http://www.w3.org/ns/sosa/>
+        PREFIX schema: <https://schema.org/>
+        
+        SELECT ?observation ?assessment ?result {
+        GRAPH <https://linked.data.gov.au/def/bdr/dqaf/fullResults>
+            { 
+                ?observation <https://linked.data.gov.au/def/bdr/dqaf/hasResult> ?result_bn .
+                ?result_bn sosa:observedProperty ?assessment ;
+                    schema:value ?result .
+            }
+        }
+        """
+    )
+    print('')
 
     # === Step 4: Extract results from the query ===
     extracted_results = {

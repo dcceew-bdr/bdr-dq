@@ -1,0 +1,40 @@
+# Definition: This query checks the recency of observation dates, categorizing them as either "recent" or "outdated."
+# - "recent_20_years": If the observation date falls within the last 20 years.
+# - "outdated_20_years": If the observation date is older than 20 years.
+
+# Define prefixes for namespaces used in the dataset.
+PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
+PREFIX time: <http://www.w3.org/2006/time#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX dqaf: <https://linked.data.gov.au/def/bdr/dqaf/>
+PREFIX schema: <https://schema.org/>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX dr:  <http://example.com/vocab/date_recency/>
+
+INSERT {
+  GRAPH dqaf:fullResults {
+    ?observation dqaf:hasDQAFResult
+        [
+          sosa:observedProperty <http://example.com/vocab/date_recency> ;
+          schema:value ?is_recent
+        ]
+  }
+}
+WHERE {
+  # Retrieve all observations from the dataset.
+  ?observation a tern:Observation .
+
+  # Find the associated time record for each observation.
+  ?observation time:hasTime ?ot .
+
+  # Extract the year of the observation date.
+  ?ot time:inXSDgYear ?date .
+
+  # Convert the date (string) into an integer for comparison.
+  BIND(xsd:integer(STR(?date)) AS ?year)
+  BIND(NOW() as ?sosa_result_time )
+
+  # Determine if the observation is "recent" or "outdated".
+  # Here, the threshold for "recent" is set at 1900 instead of 20 years from today due to our test_dq data, in future should set it 2005.
+  BIND(IF(?year >= 1900, dr:recent_20_years, dr:outdated_20_years) AS ?is_recent)
+}

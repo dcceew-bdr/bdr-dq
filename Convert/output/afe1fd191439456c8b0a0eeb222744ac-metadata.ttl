@@ -1,0 +1,10 @@
+@prefix bdrdqf: <https://bdr-dqf-compression/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://bdr-dqf-compression/run-id/afe1fd191439456c8b0a0eeb222744ac> a bdrdqf:AssessmentRun ;
+    dcterms:identifier "afe1fd191439456c8b0a0eeb222744ac" ;
+    sosa:resultTime "2025-03-27T19:27:50.932823"^^xsd:dateTime ;
+    bdrdqf:usedCompressionVersion 1 .
+
