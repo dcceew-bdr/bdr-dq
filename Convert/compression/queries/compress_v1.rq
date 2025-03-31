@@ -8,7 +8,7 @@ WHERE {
     VALUES ?run_id { UNDEF }
     {
       SELECT ?uri (GROUP_CONCAT(?assessment_2_result; separator=",") as ?concat_results) {
-        VALUES (?assessment ?abbrev_assessment) {
+        VALUES (?assessment ?abbrev_assessment) { 
 			( <http://example.com/vocab/coordinate_completeness> 1 )
 			( <http://example.com/vocab/coordinate_in_australia_state> 2 )
 			( <http://example.com/vocab/coordinate_outlier_irq> 3 )
@@ -28,8 +28,8 @@ WHERE {
 			( <http://example.com/vocab/duplicate> 17 )
 			( <http://example.com/vocab/geo_spatial_accuracy_precision> 18 )
 			( <http://example.com/vocab/scientific_name_completeness> 19 )
-			( <http://example.com/vocab/scientific_name_validation> 20 )}
-        VALUES (?result ?abbrev_result) {
+			( <http://example.com/vocab/scientific_name_validation> 20 ) }
+        VALUES (?result ?abbrev_result) { 
 			( <http://example.com/vocab/coordinate_completeness/empty> 1 )
 			( <http://example.com/vocab/coordinate_completeness/non_empty> 2 )
 			( <http://example.com/vocab/coordinate_in_australia_state/Australian_Capital_Territory> 3 )
@@ -80,7 +80,7 @@ WHERE {
 			( <http://example.com/vocab/scientific_name_completeness/empty_name> 48 )
 			( <http://example.com/vocab/scientific_name_completeness/non_empty_name> 49 )
 			( <http://example.com/vocab/scientific_name_validation/invalid_name> 50 )
-			( <http://example.com/vocab/scientific_name_validation/valid_name> 51 )}
+			( <http://example.com/vocab/scientific_name_validation/valid_name> 51 ) }
         { GRAPH <https://linked.data.gov.au/def/bdr/dqaf/fullResults> {
               ?uri dqaf:hasDQAFResult
                       [
