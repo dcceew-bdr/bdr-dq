@@ -31,7 +31,7 @@ class AssessmentScope(Enum):
 
 def run_dqf(turtle_data: str, scope: AssessmentScope, query_dir_name: str = "queries"):
     store = Store()
-    store.load(turtle_data.encode("utf-8"), format=RdfFormat.TURTLE)
+    store.load(turtle_data.encode("utf-8"))
 
     output_dir = script_dir / "output"
     output_dir.mkdir(parents=True, exist_ok=True)

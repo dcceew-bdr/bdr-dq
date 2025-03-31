@@ -1,6 +1,6 @@
 # Data Quality Assessment Framework (DQAF) Script
 
-This script executes Data Quality Framework (DQAF) tests on RDF data provided in Turtle (.ttl) format.
+This script executes Data Quality Framework (DQAF) tests on RDF data provided in RDF formats.
 
 ## Installation
 
@@ -32,7 +32,9 @@ python Convert/main.py [options] <filename>
 
 ### Arguments
 
-*   `filename`: (Required) The path to the input Turtle file (.ttl) to be assessed.
+*   `filename`: (Required) The path to the input RDF file to be assessed. NB the RDF format is guessed from the file 
+* extension, so common or "standard" file extensions should be used (.nt, .ttl etc.). 
+[Relevant PyOxigraph documentation](https://pyoxigraph.readthedocs.io/en/stable/store.html#pyoxigraph.Store.load) . 
 
 ### Options
 
