@@ -29,9 +29,9 @@ class AssessmentScope(Enum):
     def __str__(self):
         return self.value
 
-def run_dqf(turtle_data: str, scope: AssessmentScope, query_dir_name: str = "queries"):
+def run_dqf(input_file_path: str, scope: AssessmentScope, query_dir_name: str = "queries"):
     store = Store()
-    store.load(turtle_data.encode("utf-8"))
+    store.load(path=input_file_path)
 
     output_dir = script_dir / "output"
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -103,8 +103,7 @@ if __name__ == "__main__":
         exit(1)
 
     try:
-        rdf_content = input_file_path.read_text()
-        output_file = run_dqf(rdf_content, args.scope)
+        output_file = run_dqf(input_file_path, args.scope)
         logging.info(f"Processing complete. Output file generated: {output_file}")
     except Exception as e:
         logging.error(f"An error occurred during processing: {e}")
