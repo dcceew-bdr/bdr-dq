@@ -1,46 +1,56 @@
-# Assess Geospatial Accuracy Precision
-# --------------------------------------------------------
-# What does this do?
-# This query checks how accurate a coordinate is, based on its "uncertainty" value.
-# "Uncertainty" means how far off (in meters) the coordinate might be from the real location.
-#
-# How do we decide the accuracy level?
-# - If uncertainty is more than 10,000 meters OR if it is missing → "low_precision"
-# - If uncertainty is 10,000 meters or less → "high_precision"
+# ====================================================================================
+# Purpose:
+# This query checks how accurate a coordinate is, based on the uncertainty value.
 #
 # Definitions:
-# - low_precision: The location is not very accurate (missing or more than 10,000 meters).
-# - high_precision: The location is quite accurate (10,000 meters or less).
-# --------------------------------------------------------
+# - "Uncertainty" means how far the real location might be from the recorded point (in meters).
+# - "low_precision" → If uncertainty > 10,000 meters or if missing
+# - "high_precision" → If uncertainty ≤ 10,000 meters
+# ====================================================================================
 
-PREFIX tern: <https://w3id.org/tern/ontologies/tern/>        # TERN ontology for observations and samples
-PREFIX sosa: <http://www.w3.org/ns/sosa/>                    # SOSA ontology for sensor and observation links
-PREFIX geo: <http://www.opengis.net/ont/geosparql#>          # GeoSPARQL for geographic properties
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>              # XML data types like float, integer, etc.
+# =============================
+# Step 1: Define common prefixes
+# =============================
+PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>
+PREFIX sosa:   <http://www.w3.org/ns/sosa/>
+PREFIX geo:    <http://www.opengis.net/ont/geosparql#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX dqaf:   <http://example.com/def/dqaf/>
+PREFIX schema: <http://schema.org/>
 
-SELECT
-  ?observation             # The ID of the observation (what we are checking)
-  ?accuracy                # The accuracy value (uncertainty in meters)
-  (
-    IF(
-      !BOUND(?accuracy) || xsd:float(?accuracy) > 10000,  # If no value OR value > 10,000
-      "low_precision",                                   # Then: mark as low precision
-      "high_precision"                                   # Else: mark as high precision
-    ) AS ?precision                                       # This is the final result column
-  )
+# ========================================
+# Step 2: Insert the result (precision level)
+# ========================================
+INSERT {
+  GRAPH dqaf:fullResults {
+    ?observation dqaf:hasResult [
+      sosa:observedProperty <http://example.com/assess/geo_spatial_accuracy_precision/> ;
+      schema:value ?precision
+    ]
+  }
+}
+
+# ========================================
+# Step 3: Match observations and assess accuracy
+# ========================================
 WHERE {
-  # Step 1: Get all observations
-  ?observation a tern:Observation .
+  # Get each observation and its associated sample
+  ?observation a tern:Observation ;
+               sosa:hasFeatureOfInterest ?sample .
+  ?sample a tern:Sample ;
+          sosa:isResultOf ?procedure .
 
-  # Step 2: Get the sample (the object/place that was observed)
-  ?observation sosa:hasFeatureOfInterest ?sample .
-  ?sample a tern:Sample .
-
-  # Step 3: Get the procedure that created the sample
-  ?sample sosa:isResultOf ?procedure .
-
-  # Step 4: Get the uncertainty value (accuracy in meters) if available
+  # OPTIONAL: Try to get the spatial accuracy value (uncertainty in meters)
   OPTIONAL {
     ?procedure geo:hasMetricSpatialAccuracy ?accuracy .
   }
+
+  # Determine if accuracy is high or low
+  BIND(
+    IF(
+      !BOUND(?accuracy) || xsd:float(?accuracy) > 10000,
+      "low_precision",
+      "high_precision"
+    ) AS ?precision
+  )
 }

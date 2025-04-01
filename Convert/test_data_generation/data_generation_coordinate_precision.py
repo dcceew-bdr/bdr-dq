@@ -1,48 +1,61 @@
 from rdflib import Graph, Namespace, Literal
 from rdflib.namespace import RDF, XSD
 
-# Define namespaces
+# ===============================
+# Define the namespaces used
+# ===============================
 TERN = Namespace("https://w3id.org/tern/ontologies/tern/")
-SOSA = Namespace("http://www.w3.org/ns/sosa/")
+SOSAN = Namespace("http://www.w3.org/ns/sosa/")
 GEO = Namespace("http://www.opengis.net/ont/geosparql#")
+EX = Namespace("http://example.com/test/")
 
 def create_coordinate_precision_test_data():
     """
-    Generates RDF test data for coordinate precision assessment.
+    This function creates RDF test data to check coordinate precision.
 
-    - "obs_low_precision": < 2 decimals → Should return "Low".
-    - "obs_medium_precision": 3 or 4 decimals → Should return "Medium".
-    - "obs_high_precision": > 4 decimals → Should return "High".
+    It includes:
+    - One observation with high precision (more than 4 decimals)
+    - One observation with low precision (less than 2 decimals)
+    - One observation with medium precision (between 2 and 4 decimals)
     """
 
     g = Graph()
 
-    # === Observation with LOW precision (1 decimal) ===
-    g.add((TERN["obs_low_precision"], RDF.type, TERN.Observation))
-    g.add((TERN["obs_low_precision"], SOSA.hasFeatureOfInterest, TERN["sample_low"]))
-    g.add((TERN["sample_low"], RDF.type, TERN.Sample))
-    g.add((TERN["sample_low"], SOSA.isResultOf, TERN["procedure_low"]))
-    g.add((TERN["procedure_low"], GEO.hasGeometry, TERN["geometry_low"]))
-    g.add((TERN["geometry_low"], GEO.asWKT, Literal("POINT(150.6 -34.3)", datatype=XSD.string)))  # 1 decimal
+    # ======================================
+    # Observation 1: High precision
+    # WKT: POINT(150.123456 -34.987654) → "High"
+    # ======================================
+    g.add((EX["obs_high"], RDF.type, TERN.Observation))
+    g.add((EX["obs_high"], SOSAN.hasFeatureOfInterest, EX["sample_high"]))
+    g.add((EX["sample_high"], RDF.type, TERN.Sample))
+    g.add((EX["sample_high"], SOSAN.isResultOf, EX["procedure_high"]))
+    g.add((EX["procedure_high"], GEO.hasGeometry, EX["geometry_high"]))
+    g.add((EX["geometry_high"], GEO.asWKT, Literal("POINT(150.123456 -34.987654)", datatype=XSD.string)))
 
-    # === Observation with MEDIUM precision (3 decimals) ===
-    g.add((TERN["obs_medium_precision"], RDF.type, TERN.Observation))
-    g.add((TERN["obs_medium_precision"], SOSA.hasFeatureOfInterest, TERN["sample_medium"]))
-    g.add((TERN["sample_medium"], RDF.type, TERN.Sample))
-    g.add((TERN["sample_medium"], SOSA.isResultOf, TERN["procedure_medium"]))
-    g.add((TERN["procedure_medium"], GEO.hasGeometry, TERN["geometry_medium"]))
-    g.add((TERN["geometry_medium"], GEO.asWKT, Literal("POINT(150.643 -34.397)", datatype=XSD.string)))  # 3 decimals
+    # ======================================
+    # Observation 2: Low precision
+    # WKT: POINT(150.1 -34.9) → "Low"
+    # ======================================
+    g.add((EX["obs_low"], RDF.type, TERN.Observation))
+    g.add((EX["obs_low"], SOSAN.hasFeatureOfInterest, EX["sample_low"]))
+    g.add((EX["sample_low"], RDF.type, TERN.Sample))
+    g.add((EX["sample_low"], SOSAN.isResultOf, EX["procedure_low"]))
+    g.add((EX["procedure_low"], GEO.hasGeometry, EX["geometry_low"]))
+    g.add((EX["geometry_low"], GEO.asWKT, Literal("POINT(150.1 -34.9)", datatype=XSD.string)))
 
-    # === Observation with HIGH precision (6 decimals) ===
-    g.add((TERN["obs_high_precision"], RDF.type, TERN.Observation))
-    g.add((TERN["obs_high_precision"], SOSA.hasFeatureOfInterest, TERN["sample_high"]))
-    g.add((TERN["sample_high"], RDF.type, TERN.Sample))
-    g.add((TERN["sample_high"], SOSA.isResultOf, TERN["procedure_high"]))
-    g.add((TERN["procedure_high"], GEO.hasGeometry, TERN["geometry_high"]))
-    g.add((TERN["geometry_high"], GEO.asWKT, Literal("POINT(150.644123 -34.397456)", datatype=XSD.string)))  # 6 decimals
+    # ======================================
+    # Observation 3: Medium precision
+    # WKT: POINT(150.123 -34.45) → "Medium"
+    # ======================================
+    g.add((EX["obs_medium"], RDF.type, TERN.Observation))
+    g.add((EX["obs_medium"], SOSAN.hasFeatureOfInterest, EX["sample_medium"]))
+    g.add((EX["sample_medium"], RDF.type, TERN.Sample))
+    g.add((EX["sample_medium"], SOSAN.isResultOf, EX["procedure_medium"]))
+    g.add((EX["procedure_medium"], GEO.hasGeometry, EX["geometry_medium"]))
+    g.add((EX["geometry_medium"], GEO.asWKT, Literal("POINT(150.123 -34.45)", datatype=XSD.string)))
 
     return g.serialize(format="turtle")
 
-# Run the function to test output
+# For manual testing
 if __name__ == "__main__":
     print(create_coordinate_precision_test_data())

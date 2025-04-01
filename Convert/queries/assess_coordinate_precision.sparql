@@ -1,54 +1,61 @@
-# Coordinate Precision Assessment
-# • Definition: Assesses the precision of coordinates by checking how many decimal places
-#   are provided in latitude and longitude. Higher decimals = higher precision.
-# • Levels:
-#     - Low: Both latitude and longitude have fewer than 2 decimal digits.
-#     - High: Both have more than 4 decimal digits.
-#     - Medium: All other cases.
+# ====================================================================================
+# Purpose:
+# Check how many decimal places are used in coordinates (lon/lat) and assign:
+#   - "High"   → both > 4 decimal places
+#   - "Low"    → both < 2 decimal places
+#   - "Medium" → other cases
+# ====================================================================================
 
-PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
-PREFIX sosa: <http://www.w3.org/ns/sosa/>
-PREFIX geo: <http://www.opengis.net/ont/geosparql#>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>
+PREFIX sosa:   <http://www.w3.org/ns/sosa/>
+PREFIX geo:    <http://www.opengis.net/ont/geosparql#>
+PREFIX dqaf:   <http://example.com/def/dqaf/>
+PREFIX schema: <http://schema.org/>
 
-SELECT ?observation ?lonStr ?latStr
-       (IF(
-           (?lonPrecision > 4 && ?latPrecision > 4),
-           "High",
-           IF(
-               (?lonPrecision < 2 && ?latPrecision < 2),
-               "Low",
-               "Medium"
-           )
-       ) AS ?coordinate_precision)
+INSERT {
+  GRAPH dqaf:fullResults {
+    ?observation dqaf:hasResult [
+      sosa:observedProperty <http://example.com/assess/coordinate_precision/> ;
+      schema:value ?coordinate_precision
+    ]
+  }
+}
 WHERE {
-  # Select all observations
-  ?observation a tern:Observation .
-
-  # Link to the related sample
-  ?observation sosa:hasFeatureOfInterest ?sample .
-  ?sample a tern:Sample .
-
-  # Get procedure and geometry for the sample
-  ?sample sosa:isResultOf ?procedure .
-  ?procedure geo:hasGeometry ?geometry .
-
-  # Attempt to extract WKT geometry and split coordinates
+  ?observation a tern:Observation ;
+               sosa:hasFeatureOfInterest ?sample .
+  ?sample a tern:Sample ;
+          sosa:isResultOf ?procedure .
   OPTIONAL {
-    ?geometry geo:asWKT ?wkt .
+    ?procedure geo:hasGeometry ?geometry .
+    OPTIONAL {
+      ?geometry geo:asWKT ?wkt .
 
-    # Clean WKT string and isolate longitude and latitude
-    BIND(STR(?wkt) AS ?wktStr)
-    BIND(STRBEFORE(STRAFTER(?wktStr, "POINT ("), ")") AS ?coords)
-    BIND(STRBEFORE(?coords, " ") AS ?lonStr)
-    BIND(STRAFTER(?coords, " ") AS ?latStr)
+      # === Clean and extract coordinate strings ===
+      BIND(REPLACE(STR(?wkt), "POINT\\(\\s*(.*)\\s*\\)", "$1") AS ?coords)
+      BIND(STRBEFORE(?coords, " ") AS ?lonStr)
+      BIND(STRAFTER(?coords, " ") AS ?latStr)
 
-    # Extract decimal portion after the dot
-    BIND(IF(CONTAINS(?lonStr, "."), STRAFTER(?lonStr, "."), "") AS ?lonDec)
-    BIND(IF(CONTAINS(?latStr, "."), STRAFTER(?latStr, "."), "") AS ?latDec)
+      # === Extract decimals ===
+      BIND(IF(CONTAINS(?lonStr, "."), STRAFTER(?lonStr, "."), "") AS ?lonDec)
+      BIND(IF(CONTAINS(?latStr, "."), STRAFTER(?latStr, "."), "") AS ?latDec)
 
-    # Count number of decimal digits
-    BIND(STRLEN(?lonDec) AS ?lonPrecision)
-    BIND(STRLEN(?latDec) AS ?latPrecision)
+      # === Count digits after the decimal ===
+      BIND(STRLEN(?lonDec) AS ?lonPrecision)
+      BIND(STRLEN(?latDec) AS ?latPrecision)
+
+      # === Assign precision category ===
+      BIND(
+        IF(
+          (?lonPrecision > 4 && ?latPrecision > 4),
+          "High",
+          IF(
+            (?lonPrecision < 2 && ?latPrecision < 2),
+            "Low",
+            "Medium"
+          )
+        )
+        AS ?coordinate_precision
+      )
+    }
   }
 }

@@ -1,27 +1,55 @@
-# This query checks if both latitude and longitude are provided for observations.
-# It assigns "non_empty" if coordinate data exists and "empty" if it is missing.
+# ====================================================================================
+# Purpose:
+# This query checks if each observation has complete coordinate information.
+# It returns:
+#   - "non_empty" → if coordinates (WKT) are present
+#   - "empty"     → if geometry or WKT is missing
+# ====================================================================================
 
-PREFIX sosa: <http://www.w3.org/ns/sosa/>  # Standard ontology for observations
-PREFIX tern: <https://w3id.org/tern/ontologies/tern/>  # TERN ontology for samples and observations
-PREFIX geo: <http://www.opengis.net/ont/geosparql#>  # Ontology for geographic locations
+# =============================
+# Step 1: Define common prefixes
+# =============================
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
+PREFIX geo:  <http://www.opengis.net/ont/geosparql#>
+PREFIX dqaf: <http://example.com/def/dqaf/>
+PREFIX schema: <http://schema.org/>
 
-SELECT ?observation
-       (IF(BOUND(?wkt), "non_empty", "empty")
-        AS ?assess_coordinate_completeness)
+# ========================================
+# Step 2: Insert the completeness result
+# ========================================
+INSERT {
+  GRAPH dqaf:fullResults {
+    ?observation dqaf:hasResult [
+      sosa:observedProperty <http://example.com/assess/coordinate_completeness/> ;
+      schema:value ?completeness
+    ]
+  }
+}
+
+# ========================================
+# Step 3: Match and classify observations
+# ========================================
 WHERE {
-  # Select all observations
+  # Observation must exist
   ?observation a tern:Observation .
 
-  # Find the related sample that the observation refers to
+  # Observation must refer to a sample
   ?observation sosa:hasFeatureOfInterest ?sample .
   ?sample a tern:Sample .
 
-  # Get the procedure that generated this sample
+  # Sample must be result of a procedure
   ?sample sosa:isResultOf ?procedure .
 
-  # Get the geometry of the procedure
-  ?procedure geo:hasGeometry ?geometry .
+  # Try to find geometry
+  OPTIONAL {
+    ?procedure geo:hasGeometry ?geometry .
+    OPTIONAL { ?geometry geo:asWKT ?wkt . }
+  }
 
-  # Check if there is a WKT (Well-Known Text) representation for the coordinates
-  OPTIONAL { ?geometry geo:asWKT ?wkt . }
+  # If WKT is found → "non_empty", else → "empty"
+  BIND(
+    IF(BOUND(?wkt), "non_empty", "empty")
+    AS ?completeness
+  )
 }

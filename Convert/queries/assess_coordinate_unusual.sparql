@@ -1,50 +1,50 @@
+# ====================================================================================
+# Coordinate Unusual
+# Identifies if coordinates have repeating decimal digit or number patterns.
+# Examples:
+# - 111.111111 → "unusual"
+# - 123.123123 → "unusual"
+# - 147.893 → "usual"
+# ====================================================================================
 
-# Check if coordinates (latitude or longitude) have unusual decimal patterns
-# Example of unusual: 145.111111 (same number repeating), 145.123123123 (pattern repeating)
+PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>
+PREFIX sosa:   <http://www.w3.org/ns/sosa/>
+PREFIX geo:    <http://www.opengis.net/ont/geosparql#>
+PREFIX dqaf:   <http://example.com/def/dqaf/>
+PREFIX schema: <http://schema.org/>
 
-PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
-PREFIX sosa: <http://www.w3.org/ns/sosa/>
-PREFIX geo: <http://www.opengis.net/ont/geosparql#>
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-
-SELECT
-  ?observation         # The observation URI
-  ?lonStr              # Longitude as a string
-  ?latStr              # Latitude as a string
-  (IF(
-     # If the decimal part of longitude OR latitude has 3 repeating digits
-     REGEX(?lonDec, "([0-9])\\1\\1") ||
-     REGEX(?latDec, "([0-9])\\1\\1"),
-     "unusual",        # Then label as "unusual"
-     "usual"           # Otherwise, label as "usual"
-   ) AS ?coordinate_unusual)
+INSERT {
+  GRAPH dqaf:fullResults {
+    ?observation dqaf:hasResult [
+      sosa:observedProperty <http://example.com/assess/coordinate_unusual/> ;
+      schema:value ?coordinate_unusual
+    ]
+  }
+}
 WHERE {
-  # Step 1: Get observation and related geometry
-  ?observation a tern:Observation .
-  ?observation sosa:hasFeatureOfInterest ?sample .
-  ?sample a tern:Sample .
-  ?sample sosa:isResultOf ?procedure .
+  ?observation a tern:Observation ;
+               sosa:hasFeatureOfInterest ?sample .
+  ?sample a tern:Sample ;
+          sosa:isResultOf ?procedure .
   ?procedure geo:hasGeometry ?geometry .
-  ?geometry geo:asWKT ?wkt .   # Get WKT format of the location
+  ?geometry geo:asWKT ?wkt .
 
-  # Step 2: Remove CRS prefix if it exists (like <http://...>)
-  BIND(
-    IF(STRSTARTS(STR(?wkt), "<"),
-       SUBSTR(STR(?wkt), STRLEN(STRBEFORE(STR(?wkt), ">")) + 3),
-       STR(?wkt)
-    ) AS ?wktNoCRS
-  )
+  # === Parse WKT and extract lon/lat strings ===
+  BIND(STR(?wkt) AS ?wktStr)
+  BIND(STRBEFORE(STRAFTER(?wktStr, "POINT("), ")") AS ?coords)
+  BIND(STRBEFORE(?coords, " ") AS ?lonStr)
+  BIND(STRAFTER(?coords, " ") AS ?latStr)
 
-  # Step 3: Get longitude and latitude from WKT
-  # Example WKT: POINT (145.55686 -37.924)
-  BIND(REPLACE(?wktNoCRS,
-       "^POINT\\s*\\(([-+]?\\d+\\.\\d+)[\\s]+([-+]?\\d+\\.\\d+)\\)$",
-       "$1") AS ?lonStr)    # Extract longitude
-  BIND(REPLACE(?wktNoCRS,
-       "^POINT\\s*\\(([-+]?\\d+\\.\\d+)[\\s]+([-+]?\\d+\\.\\d+)\\)$",
-       "$2") AS ?latStr)    # Extract latitude
-
-  # Step 4: Get decimal part (after dot ".")
+  # === Get decimal parts ===
   BIND(STRAFTER(?lonStr, ".") AS ?lonDec)
   BIND(STRAFTER(?latStr, ".") AS ?latDec)
+
+  # === Detect unusual coordinate values ===
+  BIND(
+    IF(
+      REGEX(?lonDec, "([0-9]{1,3})\\1{2,}") || REGEX(?latDec, "([0-9]{1,3})\\1{2,}"),
+      "unusual",
+      "usual"
+    ) AS ?coordinate_unusual
+  )
 }

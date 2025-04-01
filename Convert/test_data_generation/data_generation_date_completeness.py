@@ -1,38 +1,45 @@
-from rdflib import Graph, Namespace, Literal  # Import libraries to handle RDF data
-from rdflib.namespace import RDF, XSD, TIME  # Import common RDF namespaces
+from rdflib import Graph, Namespace, Literal
+from rdflib.namespace import RDF, XSD, TIME
 
-# Define a namespace (like a category for data) for observations
-OBS = Namespace("http://createme.org/observation/scientificName/")
+# ===============================
+# Define the namespace for terms
+# ===============================
+TERN = Namespace("https://w3id.org/tern/ontologies/tern/")
+TIME = Namespace("http://www.w3.org/2006/time#")
 
 def create_date_completeness_test_data():
     """
-    This function creates test_dq data to check if observations have a date.
+    This function creates RDF data to test the date completeness rule.
 
-    - "obs_with_date" → Has a valid date (should be labeled "non_empty").
-    - "obs_no_date" → No date at all (should be labeled "empty").
-    - "obs_missing_date" → Has a time reference but no actual date (should be "empty").
+    It includes three test cases:
+    - One observation with a complete date (→ non_empty)
+    - One observation with no time or date at all (→ empty)
+    - One observation with time but missing actual year (→ empty)
     """
 
-    # Create an empty RDF graph (like a database to store the test_dq data)
     g = Graph()
 
-    # ===== Observation 1: Has a valid date (should be labeled "non_empty") =====
-    g.add((OBS["obs_with_date"], RDF.type, OBS.Observation))  # Define as an observation
-    g.add((OBS["obs_with_date"], TIME.hasTime, OBS["time1"]))  # Link observation to a time record
-    g.add((OBS["time1"], TIME.inXSDgYear, Literal("2023", datatype=XSD.gYear)))  # Assign a valid date (2023)
+    # ===============================
+    # Observation 1: Has a complete date
+    # ===============================
+    g.add((TERN["obs_with_date"], RDF.type, TERN.Observation))
+    g.add((TERN["obs_with_date"], TIME.hasTime, TERN["time1"]))
+    g.add((TERN["time1"], TIME.inXSDgYear, Literal("2020", datatype=XSD.gYear)))
 
-    # ===== Observation 2: No date at all (should be labeled "empty") =====
-    g.add((OBS["obs_no_date"], RDF.type, OBS.Observation))  # Define as an observation but no date is provided
+    # ===============================
+    # Observation 2: No date or time at all
+    # ===============================
+    g.add((TERN["obs_no_date"], RDF.type, TERN.Observation))
 
-    # ===== Observation 3: Has a time reference but missing actual date (should be labeled "empty") =====
-    g.add((OBS["obs_missing_date"], RDF.type, OBS.Observation))  # Define as an observation
-    g.add((OBS["obs_missing_date"], TIME.hasTime, OBS["time2"]))  # Time reference exists
-    # ⚠ No `time:inXSDgYear` property for time2, meaning the date is missing
+    # ===============================
+    # Observation 3: Has time, but missing actual date value
+    # ===============================
+    g.add((TERN["obs_missing_date"], RDF.type, TERN.Observation))
+    g.add((TERN["obs_missing_date"], TIME.hasTime, TERN["time2"]))
+    # No inXSDgYear for time2
 
-    # Return the RDF data serialized in Turtle format instead of writing to a file
     return g.serialize(format="turtle")
 
-# Run the function and print the generated test_dq data.
+# Test run
 if __name__ == "__main__":
-    turtle_data = create_date_completeness_test_data()
-    print(turtle_data)
+    print(create_date_completeness_test_data())

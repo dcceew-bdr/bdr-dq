@@ -1,51 +1,52 @@
 from rdflib import Graph, Namespace, Literal
 from rdflib.namespace import RDF, XSD
 
-# Namespaces
+# ================================
+# Step 1: Define RDF namespaces
+# ================================
 TERN = Namespace("https://w3id.org/tern/ontologies/tern/")
 SOSA = Namespace("http://www.w3.org/ns/sosa/")
 GEO = Namespace("http://www.opengis.net/ont/geosparql#")
+EX = Namespace("http://example.com/test/")
 
-
-def create_coordinate_unusual_pattern_test_data():
+def create_coordinate_unusual_test_data():
     """
-    Generates RDF test data to assess unusual patterns in coordinate decimals.
+    This function creates test RDF data for assessing coordinate unusual patterns.
 
-    - "obs_usual_coords" → Normal decimal precision → should be labeled "usual"
-    - "obs_repeating_digits" → Repeating digits like 145.111111 → should be "unusual"
-    - "obs_pattern_repeats" → Pattern like 145.123123123 → should be "unusual"
+    The test includes:
+    - One observation with decimal repeating digit (e.g., 45.111111) → "unusual"
+    - One observation with repeating number pattern (e.g., 45.123123123) → "unusual"
+    - One observation with no repeating pattern (e.g., 43.147893) → "usual"
     """
 
     g = Graph()
 
-    # === Observation 1: Usual coordinate (should return "usual") ===
-    g.add((TERN["obs_usual_coords"], RDF.type, TERN.Observation))
-    g.add((TERN["obs_usual_coords"], SOSA.hasFeatureOfInterest, TERN["sample_usual"]))
-    g.add((TERN["sample_usual"], RDF.type, TERN.Sample))
-    g.add((TERN["sample_usual"], SOSA.isResultOf, TERN["procedure_usual"]))
-    g.add((TERN["procedure_usual"], GEO.hasGeometry, TERN["geometry_usual"]))
-    g.add((TERN["geometry_usual"], GEO.asWKT, Literal("POINT(145.6789 -37.9543)", datatype=XSD.string)))
+    # === Observation 1: Unusual - repeating digit pattern (e.g., 111111)
+    g.add((EX["obs_unusual_digit"], RDF.type, TERN.Observation))
+    g.add((EX["obs_unusual_digit"], SOSA.hasFeatureOfInterest, EX["sample1"]))
+    g.add((EX["sample1"], RDF.type, TERN.Sample))
+    g.add((EX["sample1"], SOSA.isResultOf, EX["proc1"]))
+    g.add((EX["proc1"], GEO.hasGeometry, EX["geom1"]))
+    g.add((EX["geom1"], GEO.asWKT, Literal("POINT(45.111111 -33.111111)", datatype=XSD.string)))
 
-    # === Observation 2: Repeating digit pattern (should return "unusual") ===
-    g.add((TERN["obs_repeating_digits"], RDF.type, TERN.Observation))
-    g.add((TERN["obs_repeating_digits"], SOSA.hasFeatureOfInterest, TERN["sample_repeat"]))
-    g.add((TERN["sample_repeat"], RDF.type, TERN.Sample))
-    g.add((TERN["sample_repeat"], SOSA.isResultOf, TERN["procedure_repeat"]))
-    g.add((TERN["procedure_repeat"], GEO.hasGeometry, TERN["geometry_repeat"]))
-    g.add((TERN["geometry_repeat"], GEO.asWKT, Literal("POINT(145.111111 -37.999)", datatype=XSD.string)))
+    # === Observation 2: Unusual - repeating number pattern (e.g., 123123123)
+    g.add((EX["obs_unusual_pattern"], RDF.type, TERN.Observation))
+    g.add((EX["obs_unusual_pattern"], SOSA.hasFeatureOfInterest, EX["sample2"]))
+    g.add((EX["sample2"], RDF.type, TERN.Sample))
+    g.add((EX["sample2"], SOSA.isResultOf, EX["proc2"]))
+    g.add((EX["proc2"], GEO.hasGeometry, EX["geom2"]))
+    g.add((EX["geom2"], GEO.asWKT, Literal("POINT(45.123123123 -34.145145145)", datatype=XSD.string)))
 
-    # === Observation 3: Repeating pattern like 123123 (should return "unusual") ===
-    g.add((TERN["obs_pattern_repeats"], RDF.type, TERN.Observation))
-    g.add((TERN["obs_pattern_repeats"], SOSA.hasFeatureOfInterest, TERN["sample_pattern"]))
-    g.add((TERN["sample_pattern"], RDF.type, TERN.Sample))
-    g.add((TERN["sample_pattern"], SOSA.isResultOf, TERN["procedure_pattern"]))
-    g.add((TERN["procedure_pattern"], GEO.hasGeometry, TERN["geometry_pattern"]))
-    g.add((TERN["geometry_pattern"], GEO.asWKT, Literal("POINT(145.123123123 -37.456456456)", datatype=XSD.string)))
+    # === Observation 3: Usual - normal decimal pattern
+    g.add((EX["obs_usual"], RDF.type, TERN.Observation))
+    g.add((EX["obs_usual"], SOSA.hasFeatureOfInterest, EX["sample3"]))
+    g.add((EX["sample3"], RDF.type, TERN.Sample))
+    g.add((EX["sample3"], SOSA.isResultOf, EX["proc3"]))
+    g.add((EX["proc3"], GEO.hasGeometry, EX["geom3"]))
+    g.add((EX["geom3"], GEO.asWKT, Literal("POINT(43.147893 -32.654321)", datatype=XSD.string)))
 
     return g.serialize(format="turtle")
 
-
-# Run this file directly to see the output
+# === For testing in console ===
 if __name__ == "__main__":
-    turtle_data = create_coordinate_unusual_pattern_test_data()
-    print(turtle_data)
+    print(create_coordinate_unusual_test_data())

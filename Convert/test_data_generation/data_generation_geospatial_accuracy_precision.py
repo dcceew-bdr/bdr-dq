@@ -1,48 +1,49 @@
 from rdflib import Graph, Namespace, Literal
 from rdflib.namespace import RDF, XSD
 
-# Define necessary namespaces
+# ===============================
+# Step 1: Define common namespaces
+# ===============================
 TERN = Namespace("https://w3id.org/tern/ontologies/tern/")
 SOSA = Namespace("http://www.w3.org/ns/sosa/")
 GEO = Namespace("http://www.opengis.net/ont/geosparql#")
-
+EX = Namespace("http://example.com/test/")
 
 def create_geospatial_accuracy_precision_test_data():
     """
-    Generates RDF data for geospatial accuracy precision checks:
+    This function creates RDF test data to check geospatial accuracy precision.
 
-    - obs_high_precision: accuracy <= 10,000 meters
-    - obs_low_precision: accuracy > 10,000 meters
-    - obs_missing_accuracy: no accuracy value provided
+    We test 3 cases:
+    - Observation with uncertainty = 5.5 → should be 'high_precision'
+    - Observation with uncertainty = 20000 → should be 'low_precision'
+    - Observation with no uncertainty → should also be 'low_precision'
     """
 
     g = Graph()
 
-    # === Observation 1: High precision (5000 meters) ===
-    g.add((TERN["obs_high_precision"], RDF.type, TERN.Observation))
-    g.add((TERN["obs_high_precision"], SOSA.hasFeatureOfInterest, TERN["sample_high"]))
-    g.add((TERN["sample_high"], RDF.type, TERN.Sample))
-    g.add((TERN["sample_high"], SOSA.isResultOf, TERN["procedure_high"]))
-    g.add((TERN["procedure_high"], GEO.hasMetricSpatialAccuracy, Literal("5000", datatype=XSD.float)))
+    # === Case 1: High precision (uncertainty = 5.5)
+    g.add((EX["obs_high"], RDF.type, TERN.Observation))
+    g.add((EX["obs_high"], SOSA.hasFeatureOfInterest, EX["sample1"]))
+    g.add((EX["sample1"], RDF.type, TERN.Sample))
+    g.add((EX["sample1"], SOSA.isResultOf, EX["proc1"]))
+    g.add((EX["proc1"], GEO.hasMetricSpatialAccuracy, Literal("5.5", datatype=XSD.float)))
 
-    # === Observation 2: Low precision (15000 meters) ===
-    g.add((TERN["obs_low_precision"], RDF.type, TERN.Observation))
-    g.add((TERN["obs_low_precision"], SOSA.hasFeatureOfInterest, TERN["sample_low"]))
-    g.add((TERN["sample_low"], RDF.type, TERN.Sample))
-    g.add((TERN["sample_low"], SOSA.isResultOf, TERN["procedure_low"]))
-    g.add((TERN["procedure_low"], GEO.hasMetricSpatialAccuracy, Literal("15000", datatype=XSD.float)))
+    # === Case 2: Low precision (uncertainty = 20000)
+    g.add((EX["obs_low"], RDF.type, TERN.Observation))
+    g.add((EX["obs_low"], SOSA.hasFeatureOfInterest, EX["sample2"]))
+    g.add((EX["sample2"], RDF.type, TERN.Sample))
+    g.add((EX["sample2"], SOSA.isResultOf, EX["proc2"]))
+    g.add((EX["proc2"], GEO.hasMetricSpatialAccuracy, Literal("20000", datatype=XSD.float)))
 
-    # === Observation 3: Missing accuracy value (should be treated as low_precision) ===
-    g.add((TERN["obs_missing_accuracy"], RDF.type, TERN.Observation))
-    g.add((TERN["obs_missing_accuracy"], SOSA.hasFeatureOfInterest, TERN["sample_missing"]))
-    g.add((TERN["sample_missing"], RDF.type, TERN.Sample))
-    g.add((TERN["sample_missing"], SOSA.isResultOf, TERN["procedure_missing"]))
-    # No accuracy triple added for procedure_missing
+    # === Case 3: Missing uncertainty → should default to 'low_precision'
+    g.add((EX["obs_missing"], RDF.type, TERN.Observation))
+    g.add((EX["obs_missing"], SOSA.hasFeatureOfInterest, EX["sample3"]))
+    g.add((EX["sample3"], RDF.type, TERN.Sample))
+    g.add((EX["sample3"], SOSA.isResultOf, EX["proc3"]))
+    # No accuracy triple added for this case
 
     return g.serialize(format="turtle")
 
-
-# Run the function and print the generated RDF Turtle
+# === For manual testing ===
 if __name__ == "__main__":
-    turtle_data = create_geospatial_accuracy_precision_test_data()
-    print(turtle_data)
+    print(create_geospatial_accuracy_precision_test_data())
