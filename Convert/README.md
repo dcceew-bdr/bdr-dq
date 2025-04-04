@@ -78,3 +78,6 @@ Upon successful execution, the script will:
     *   A file containing the DQAF assessment results, potentially with compressed literals for efficiency.
     *   A metadata file describing the assessment run.
     *   If a new vocabulary mapping is generated (linking compression codes to assessment and result URIs), an RDF version of this mapping will also be created in the output directory.
+
+## Build command
+`uv build --wheel`

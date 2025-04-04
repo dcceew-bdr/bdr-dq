@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dqaf"
-version = "0.1.5"
+version = "0.1.6"
 description = "BDR Data Quality Assessment Framework"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -38,7 +38,8 @@ exclude = [
     "dqaf/dist/",
     "dqaf/test_data_generation/",
     "dqaf/test_dq",
-    "dqaf/docs"
+    "dqaf/docs",
+    "dqaf/*.ttl"
 ]
 
 [tool.pytest.ini_options]
