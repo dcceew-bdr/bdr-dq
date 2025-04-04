@@ -11,7 +11,6 @@ from rdflib import URIRef, Graph, Namespace, RDF, DCTERMS, Literal, XSD, SOSA
 
 from compression.generate_compression_query import check_and_generate_compression_files
 
-
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -19,7 +18,9 @@ logging.basicConfig(
     stream=sys.stdout,
 )
 
-script_dir = Path(__file__).parent
+# Get the package directory, not the script directory
+package_dir = Path(__file__).parent
+
 
 class AssessmentScope(Enum):
     CHUNK = "Chunk"
@@ -29,18 +30,30 @@ class AssessmentScope(Enum):
     def __str__(self):
         return self.value
 
-def run_dqf(input_file_path: str, scope: AssessmentScope, query_dir_name: str = "queries"):
+
+def run_assessment(input_file_path: str | Path, scope: AssessmentScope, query_dir_name: str = "queries"):
+    """
+    Run the data quality assessment framework on an input Turtle file.
+
+    Args:
+        input_file_path: Path to the input Turtle file (.ttl)
+        scope: Scope of the assessment (Chunk, Dataset, BDR)
+        query_dir_name: Directory containing the SPARQL queries
+
+    Returns:
+        Path to the output file containing the assessment results
+    """
     store = Store()
     store.load(path=input_file_path)
 
-    output_dir = script_dir / "output"
+    output_dir = package_dir / "output"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    compression_vocab_path = script_dir / "compression/vocabulary_versions.json"
+    compression_vocab_path = package_dir / "compression/vocabulary_versions.json"
     with open(compression_vocab_path) as f:
         vv = json.load(f)
     current_version = vv["current_version"]
-    compression_query_path = script_dir / f"compression/queries/compress_v{current_version}.rq"
+    compression_query_path = package_dir / f"compression/queries/compress_v{current_version}.rq"
     compression_query = compression_query_path.read_text()
 
     # add a run ID to the compression query
@@ -48,7 +61,7 @@ def run_dqf(input_file_path: str, scope: AssessmentScope, query_dir_name: str = 
     run_uri = URIRef(f"https://bdr-dqf-compression/run-id/{uid}")
     compression_query = compression_query.replace(
         "VALUES ?run_id { UNDEF }",
-        f"VALUES ?run_id { {uid} }",
+        f"VALUES ?run_id {{ \"{uid}\" }}",
     )
 
     # create RDF details for the run
@@ -60,10 +73,10 @@ def run_dqf(input_file_path: str, scope: AssessmentScope, query_dir_name: str = 
     now_literal = Literal(datetime.now().isoformat(), datatype=XSD.dateTime)
     g.add((run_uri, SOSA.resultTime, now_literal))
     g.add((run_uri, BDRDQF.usedCompressionVersion, BDRDQF[f"version/{current_version}"]))
-    g.add((run_uri, BDRDQF.assessmentScope, BDRDQF[f"scope/{scope.value}"]))  # Use scope.value
+    g.add((run_uri, BDRDQF.assessmentScope, BDRDQF[f"scope/{scope.value}"]))
     g.serialize(output_dir / f"{uid}-metadata.ttl", format="turtle")
 
-    query_dir_path = script_dir / query_dir_name
+    query_dir_path = package_dir / query_dir_name
     for query_path in query_dir_path.glob("*.rq"):
         logging.info(f"Running assessment: {query_path.stem}")
         with query_path.open("r") as file:
@@ -72,17 +85,18 @@ def run_dqf(input_file_path: str, scope: AssessmentScope, query_dir_name: str = 
             store.update(result_generation_query)  # adds the full results to the dataset
         except Exception as e:
             logging.error(f"Error running assessment in {query_path}: {e}")
-    compressed_results = store.query(compression_query)
-    output_filename = output_dir / f"{uid}.ttl"
+    store.update(compression_query)
+    output_filename = output_dir / f"{uid}.nq"
     with open(output_filename, "wb") as f:
-        f.write(compressed_results.serialize(format=RdfFormat.TURTLE))
+        f.write(store.dump(format=RdfFormat.N_QUADS))
 
     return output_filename
 
 
-if __name__ == "__main__":
+def main():
+    """Command-line entry point for the dqaf package."""
     # --- Check and generate compression files first ---
-    compression_dir = script_dir / "compression"
+    compression_dir = package_dir / "compression"
     check_and_generate_compression_files(compression_dir)
     # --- End compression check ---
 
@@ -100,11 +114,15 @@ if __name__ == "__main__":
     input_file_path = Path(args.filename)
     if not input_file_path.is_file():
         logging.error(f"Input file not found at {input_file_path}")
-        exit(1)
+        sys.exit(1)
 
     try:
-        output_file = run_dqf(input_file_path, args.scope)
+        output_file = run_assessment(input_file_path, args.scope)
         logging.info(f"Processing complete. Output file generated: {output_file}")
     except Exception as e:
         logging.error(f"An error occurred during processing: {e}")
-        exit(1)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

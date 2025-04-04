@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dqaf"
+version = "0.1.5"
+description = "BDR Data Quality Assessment Framework"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "rdflib",
+    "pyoxigraph"
+]
+authors = [
+    {name = "David Habgood", email = "david@kurrawong.ai"}
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest"
+]
+
+[project.scripts]
+dqaf = "dqaf.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["dqaf"]
+include = [
+    "dqaf/compression/**/*.json",
+    "dqaf/compression/**/*.rq",
+    "dqaf/queries/**/*.rq",
+    "dqaf/queries/**/*.sparql",
+    "README.md"
+]
+exclude = [
+    "dqaf/output/",
+    "dqaf/dist/",
+    "dqaf/test_data_generation/",
+    "dqaf/test_dq",
+    "dqaf/docs"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

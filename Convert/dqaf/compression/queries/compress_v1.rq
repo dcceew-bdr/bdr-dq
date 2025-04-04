@@ -2,7 +2,9 @@ PREFIX schema: <https://schema.org/>
 PREFIX sosa: <http://www.w3.org/ns/sosa/>
 PREFIX dqaf: <https://linked.data.gov.au/def/bdr/dqaf/>
 
-CONSTRUCT { ?uri dqaf:hasCompressedResults ?final_results }
+INSERT {
+  GRAPH  dqaf:compressedResults { ?uri dqaf:hasCompressedResults ?final_results }
+}
 WHERE {
   SELECT ?uri (CONCAT("{\"r\":\"", STR(?run_id), "\",", ?concat_results, "}") AS ?final_results) {
     VALUES ?run_id { UNDEF }
