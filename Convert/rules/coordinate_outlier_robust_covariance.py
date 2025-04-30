@@ -1,9 +1,10 @@
 from pyoxigraph import Store
 import numpy as np
+from sklearn.covariance import MinCovDet
 
-def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
+def run_coordinate_outlier_robust_covariance(store: Store, threshold: float = 5.0):
     """
-    This function calculates coordinate outliers using the Z-score method
+    This function detects coordinate outliers using the Robust Covariance method
     and writes the result back into dqaf:fullResults using INSERT/WHERE pattern.
     """
 
@@ -11,7 +12,7 @@ def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
     coord_query = """
     PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
-    PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+    PREFIX geo: <http://www.opengis.net/geosparql#>
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
     SELECT ?observation ?lonVal ?latVal
@@ -33,30 +34,26 @@ def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
     """
     results = list(store.query(coord_query))
 
-    # === Step 2: Prepare data ===
+    if not results:
+        print("⚠️ No coordinates found.")
+        return
+
     coords = []
     obs_map = {}
     for row in results:
         lon = float(row["lonVal"].value)
         lat = float(row["latVal"].value)
         obs_uri = str(row["observation"]).strip("<>")
-        coords.append((lon, lat))
+        coords.append([lon, lat])
         obs_map[obs_uri] = (lon, lat)
 
-    lons = np.array([pt[0] for pt in coords])
-    lats = np.array([pt[1] for pt in coords])
+    coords = np.array(coords)
 
-    lon_mean = np.mean(lons)
-    lon_std = np.std(lons)
-    lat_mean = np.mean(lats)
-    lat_std = np.std(lats)
+    # === Step 2: Fit Robust Covariance Model ===
+    robust_cov = MinCovDet().fit(coords)
+    distances = robust_cov.mahalanobis(coords)
 
-    def is_outlier(val, mean, std):
-        if std == 0:
-            return False
-        return abs((val - mean) / std) > threshold
-
-    # === Step 3: Build SPARQL INSERT ===
+    # === Step 3: Build batch INSERT SPARQL query ===
     insert_prefix = """
     PREFIX dqaf: <http://example.com/def/dqaf/>
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
@@ -66,15 +63,12 @@ def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
       GRAPH dqaf:fullResults {
     """
     insert_values = ""
-    for obs_uri, (lon, lat) in obs_map.items():
-        tag = "outlier_coordinate" if (
-            is_outlier(lon, lon_mean, lon_std) or
-            is_outlier(lat, lat_mean, lat_std)
-        ) else "normal_coordinate"
+    for obs_uri, dist in zip(obs_map.keys(), distances):
+        tag = "outlier_coordinate" if dist > threshold else "normal_coordinate"
 
         insert_values += f"""
         <{obs_uri}> dqaf:hasResult [
-          sosa:observedProperty <http://example.com/assess/coordinate_outlier_zscore/> ;
+          sosa:observedProperty <http://example.com/assess/coordinate_outlier_robust_covariance/> ;
           schema:value "{tag}"
         ] .
         """
@@ -86,5 +80,4 @@ def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
 
     full_insert_query = insert_prefix + insert_values + insert_suffix
 
-    # === Step 4: Run the SPARQL update ===
     store.update(full_insert_query)

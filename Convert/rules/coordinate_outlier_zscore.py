@@ -11,7 +11,7 @@ def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
     coord_query = """
     PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
-    PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+    PREFIX geo: <http://www.opengis.net/geosparql#>
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
     SELECT ?observation ?lonVal ?latVal
@@ -33,7 +33,11 @@ def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
     """
     results = list(store.query(coord_query))
 
-    # === Step 2: Prepare data ===
+    if not results:
+        print("⚠️ No coordinates found.")
+        return
+
+    # === Step 2: Prepare data for Z-score calculation ===
     coords = []
     obs_map = {}
     for row in results:
@@ -46,17 +50,15 @@ def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
     lons = np.array([pt[0] for pt in coords])
     lats = np.array([pt[1] for pt in coords])
 
-    lon_mean = np.mean(lons)
-    lon_std = np.std(lons)
-    lat_mean = np.mean(lats)
-    lat_std = np.std(lats)
+    lon_mean, lon_std = np.mean(lons), np.std(lons)
+    lat_mean, lat_std = np.mean(lats), np.std(lats)
 
     def is_outlier(val, mean, std):
         if std == 0:
             return False
         return abs((val - mean) / std) > threshold
 
-    # === Step 3: Build SPARQL INSERT ===
+    # === Step 3: Build batch INSERT SPARQL query ===
     insert_prefix = """
     PREFIX dqaf: <http://example.com/def/dqaf/>
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
