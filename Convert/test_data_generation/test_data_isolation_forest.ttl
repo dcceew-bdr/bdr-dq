@@ -1,0 +1,2104 @@
+@prefix ns1: <http://www.opengis.net/geosparql#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.com/test/obs_0> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_0> .
+
+<http://example.com/test/obs_1> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_1> .
+
+<http://example.com/test/obs_10> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_10> .
+
+<http://example.com/test/obs_100> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_100> .
+
+<http://example.com/test/obs_101> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_101> .
+
+<http://example.com/test/obs_102> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_102> .
+
+<http://example.com/test/obs_103> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_103> .
+
+<http://example.com/test/obs_104> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_104> .
+
+<http://example.com/test/obs_105> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_105> .
+
+<http://example.com/test/obs_106> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_106> .
+
+<http://example.com/test/obs_107> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_107> .
+
+<http://example.com/test/obs_108> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_108> .
+
+<http://example.com/test/obs_109> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_109> .
+
+<http://example.com/test/obs_11> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_11> .
+
+<http://example.com/test/obs_110> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_110> .
+
+<http://example.com/test/obs_111> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_111> .
+
+<http://example.com/test/obs_112> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_112> .
+
+<http://example.com/test/obs_113> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_113> .
+
+<http://example.com/test/obs_114> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_114> .
+
+<http://example.com/test/obs_115> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_115> .
+
+<http://example.com/test/obs_116> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_116> .
+
+<http://example.com/test/obs_117> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_117> .
+
+<http://example.com/test/obs_118> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_118> .
+
+<http://example.com/test/obs_119> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_119> .
+
+<http://example.com/test/obs_12> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_12> .
+
+<http://example.com/test/obs_120> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_120> .
+
+<http://example.com/test/obs_121> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_121> .
+
+<http://example.com/test/obs_122> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_122> .
+
+<http://example.com/test/obs_123> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_123> .
+
+<http://example.com/test/obs_124> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_124> .
+
+<http://example.com/test/obs_125> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_125> .
+
+<http://example.com/test/obs_126> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_126> .
+
+<http://example.com/test/obs_127> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_127> .
+
+<http://example.com/test/obs_128> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_128> .
+
+<http://example.com/test/obs_129> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_129> .
+
+<http://example.com/test/obs_13> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_13> .
+
+<http://example.com/test/obs_130> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_130> .
+
+<http://example.com/test/obs_131> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_131> .
+
+<http://example.com/test/obs_132> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_132> .
+
+<http://example.com/test/obs_133> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_133> .
+
+<http://example.com/test/obs_134> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_134> .
+
+<http://example.com/test/obs_135> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_135> .
+
+<http://example.com/test/obs_136> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_136> .
+
+<http://example.com/test/obs_137> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_137> .
+
+<http://example.com/test/obs_138> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_138> .
+
+<http://example.com/test/obs_139> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_139> .
+
+<http://example.com/test/obs_14> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_14> .
+
+<http://example.com/test/obs_140> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_140> .
+
+<http://example.com/test/obs_141> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_141> .
+
+<http://example.com/test/obs_142> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_142> .
+
+<http://example.com/test/obs_143> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_143> .
+
+<http://example.com/test/obs_144> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_144> .
+
+<http://example.com/test/obs_145> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_145> .
+
+<http://example.com/test/obs_146> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_146> .
+
+<http://example.com/test/obs_147> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_147> .
+
+<http://example.com/test/obs_148> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_148> .
+
+<http://example.com/test/obs_149> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_149> .
+
+<http://example.com/test/obs_15> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_15> .
+
+<http://example.com/test/obs_150> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_150> .
+
+<http://example.com/test/obs_151> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_151> .
+
+<http://example.com/test/obs_152> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_152> .
+
+<http://example.com/test/obs_153> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_153> .
+
+<http://example.com/test/obs_154> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_154> .
+
+<http://example.com/test/obs_155> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_155> .
+
+<http://example.com/test/obs_156> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_156> .
+
+<http://example.com/test/obs_157> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_157> .
+
+<http://example.com/test/obs_158> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_158> .
+
+<http://example.com/test/obs_159> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_159> .
+
+<http://example.com/test/obs_16> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_16> .
+
+<http://example.com/test/obs_160> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_160> .
+
+<http://example.com/test/obs_161> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_161> .
+
+<http://example.com/test/obs_162> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_162> .
+
+<http://example.com/test/obs_163> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_163> .
+
+<http://example.com/test/obs_164> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_164> .
+
+<http://example.com/test/obs_165> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_165> .
+
+<http://example.com/test/obs_166> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_166> .
+
+<http://example.com/test/obs_167> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_167> .
+
+<http://example.com/test/obs_168> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_168> .
+
+<http://example.com/test/obs_169> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_169> .
+
+<http://example.com/test/obs_17> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_17> .
+
+<http://example.com/test/obs_170> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_170> .
+
+<http://example.com/test/obs_171> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_171> .
+
+<http://example.com/test/obs_172> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_172> .
+
+<http://example.com/test/obs_173> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_173> .
+
+<http://example.com/test/obs_174> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_174> .
+
+<http://example.com/test/obs_175> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_175> .
+
+<http://example.com/test/obs_176> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_176> .
+
+<http://example.com/test/obs_177> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_177> .
+
+<http://example.com/test/obs_178> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_178> .
+
+<http://example.com/test/obs_179> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_179> .
+
+<http://example.com/test/obs_18> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_18> .
+
+<http://example.com/test/obs_180> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_180> .
+
+<http://example.com/test/obs_181> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_181> .
+
+<http://example.com/test/obs_182> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_182> .
+
+<http://example.com/test/obs_183> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_183> .
+
+<http://example.com/test/obs_184> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_184> .
+
+<http://example.com/test/obs_185> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_185> .
+
+<http://example.com/test/obs_186> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_186> .
+
+<http://example.com/test/obs_187> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_187> .
+
+<http://example.com/test/obs_188> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_188> .
+
+<http://example.com/test/obs_189> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_189> .
+
+<http://example.com/test/obs_19> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_19> .
+
+<http://example.com/test/obs_190> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_190> .
+
+<http://example.com/test/obs_191> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_191> .
+
+<http://example.com/test/obs_192> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_192> .
+
+<http://example.com/test/obs_193> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_193> .
+
+<http://example.com/test/obs_194> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_194> .
+
+<http://example.com/test/obs_195> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_195> .
+
+<http://example.com/test/obs_196> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_196> .
+
+<http://example.com/test/obs_197> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_197> .
+
+<http://example.com/test/obs_198> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_198> .
+
+<http://example.com/test/obs_199> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_199> .
+
+<http://example.com/test/obs_2> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_2> .
+
+<http://example.com/test/obs_20> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_20> .
+
+<http://example.com/test/obs_200> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_200> .
+
+<http://example.com/test/obs_201> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_201> .
+
+<http://example.com/test/obs_202> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_202> .
+
+<http://example.com/test/obs_203> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_203> .
+
+<http://example.com/test/obs_204> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_204> .
+
+<http://example.com/test/obs_205> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_205> .
+
+<http://example.com/test/obs_206> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_206> .
+
+<http://example.com/test/obs_207> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_207> .
+
+<http://example.com/test/obs_208> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_208> .
+
+<http://example.com/test/obs_209> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_209> .
+
+<http://example.com/test/obs_21> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_21> .
+
+<http://example.com/test/obs_22> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_22> .
+
+<http://example.com/test/obs_23> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_23> .
+
+<http://example.com/test/obs_24> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_24> .
+
+<http://example.com/test/obs_25> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_25> .
+
+<http://example.com/test/obs_26> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_26> .
+
+<http://example.com/test/obs_27> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_27> .
+
+<http://example.com/test/obs_28> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_28> .
+
+<http://example.com/test/obs_29> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_29> .
+
+<http://example.com/test/obs_3> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_3> .
+
+<http://example.com/test/obs_30> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_30> .
+
+<http://example.com/test/obs_31> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_31> .
+
+<http://example.com/test/obs_32> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_32> .
+
+<http://example.com/test/obs_33> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_33> .
+
+<http://example.com/test/obs_34> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_34> .
+
+<http://example.com/test/obs_35> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_35> .
+
+<http://example.com/test/obs_36> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_36> .
+
+<http://example.com/test/obs_37> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_37> .
+
+<http://example.com/test/obs_38> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_38> .
+
+<http://example.com/test/obs_39> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_39> .
+
+<http://example.com/test/obs_4> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_4> .
+
+<http://example.com/test/obs_40> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_40> .
+
+<http://example.com/test/obs_41> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_41> .
+
+<http://example.com/test/obs_42> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_42> .
+
+<http://example.com/test/obs_43> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_43> .
+
+<http://example.com/test/obs_44> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_44> .
+
+<http://example.com/test/obs_45> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_45> .
+
+<http://example.com/test/obs_46> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_46> .
+
+<http://example.com/test/obs_47> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_47> .
+
+<http://example.com/test/obs_48> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_48> .
+
+<http://example.com/test/obs_49> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_49> .
+
+<http://example.com/test/obs_5> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_5> .
+
+<http://example.com/test/obs_50> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_50> .
+
+<http://example.com/test/obs_51> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_51> .
+
+<http://example.com/test/obs_52> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_52> .
+
+<http://example.com/test/obs_53> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_53> .
+
+<http://example.com/test/obs_54> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_54> .
+
+<http://example.com/test/obs_55> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_55> .
+
+<http://example.com/test/obs_56> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_56> .
+
+<http://example.com/test/obs_57> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_57> .
+
+<http://example.com/test/obs_58> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_58> .
+
+<http://example.com/test/obs_59> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_59> .
+
+<http://example.com/test/obs_6> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_6> .
+
+<http://example.com/test/obs_60> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_60> .
+
+<http://example.com/test/obs_61> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_61> .
+
+<http://example.com/test/obs_62> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_62> .
+
+<http://example.com/test/obs_63> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_63> .
+
+<http://example.com/test/obs_64> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_64> .
+
+<http://example.com/test/obs_65> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_65> .
+
+<http://example.com/test/obs_66> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_66> .
+
+<http://example.com/test/obs_67> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_67> .
+
+<http://example.com/test/obs_68> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_68> .
+
+<http://example.com/test/obs_69> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_69> .
+
+<http://example.com/test/obs_7> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_7> .
+
+<http://example.com/test/obs_70> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_70> .
+
+<http://example.com/test/obs_71> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_71> .
+
+<http://example.com/test/obs_72> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_72> .
+
+<http://example.com/test/obs_73> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_73> .
+
+<http://example.com/test/obs_74> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_74> .
+
+<http://example.com/test/obs_75> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_75> .
+
+<http://example.com/test/obs_76> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_76> .
+
+<http://example.com/test/obs_77> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_77> .
+
+<http://example.com/test/obs_78> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_78> .
+
+<http://example.com/test/obs_79> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_79> .
+
+<http://example.com/test/obs_8> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_8> .
+
+<http://example.com/test/obs_80> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_80> .
+
+<http://example.com/test/obs_81> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_81> .
+
+<http://example.com/test/obs_82> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_82> .
+
+<http://example.com/test/obs_83> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_83> .
+
+<http://example.com/test/obs_84> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_84> .
+
+<http://example.com/test/obs_85> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_85> .
+
+<http://example.com/test/obs_86> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_86> .
+
+<http://example.com/test/obs_87> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_87> .
+
+<http://example.com/test/obs_88> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_88> .
+
+<http://example.com/test/obs_89> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_89> .
+
+<http://example.com/test/obs_9> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_9> .
+
+<http://example.com/test/obs_90> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_90> .
+
+<http://example.com/test/obs_91> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_91> .
+
+<http://example.com/test/obs_92> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_92> .
+
+<http://example.com/test/obs_93> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_93> .
+
+<http://example.com/test/obs_94> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_94> .
+
+<http://example.com/test/obs_95> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_95> .
+
+<http://example.com/test/obs_96> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_96> .
+
+<http://example.com/test/obs_97> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_97> .
+
+<http://example.com/test/obs_98> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_98> .
+
+<http://example.com/test/obs_99> a <https://w3id.org/tern/ontologies/tern/Observation> ;
+    sosa:hasFeatureOfInterest <http://example.com/test/sample_99> .
+
+<http://example.com/test/geom_0> ns1:asWKT "POINT(151.205346 -33.900308)"^^xsd:string .
+
+<http://example.com/test/geom_1> ns1:asWKT "POINT(151.240816 -33.90222)"^^xsd:string .
+
+<http://example.com/test/geom_10> ns1:asWKT "POINT(151.233724 -33.866853)"^^xsd:string .
+
+<http://example.com/test/geom_100> ns1:asWKT "POINT(153.04894 -27.49585)"^^xsd:string .
+
+<http://example.com/test/geom_101> ns1:asWKT "POINT(152.983578 -27.47289)"^^xsd:string .
+
+<http://example.com/test/geom_102> ns1:asWKT "POINT(153.01973 -27.515062)"^^xsd:string .
+
+<http://example.com/test/geom_103> ns1:asWKT "POINT(153.011852 -27.484595)"^^xsd:string .
+
+<http://example.com/test/geom_104> ns1:asWKT "POINT(152.990156 -27.478007)"^^xsd:string .
+
+<http://example.com/test/geom_105> ns1:asWKT "POINT(152.954396 -27.503985)"^^xsd:string .
+
+<http://example.com/test/geom_106> ns1:asWKT "POINT(153.010408 -27.524961)"^^xsd:string .
+
+<http://example.com/test/geom_107> ns1:asWKT "POINT(152.999559 -27.506223)"^^xsd:string .
+
+<http://example.com/test/geom_108> ns1:asWKT "POINT(152.976494 -27.46816)"^^xsd:string .
+
+<http://example.com/test/geom_109> ns1:asWKT "POINT(152.952188 -27.499104)"^^xsd:string .
+
+<http://example.com/test/geom_11> ns1:asWKT "POINT(151.189797 -33.868873)"^^xsd:string .
+
+<http://example.com/test/geom_110> ns1:asWKT "POINT(152.957543 -27.463001)"^^xsd:string .
+
+<http://example.com/test/geom_111> ns1:asWKT "POINT(153.037112 -27.466999)"^^xsd:string .
+
+<http://example.com/test/geom_112> ns1:asWKT "POINT(152.971912 -27.452317)"^^xsd:string .
+
+<http://example.com/test/geom_113> ns1:asWKT "POINT(153.00978 -27.478182)"^^xsd:string .
+
+<http://example.com/test/geom_114> ns1:asWKT "POINT(153.049189 -27.47132)"^^xsd:string .
+
+<http://example.com/test/geom_115> ns1:asWKT "POINT(153.042212 -27.516864)"^^xsd:string .
+
+<http://example.com/test/geom_116> ns1:asWKT "POINT(152.951208 -27.513825)"^^xsd:string .
+
+<http://example.com/test/geom_117> ns1:asWKT "POINT(153.044304 -27.5167)"^^xsd:string .
+
+<http://example.com/test/geom_118> ns1:asWKT "POINT(153.001848 -27.505354)"^^xsd:string .
+
+<http://example.com/test/geom_119> ns1:asWKT "POINT(153.010156 -27.505753)"^^xsd:string .
+
+<http://example.com/test/geom_12> ns1:asWKT "POINT(151.208259 -33.858161)"^^xsd:string .
+
+<http://example.com/test/geom_120> ns1:asWKT "POINT(153.001548 -27.547309)"^^xsd:string .
+
+<http://example.com/test/geom_121> ns1:asWKT "POINT(153.023666 -27.518713)"^^xsd:string .
+
+<http://example.com/test/geom_122> ns1:asWKT "POINT(153.048678 -27.484085)"^^xsd:string .
+
+<http://example.com/test/geom_123> ns1:asWKT "POINT(153.025835 -27.544297)"^^xsd:string .
+
+<http://example.com/test/geom_124> ns1:asWKT "POINT(152.995837 -27.541724)"^^xsd:string .
+
+<http://example.com/test/geom_125> ns1:asWKT "POINT(153.030911 -27.465699)"^^xsd:string .
+
+<http://example.com/test/geom_126> ns1:asWKT "POINT(152.955427 -27.533513)"^^xsd:string .
+
+<http://example.com/test/geom_127> ns1:asWKT "POINT(152.952936 -27.502774)"^^xsd:string .
+
+<http://example.com/test/geom_128> ns1:asWKT "POINT(153.005946 -27.517803)"^^xsd:string .
+
+<http://example.com/test/geom_129> ns1:asWKT "POINT(153.020235 -27.502795)"^^xsd:string .
+
+<http://example.com/test/geom_13> ns1:asWKT "POINT(151.214707 -33.863052)"^^xsd:string .
+
+<http://example.com/test/geom_130> ns1:asWKT "POINT(153.030693 -27.509358)"^^xsd:string .
+
+<http://example.com/test/geom_131> ns1:asWKT "POINT(152.958033 -27.504826)"^^xsd:string .
+
+<http://example.com/test/geom_132> ns1:asWKT "POINT(153.005077 -27.481454)"^^xsd:string .
+
+<http://example.com/test/geom_133> ns1:asWKT "POINT(153.005018 -27.525727)"^^xsd:string .
+
+<http://example.com/test/geom_134> ns1:asWKT "POINT(152.989732 -27.463745)"^^xsd:string .
+
+<http://example.com/test/geom_135> ns1:asWKT "POINT(152.958589 -27.533156)"^^xsd:string .
+
+<http://example.com/test/geom_136> ns1:asWKT "POINT(153.019574 -27.464768)"^^xsd:string .
+
+<http://example.com/test/geom_137> ns1:asWKT "POINT(152.964691 -27.544905)"^^xsd:string .
+
+<http://example.com/test/geom_138> ns1:asWKT "POINT(153.013625 -27.482896)"^^xsd:string .
+
+<http://example.com/test/geom_139> ns1:asWKT "POINT(153.004586 -27.514563)"^^xsd:string .
+
+<http://example.com/test/geom_14> ns1:asWKT "POINT(151.211804 -33.891735)"^^xsd:string .
+
+<http://example.com/test/geom_140> ns1:asWKT "POINT(153.005593 -27.453636)"^^xsd:string .
+
+<http://example.com/test/geom_141> ns1:asWKT "POINT(152.982174 -27.498984)"^^xsd:string .
+
+<http://example.com/test/geom_142> ns1:asWKT "POINT(153.034727 -27.530907)"^^xsd:string .
+
+<http://example.com/test/geom_143> ns1:asWKT "POINT(152.974703 -27.529272)"^^xsd:string .
+
+<http://example.com/test/geom_144> ns1:asWKT "POINT(152.963742 -27.51201)"^^xsd:string .
+
+<http://example.com/test/geom_145> ns1:asWKT "POINT(152.961897 -27.46547)"^^xsd:string .
+
+<http://example.com/test/geom_146> ns1:asWKT "POINT(153.045627 -27.508525)"^^xsd:string .
+
+<http://example.com/test/geom_147> ns1:asWKT "POINT(152.953649 -27.524386)"^^xsd:string .
+
+<http://example.com/test/geom_148> ns1:asWKT "POINT(153.026679 -27.494587)"^^xsd:string .
+
+<http://example.com/test/geom_149> ns1:asWKT "POINT(153.006619 -27.47454)"^^xsd:string .
+
+<http://example.com/test/geom_15> ns1:asWKT "POINT(151.247029 -33.865323)"^^xsd:string .
+
+<http://example.com/test/geom_150> ns1:asWKT "POINT(152.965405 -27.484202)"^^xsd:string .
+
+<http://example.com/test/geom_151> ns1:asWKT "POINT(153.00534 -27.521175)"^^xsd:string .
+
+<http://example.com/test/geom_152> ns1:asWKT "POINT(152.972066 -27.513509)"^^xsd:string .
+
+<http://example.com/test/geom_153> ns1:asWKT "POINT(152.952779 -27.493648)"^^xsd:string .
+
+<http://example.com/test/geom_154> ns1:asWKT "POINT(152.988257 -27.537944)"^^xsd:string .
+
+<http://example.com/test/geom_155> ns1:asWKT "POINT(152.962588 -27.458456)"^^xsd:string .
+
+<http://example.com/test/geom_156> ns1:asWKT "POINT(152.968809 -27.464801)"^^xsd:string .
+
+<http://example.com/test/geom_157> ns1:asWKT "POINT(152.974131 -27.513617)"^^xsd:string .
+
+<http://example.com/test/geom_158> ns1:asWKT "POINT(152.975177 -27.513104)"^^xsd:string .
+
+<http://example.com/test/geom_159> ns1:asWKT "POINT(152.957561 -27.498641)"^^xsd:string .
+
+<http://example.com/test/geom_16> ns1:asWKT "POINT(151.166553 -33.929273)"^^xsd:string .
+
+<http://example.com/test/geom_160> ns1:asWKT "POINT(152.976945 -27.524227)"^^xsd:string .
+
+<http://example.com/test/geom_161> ns1:asWKT "POINT(153.043462 -27.533637)"^^xsd:string .
+
+<http://example.com/test/geom_162> ns1:asWKT "POINT(153.0455 -27.536709)"^^xsd:string .
+
+<http://example.com/test/geom_163> ns1:asWKT "POINT(153.02882 -27.504819)"^^xsd:string .
+
+<http://example.com/test/geom_164> ns1:asWKT "POINT(152.973329 -27.494756)"^^xsd:string .
+
+<http://example.com/test/geom_165> ns1:asWKT "POINT(152.962255 -27.472223)"^^xsd:string .
+
+<http://example.com/test/geom_166> ns1:asWKT "POINT(153.017833 -27.450244)"^^xsd:string .
+
+<http://example.com/test/geom_167> ns1:asWKT "POINT(153.04997 -27.536445)"^^xsd:string .
+
+<http://example.com/test/geom_168> ns1:asWKT "POINT(153.03766 -27.454017)"^^xsd:string .
+
+<http://example.com/test/geom_169> ns1:asWKT "POINT(152.969912 -27.498862)"^^xsd:string .
+
+<http://example.com/test/geom_17> ns1:asWKT "POINT(151.153531 -33.917469)"^^xsd:string .
+
+<http://example.com/test/geom_170> ns1:asWKT "POINT(153.035999 -27.534183)"^^xsd:string .
+
+<http://example.com/test/geom_171> ns1:asWKT "POINT(152.957278 -27.515205)"^^xsd:string .
+
+<http://example.com/test/geom_172> ns1:asWKT "POINT(153.02805 -27.491941)"^^xsd:string .
+
+<http://example.com/test/geom_173> ns1:asWKT "POINT(153.046273 -27.549722)"^^xsd:string .
+
+<http://example.com/test/geom_174> ns1:asWKT "POINT(152.985441 -27.538223)"^^xsd:string .
+
+<http://example.com/test/geom_175> ns1:asWKT "POINT(153.047678 -27.457964)"^^xsd:string .
+
+<http://example.com/test/geom_176> ns1:asWKT "POINT(152.955332 -27.544305)"^^xsd:string .
+
+<http://example.com/test/geom_177> ns1:asWKT "POINT(153.023705 -27.534603)"^^xsd:string .
+
+<http://example.com/test/geom_178> ns1:asWKT "POINT(153.022036 -27.507409)"^^xsd:string .
+
+<http://example.com/test/geom_179> ns1:asWKT "POINT(153.025068 -27.535094)"^^xsd:string .
+
+<http://example.com/test/geom_18> ns1:asWKT "POINT(151.221844 -33.864128)"^^xsd:string .
+
+<http://example.com/test/geom_180> ns1:asWKT "POINT(153.004815 -27.47627)"^^xsd:string .
+
+<http://example.com/test/geom_181> ns1:asWKT "POINT(153.023472 -27.500784)"^^xsd:string .
+
+<http://example.com/test/geom_182> ns1:asWKT "POINT(153.013282 -27.519496)"^^xsd:string .
+
+<http://example.com/test/geom_183> ns1:asWKT "POINT(153.024538 -27.516298)"^^xsd:string .
+
+<http://example.com/test/geom_184> ns1:asWKT "POINT(152.999572 -27.458279)"^^xsd:string .
+
+<http://example.com/test/geom_185> ns1:asWKT "POINT(152.955006 -27.450359)"^^xsd:string .
+
+<http://example.com/test/geom_186> ns1:asWKT "POINT(153.041076 -27.48527)"^^xsd:string .
+
+<http://example.com/test/geom_187> ns1:asWKT "POINT(152.97362 -27.492252)"^^xsd:string .
+
+<http://example.com/test/geom_188> ns1:asWKT "POINT(153.034472 -27.544693)"^^xsd:string .
+
+<http://example.com/test/geom_189> ns1:asWKT "POINT(153.011982 -27.541684)"^^xsd:string .
+
+<http://example.com/test/geom_19> ns1:asWKT "POINT(151.234046 -33.928226)"^^xsd:string .
+
+<http://example.com/test/geom_190> ns1:asWKT "POINT(153.03668 -27.502374)"^^xsd:string .
+
+<http://example.com/test/geom_191> ns1:asWKT "POINT(153.020092 -27.498629)"^^xsd:string .
+
+<http://example.com/test/geom_192> ns1:asWKT "POINT(153.022678 -27.505413)"^^xsd:string .
+
+<http://example.com/test/geom_193> ns1:asWKT "POINT(153.021637 -27.476513)"^^xsd:string .
+
+<http://example.com/test/geom_194> ns1:asWKT "POINT(152.975033 -27.469675)"^^xsd:string .
+
+<http://example.com/test/geom_195> ns1:asWKT "POINT(153.032074 -27.510727)"^^xsd:string .
+
+<http://example.com/test/geom_196> ns1:asWKT "POINT(152.997059 -27.469938)"^^xsd:string .
+
+<http://example.com/test/geom_197> ns1:asWKT "POINT(153.028932 -27.546031)"^^xsd:string .
+
+<http://example.com/test/geom_198> ns1:asWKT "POINT(153.048798 -27.482767)"^^xsd:string .
+
+<http://example.com/test/geom_199> ns1:asWKT "POINT(153.022211 -27.499443)"^^xsd:string .
+
+<http://example.com/test/geom_2> ns1:asWKT "POINT(151.210021 -33.861068)"^^xsd:string .
+
+<http://example.com/test/geom_20> ns1:asWKT "POINT(151.231185 -33.853978)"^^xsd:string .
+
+<http://example.com/test/geom_200> ns1:asWKT "POINT(155.057955 -36.062448)"^^xsd:string .
+
+<http://example.com/test/geom_201> ns1:asWKT "POINT(151.507183 -21.734496)"^^xsd:string .
+
+<http://example.com/test/geom_202> ns1:asWKT "POINT(143.464842 -21.703937)"^^xsd:string .
+
+<http://example.com/test/geom_203> ns1:asWKT "POINT(138.332595 -15.474012)"^^xsd:string .
+
+<http://example.com/test/geom_204> ns1:asWKT "POINT(159.338403 -35.134445)"^^xsd:string .
+
+<http://example.com/test/geom_205> ns1:asWKT "POINT(158.40304 -31.700087)"^^xsd:string .
+
+<http://example.com/test/geom_206> ns1:asWKT "POINT(158.970584 -16.532767)"^^xsd:string .
+
+<http://example.com/test/geom_207> ns1:asWKT "POINT(137.796347 -14.168326)"^^xsd:string .
+
+<http://example.com/test/geom_208> ns1:asWKT "POINT(151.931221 -26.332089)"^^xsd:string .
+
+<http://example.com/test/geom_209> ns1:asWKT "POINT(139.811049 -15.631797)"^^xsd:string .
+
+<http://example.com/test/geom_21> ns1:asWKT "POINT(151.176578 -33.860237)"^^xsd:string .
+
+<http://example.com/test/geom_22> ns1:asWKT "POINT(151.167787 -33.881897)"^^xsd:string .
+
+<http://example.com/test/geom_23> ns1:asWKT "POINT(151.213695 -33.903946)"^^xsd:string .
+
+<http://example.com/test/geom_24> ns1:asWKT "POINT(151.155385 -33.931996)"^^xsd:string .
+
+<http://example.com/test/geom_25> ns1:asWKT "POINT(151.181144 -33.857729)"^^xsd:string .
+
+<http://example.com/test/geom_26> ns1:asWKT "POINT(151.212309 -33.931234)"^^xsd:string .
+
+<http://example.com/test/geom_27> ns1:asWKT "POINT(151.230079 -33.865077)"^^xsd:string .
+
+<http://example.com/test/geom_28> ns1:asWKT "POINT(151.18843 -33.862075)"^^xsd:string .
+
+<http://example.com/test/geom_29> ns1:asWKT "POINT(151.161812 -33.860375)"^^xsd:string .
+
+<http://example.com/test/geom_3> ns1:asWKT "POINT(151.174931 -33.927727)"^^xsd:string .
+
+<http://example.com/test/geom_30> ns1:asWKT "POINT(151.195798 -33.855029)"^^xsd:string .
+
+<http://example.com/test/geom_31> ns1:asWKT "POINT(151.17852 -33.865942)"^^xsd:string .
+
+<http://example.com/test/geom_32> ns1:asWKT "POINT(151.18694 -33.94834)"^^xsd:string .
+
+<http://example.com/test/geom_33> ns1:asWKT "POINT(151.166055 -33.864041)"^^xsd:string .
+
+<http://example.com/test/geom_34> ns1:asWKT "POINT(151.196892 -33.905208)"^^xsd:string .
+
+<http://example.com/test/geom_35> ns1:asWKT "POINT(151.244597 -33.850724)"^^xsd:string .
+
+<http://example.com/test/geom_36> ns1:asWKT "POINT(151.211296 -33.893849)"^^xsd:string .
+
+<http://example.com/test/geom_37> ns1:asWKT "POINT(151.179249 -33.858119)"^^xsd:string .
+
+<http://example.com/test/geom_38> ns1:asWKT "POINT(151.163397 -33.863105)"^^xsd:string .
+
+<http://example.com/test/geom_39> ns1:asWKT "POINT(151.239825 -33.940514)"^^xsd:string .
+
+<http://example.com/test/geom_4> ns1:asWKT "POINT(151.171155 -33.863924)"^^xsd:string .
+
+<http://example.com/test/geom_40> ns1:asWKT "POINT(151.152639 -33.909008)"^^xsd:string .
+
+<http://example.com/test/geom_41> ns1:asWKT "POINT(151.21892 -33.851628)"^^xsd:string .
+
+<http://example.com/test/geom_42> ns1:asWKT "POINT(151.199137 -33.864672)"^^xsd:string .
+
+<http://example.com/test/geom_43> ns1:asWKT "POINT(151.1511 -33.890233)"^^xsd:string .
+
+<http://example.com/test/geom_44> ns1:asWKT "POINT(151.19468 -33.937496)"^^xsd:string .
+
+<http://example.com/test/geom_45> ns1:asWKT "POINT(151.18732 -33.891281)"^^xsd:string .
+
+<http://example.com/test/geom_46> ns1:asWKT "POINT(151.228629 -33.927262)"^^xsd:string .
+
+<http://example.com/test/geom_47> ns1:asWKT "POINT(151.194185 -33.859362)"^^xsd:string .
+
+<http://example.com/test/geom_48> ns1:asWKT "POINT(151.227955 -33.943959)"^^xsd:string .
+
+<http://example.com/test/geom_49> ns1:asWKT "POINT(151.154015 -33.902292)"^^xsd:string .
+
+<http://example.com/test/geom_5> ns1:asWKT "POINT(151.182469 -33.885485)"^^xsd:string .
+
+<http://example.com/test/geom_50> ns1:asWKT "POINT(151.165677 -33.914898)"^^xsd:string .
+
+<http://example.com/test/geom_51> ns1:asWKT "POINT(151.180612 -33.878215)"^^xsd:string .
+
+<http://example.com/test/geom_52> ns1:asWKT "POINT(151.205314 -33.886757)"^^xsd:string .
+
+<http://example.com/test/geom_53> ns1:asWKT "POINT(151.239563 -33.858437)"^^xsd:string .
+
+<http://example.com/test/geom_54> ns1:asWKT "POINT(151.182372 -33.938896)"^^xsd:string .
+
+<http://example.com/test/geom_55> ns1:asWKT "POINT(151.186765 -33.934196)"^^xsd:string .
+
+<http://example.com/test/geom_56> ns1:asWKT "POINT(151.187389 -33.869471)"^^xsd:string .
+
+<http://example.com/test/geom_57> ns1:asWKT "POINT(151.168617 -33.924466)"^^xsd:string .
+
+<http://example.com/test/geom_58> ns1:asWKT "POINT(151.236342 -33.904725)"^^xsd:string .
+
+<http://example.com/test/geom_59> ns1:asWKT "POINT(151.158136 -33.931802)"^^xsd:string .
+
+<http://example.com/test/geom_6> ns1:asWKT "POINT(151.15807 -33.884439)"^^xsd:string .
+
+<http://example.com/test/geom_60> ns1:asWKT "POINT(151.230762 -33.876571)"^^xsd:string .
+
+<http://example.com/test/geom_61> ns1:asWKT "POINT(151.245573 -33.908073)"^^xsd:string .
+
+<http://example.com/test/geom_62> ns1:asWKT "POINT(151.19833 -33.899675)"^^xsd:string .
+
+<http://example.com/test/geom_63> ns1:asWKT "POINT(151.186995 -33.90466)"^^xsd:string .
+
+<http://example.com/test/geom_64> ns1:asWKT "POINT(151.226843 -33.88228)"^^xsd:string .
+
+<http://example.com/test/geom_65> ns1:asWKT "POINT(151.190389 -33.870185)"^^xsd:string .
+
+<http://example.com/test/geom_66> ns1:asWKT "POINT(151.240186 -33.857693)"^^xsd:string .
+
+<http://example.com/test/geom_67> ns1:asWKT "POINT(151.24103 -33.86932)"^^xsd:string .
+
+<http://example.com/test/geom_68> ns1:asWKT "POINT(151.20447 -33.870677)"^^xsd:string .
+
+<http://example.com/test/geom_69> ns1:asWKT "POINT(151.220912 -33.853452)"^^xsd:string .
+
+<http://example.com/test/geom_7> ns1:asWKT "POINT(151.218931 -33.921694)"^^xsd:string .
+
+<http://example.com/test/geom_70> ns1:asWKT "POINT(151.169976 -33.884976)"^^xsd:string .
+
+<http://example.com/test/geom_71> ns1:asWKT "POINT(151.153112 -33.938521)"^^xsd:string .
+
+<http://example.com/test/geom_72> ns1:asWKT "POINT(151.193823 -33.90499)"^^xsd:string .
+
+<http://example.com/test/geom_73> ns1:asWKT "POINT(151.206639 -33.886973)"^^xsd:string .
+
+<http://example.com/test/geom_74> ns1:asWKT "POINT(151.180477 -33.85525)"^^xsd:string .
+
+<http://example.com/test/geom_75> ns1:asWKT "POINT(151.166216 -33.88927)"^^xsd:string .
+
+<http://example.com/test/geom_76> ns1:asWKT "POINT(151.238485 -33.941327)"^^xsd:string .
+
+<http://example.com/test/geom_77> ns1:asWKT "POINT(151.242322 -33.92531)"^^xsd:string .
+
+<http://example.com/test/geom_78> ns1:asWKT "POINT(151.228092 -33.943613)"^^xsd:string .
+
+<http://example.com/test/geom_79> ns1:asWKT "POINT(151.180819 -33.910843)"^^xsd:string .
+
+<http://example.com/test/geom_8> ns1:asWKT "POINT(151.18754 -33.881995)"^^xsd:string .
+
+<http://example.com/test/geom_80> ns1:asWKT "POINT(151.24585 -33.882899)"^^xsd:string .
+
+<http://example.com/test/geom_81> ns1:asWKT "POINT(151.206744 -33.903492)"^^xsd:string .
+
+<http://example.com/test/geom_82> ns1:asWKT "POINT(151.229357 -33.851763)"^^xsd:string .
+
+<http://example.com/test/geom_83> ns1:asWKT "POINT(151.23503 -33.92518)"^^xsd:string .
+
+<http://example.com/test/geom_84> ns1:asWKT "POINT(151.245343 -33.942958)"^^xsd:string .
+
+<http://example.com/test/geom_85> ns1:asWKT "POINT(151.22463 -33.91284)"^^xsd:string .
+
+<http://example.com/test/geom_86> ns1:asWKT "POINT(151.218344 -33.854899)"^^xsd:string .
+
+<http://example.com/test/geom_87> ns1:asWKT "POINT(151.232403 -33.947421)"^^xsd:string .
+
+<http://example.com/test/geom_88> ns1:asWKT "POINT(151.193025 -33.853313)"^^xsd:string .
+
+<http://example.com/test/geom_89> ns1:asWKT "POINT(151.214016 -33.923464)"^^xsd:string .
+
+<http://example.com/test/geom_9> ns1:asWKT "POINT(151.1608 -33.877632)"^^xsd:string .
+
+<http://example.com/test/geom_90> ns1:asWKT "POINT(151.22728 -33.942612)"^^xsd:string .
+
+<http://example.com/test/geom_91> ns1:asWKT "POINT(151.153779 -33.900099)"^^xsd:string .
+
+<http://example.com/test/geom_92> ns1:asWKT "POINT(151.198902 -33.943738)"^^xsd:string .
+
+<http://example.com/test/geom_93> ns1:asWKT "POINT(151.228055 -33.930315)"^^xsd:string .
+
+<http://example.com/test/geom_94> ns1:asWKT "POINT(151.24992 -33.912842)"^^xsd:string .
+
+<http://example.com/test/geom_95> ns1:asWKT "POINT(151.153408 -33.866458)"^^xsd:string .
+
+<http://example.com/test/geom_96> ns1:asWKT "POINT(151.244377 -33.915531)"^^xsd:string .
+
+<http://example.com/test/geom_97> ns1:asWKT "POINT(151.210329 -33.88787)"^^xsd:string .
+
+<http://example.com/test/geom_98> ns1:asWKT "POINT(151.201597 -33.898078)"^^xsd:string .
+
+<http://example.com/test/geom_99> ns1:asWKT "POINT(151.24374 -33.891359)"^^xsd:string .
+
+<http://example.com/test/proc_0> ns1:hasGeometry <http://example.com/test/geom_0> .
+
+<http://example.com/test/proc_1> ns1:hasGeometry <http://example.com/test/geom_1> .
+
+<http://example.com/test/proc_10> ns1:hasGeometry <http://example.com/test/geom_10> .
+
+<http://example.com/test/proc_100> ns1:hasGeometry <http://example.com/test/geom_100> .
+
+<http://example.com/test/proc_101> ns1:hasGeometry <http://example.com/test/geom_101> .
+
+<http://example.com/test/proc_102> ns1:hasGeometry <http://example.com/test/geom_102> .
+
+<http://example.com/test/proc_103> ns1:hasGeometry <http://example.com/test/geom_103> .
+
+<http://example.com/test/proc_104> ns1:hasGeometry <http://example.com/test/geom_104> .
+
+<http://example.com/test/proc_105> ns1:hasGeometry <http://example.com/test/geom_105> .
+
+<http://example.com/test/proc_106> ns1:hasGeometry <http://example.com/test/geom_106> .
+
+<http://example.com/test/proc_107> ns1:hasGeometry <http://example.com/test/geom_107> .
+
+<http://example.com/test/proc_108> ns1:hasGeometry <http://example.com/test/geom_108> .
+
+<http://example.com/test/proc_109> ns1:hasGeometry <http://example.com/test/geom_109> .
+
+<http://example.com/test/proc_11> ns1:hasGeometry <http://example.com/test/geom_11> .
+
+<http://example.com/test/proc_110> ns1:hasGeometry <http://example.com/test/geom_110> .
+
+<http://example.com/test/proc_111> ns1:hasGeometry <http://example.com/test/geom_111> .
+
+<http://example.com/test/proc_112> ns1:hasGeometry <http://example.com/test/geom_112> .
+
+<http://example.com/test/proc_113> ns1:hasGeometry <http://example.com/test/geom_113> .
+
+<http://example.com/test/proc_114> ns1:hasGeometry <http://example.com/test/geom_114> .
+
+<http://example.com/test/proc_115> ns1:hasGeometry <http://example.com/test/geom_115> .
+
+<http://example.com/test/proc_116> ns1:hasGeometry <http://example.com/test/geom_116> .
+
+<http://example.com/test/proc_117> ns1:hasGeometry <http://example.com/test/geom_117> .
+
+<http://example.com/test/proc_118> ns1:hasGeometry <http://example.com/test/geom_118> .
+
+<http://example.com/test/proc_119> ns1:hasGeometry <http://example.com/test/geom_119> .
+
+<http://example.com/test/proc_12> ns1:hasGeometry <http://example.com/test/geom_12> .
+
+<http://example.com/test/proc_120> ns1:hasGeometry <http://example.com/test/geom_120> .
+
+<http://example.com/test/proc_121> ns1:hasGeometry <http://example.com/test/geom_121> .
+
+<http://example.com/test/proc_122> ns1:hasGeometry <http://example.com/test/geom_122> .
+
+<http://example.com/test/proc_123> ns1:hasGeometry <http://example.com/test/geom_123> .
+
+<http://example.com/test/proc_124> ns1:hasGeometry <http://example.com/test/geom_124> .
+
+<http://example.com/test/proc_125> ns1:hasGeometry <http://example.com/test/geom_125> .
+
+<http://example.com/test/proc_126> ns1:hasGeometry <http://example.com/test/geom_126> .
+
+<http://example.com/test/proc_127> ns1:hasGeometry <http://example.com/test/geom_127> .
+
+<http://example.com/test/proc_128> ns1:hasGeometry <http://example.com/test/geom_128> .
+
+<http://example.com/test/proc_129> ns1:hasGeometry <http://example.com/test/geom_129> .
+
+<http://example.com/test/proc_13> ns1:hasGeometry <http://example.com/test/geom_13> .
+
+<http://example.com/test/proc_130> ns1:hasGeometry <http://example.com/test/geom_130> .
+
+<http://example.com/test/proc_131> ns1:hasGeometry <http://example.com/test/geom_131> .
+
+<http://example.com/test/proc_132> ns1:hasGeometry <http://example.com/test/geom_132> .
+
+<http://example.com/test/proc_133> ns1:hasGeometry <http://example.com/test/geom_133> .
+
+<http://example.com/test/proc_134> ns1:hasGeometry <http://example.com/test/geom_134> .
+
+<http://example.com/test/proc_135> ns1:hasGeometry <http://example.com/test/geom_135> .
+
+<http://example.com/test/proc_136> ns1:hasGeometry <http://example.com/test/geom_136> .
+
+<http://example.com/test/proc_137> ns1:hasGeometry <http://example.com/test/geom_137> .
+
+<http://example.com/test/proc_138> ns1:hasGeometry <http://example.com/test/geom_138> .
+
+<http://example.com/test/proc_139> ns1:hasGeometry <http://example.com/test/geom_139> .
+
+<http://example.com/test/proc_14> ns1:hasGeometry <http://example.com/test/geom_14> .
+
+<http://example.com/test/proc_140> ns1:hasGeometry <http://example.com/test/geom_140> .
+
+<http://example.com/test/proc_141> ns1:hasGeometry <http://example.com/test/geom_141> .
+
+<http://example.com/test/proc_142> ns1:hasGeometry <http://example.com/test/geom_142> .
+
+<http://example.com/test/proc_143> ns1:hasGeometry <http://example.com/test/geom_143> .
+
+<http://example.com/test/proc_144> ns1:hasGeometry <http://example.com/test/geom_144> .
+
+<http://example.com/test/proc_145> ns1:hasGeometry <http://example.com/test/geom_145> .
+
+<http://example.com/test/proc_146> ns1:hasGeometry <http://example.com/test/geom_146> .
+
+<http://example.com/test/proc_147> ns1:hasGeometry <http://example.com/test/geom_147> .
+
+<http://example.com/test/proc_148> ns1:hasGeometry <http://example.com/test/geom_148> .
+
+<http://example.com/test/proc_149> ns1:hasGeometry <http://example.com/test/geom_149> .
+
+<http://example.com/test/proc_15> ns1:hasGeometry <http://example.com/test/geom_15> .
+
+<http://example.com/test/proc_150> ns1:hasGeometry <http://example.com/test/geom_150> .
+
+<http://example.com/test/proc_151> ns1:hasGeometry <http://example.com/test/geom_151> .
+
+<http://example.com/test/proc_152> ns1:hasGeometry <http://example.com/test/geom_152> .
+
+<http://example.com/test/proc_153> ns1:hasGeometry <http://example.com/test/geom_153> .
+
+<http://example.com/test/proc_154> ns1:hasGeometry <http://example.com/test/geom_154> .
+
+<http://example.com/test/proc_155> ns1:hasGeometry <http://example.com/test/geom_155> .
+
+<http://example.com/test/proc_156> ns1:hasGeometry <http://example.com/test/geom_156> .
+
+<http://example.com/test/proc_157> ns1:hasGeometry <http://example.com/test/geom_157> .
+
+<http://example.com/test/proc_158> ns1:hasGeometry <http://example.com/test/geom_158> .
+
+<http://example.com/test/proc_159> ns1:hasGeometry <http://example.com/test/geom_159> .
+
+<http://example.com/test/proc_16> ns1:hasGeometry <http://example.com/test/geom_16> .
+
+<http://example.com/test/proc_160> ns1:hasGeometry <http://example.com/test/geom_160> .
+
+<http://example.com/test/proc_161> ns1:hasGeometry <http://example.com/test/geom_161> .
+
+<http://example.com/test/proc_162> ns1:hasGeometry <http://example.com/test/geom_162> .
+
+<http://example.com/test/proc_163> ns1:hasGeometry <http://example.com/test/geom_163> .
+
+<http://example.com/test/proc_164> ns1:hasGeometry <http://example.com/test/geom_164> .
+
+<http://example.com/test/proc_165> ns1:hasGeometry <http://example.com/test/geom_165> .
+
+<http://example.com/test/proc_166> ns1:hasGeometry <http://example.com/test/geom_166> .
+
+<http://example.com/test/proc_167> ns1:hasGeometry <http://example.com/test/geom_167> .
+
+<http://example.com/test/proc_168> ns1:hasGeometry <http://example.com/test/geom_168> .
+
+<http://example.com/test/proc_169> ns1:hasGeometry <http://example.com/test/geom_169> .
+
+<http://example.com/test/proc_17> ns1:hasGeometry <http://example.com/test/geom_17> .
+
+<http://example.com/test/proc_170> ns1:hasGeometry <http://example.com/test/geom_170> .
+
+<http://example.com/test/proc_171> ns1:hasGeometry <http://example.com/test/geom_171> .
+
+<http://example.com/test/proc_172> ns1:hasGeometry <http://example.com/test/geom_172> .
+
+<http://example.com/test/proc_173> ns1:hasGeometry <http://example.com/test/geom_173> .
+
+<http://example.com/test/proc_174> ns1:hasGeometry <http://example.com/test/geom_174> .
+
+<http://example.com/test/proc_175> ns1:hasGeometry <http://example.com/test/geom_175> .
+
+<http://example.com/test/proc_176> ns1:hasGeometry <http://example.com/test/geom_176> .
+
+<http://example.com/test/proc_177> ns1:hasGeometry <http://example.com/test/geom_177> .
+
+<http://example.com/test/proc_178> ns1:hasGeometry <http://example.com/test/geom_178> .
+
+<http://example.com/test/proc_179> ns1:hasGeometry <http://example.com/test/geom_179> .
+
+<http://example.com/test/proc_18> ns1:hasGeometry <http://example.com/test/geom_18> .
+
+<http://example.com/test/proc_180> ns1:hasGeometry <http://example.com/test/geom_180> .
+
+<http://example.com/test/proc_181> ns1:hasGeometry <http://example.com/test/geom_181> .
+
+<http://example.com/test/proc_182> ns1:hasGeometry <http://example.com/test/geom_182> .
+
+<http://example.com/test/proc_183> ns1:hasGeometry <http://example.com/test/geom_183> .
+
+<http://example.com/test/proc_184> ns1:hasGeometry <http://example.com/test/geom_184> .
+
+<http://example.com/test/proc_185> ns1:hasGeometry <http://example.com/test/geom_185> .
+
+<http://example.com/test/proc_186> ns1:hasGeometry <http://example.com/test/geom_186> .
+
+<http://example.com/test/proc_187> ns1:hasGeometry <http://example.com/test/geom_187> .
+
+<http://example.com/test/proc_188> ns1:hasGeometry <http://example.com/test/geom_188> .
+
+<http://example.com/test/proc_189> ns1:hasGeometry <http://example.com/test/geom_189> .
+
+<http://example.com/test/proc_19> ns1:hasGeometry <http://example.com/test/geom_19> .
+
+<http://example.com/test/proc_190> ns1:hasGeometry <http://example.com/test/geom_190> .
+
+<http://example.com/test/proc_191> ns1:hasGeometry <http://example.com/test/geom_191> .
+
+<http://example.com/test/proc_192> ns1:hasGeometry <http://example.com/test/geom_192> .
+
+<http://example.com/test/proc_193> ns1:hasGeometry <http://example.com/test/geom_193> .
+
+<http://example.com/test/proc_194> ns1:hasGeometry <http://example.com/test/geom_194> .
+
+<http://example.com/test/proc_195> ns1:hasGeometry <http://example.com/test/geom_195> .
+
+<http://example.com/test/proc_196> ns1:hasGeometry <http://example.com/test/geom_196> .
+
+<http://example.com/test/proc_197> ns1:hasGeometry <http://example.com/test/geom_197> .
+
+<http://example.com/test/proc_198> ns1:hasGeometry <http://example.com/test/geom_198> .
+
+<http://example.com/test/proc_199> ns1:hasGeometry <http://example.com/test/geom_199> .
+
+<http://example.com/test/proc_2> ns1:hasGeometry <http://example.com/test/geom_2> .
+
+<http://example.com/test/proc_20> ns1:hasGeometry <http://example.com/test/geom_20> .
+
+<http://example.com/test/proc_200> ns1:hasGeometry <http://example.com/test/geom_200> .
+
+<http://example.com/test/proc_201> ns1:hasGeometry <http://example.com/test/geom_201> .
+
+<http://example.com/test/proc_202> ns1:hasGeometry <http://example.com/test/geom_202> .
+
+<http://example.com/test/proc_203> ns1:hasGeometry <http://example.com/test/geom_203> .
+
+<http://example.com/test/proc_204> ns1:hasGeometry <http://example.com/test/geom_204> .
+
+<http://example.com/test/proc_205> ns1:hasGeometry <http://example.com/test/geom_205> .
+
+<http://example.com/test/proc_206> ns1:hasGeometry <http://example.com/test/geom_206> .
+
+<http://example.com/test/proc_207> ns1:hasGeometry <http://example.com/test/geom_207> .
+
+<http://example.com/test/proc_208> ns1:hasGeometry <http://example.com/test/geom_208> .
+
+<http://example.com/test/proc_209> ns1:hasGeometry <http://example.com/test/geom_209> .
+
+<http://example.com/test/proc_21> ns1:hasGeometry <http://example.com/test/geom_21> .
+
+<http://example.com/test/proc_22> ns1:hasGeometry <http://example.com/test/geom_22> .
+
+<http://example.com/test/proc_23> ns1:hasGeometry <http://example.com/test/geom_23> .
+
+<http://example.com/test/proc_24> ns1:hasGeometry <http://example.com/test/geom_24> .
+
+<http://example.com/test/proc_25> ns1:hasGeometry <http://example.com/test/geom_25> .
+
+<http://example.com/test/proc_26> ns1:hasGeometry <http://example.com/test/geom_26> .
+
+<http://example.com/test/proc_27> ns1:hasGeometry <http://example.com/test/geom_27> .
+
+<http://example.com/test/proc_28> ns1:hasGeometry <http://example.com/test/geom_28> .
+
+<http://example.com/test/proc_29> ns1:hasGeometry <http://example.com/test/geom_29> .
+
+<http://example.com/test/proc_3> ns1:hasGeometry <http://example.com/test/geom_3> .
+
+<http://example.com/test/proc_30> ns1:hasGeometry <http://example.com/test/geom_30> .
+
+<http://example.com/test/proc_31> ns1:hasGeometry <http://example.com/test/geom_31> .
+
+<http://example.com/test/proc_32> ns1:hasGeometry <http://example.com/test/geom_32> .
+
+<http://example.com/test/proc_33> ns1:hasGeometry <http://example.com/test/geom_33> .
+
+<http://example.com/test/proc_34> ns1:hasGeometry <http://example.com/test/geom_34> .
+
+<http://example.com/test/proc_35> ns1:hasGeometry <http://example.com/test/geom_35> .
+
+<http://example.com/test/proc_36> ns1:hasGeometry <http://example.com/test/geom_36> .
+
+<http://example.com/test/proc_37> ns1:hasGeometry <http://example.com/test/geom_37> .
+
+<http://example.com/test/proc_38> ns1:hasGeometry <http://example.com/test/geom_38> .
+
+<http://example.com/test/proc_39> ns1:hasGeometry <http://example.com/test/geom_39> .
+
+<http://example.com/test/proc_4> ns1:hasGeometry <http://example.com/test/geom_4> .
+
+<http://example.com/test/proc_40> ns1:hasGeometry <http://example.com/test/geom_40> .
+
+<http://example.com/test/proc_41> ns1:hasGeometry <http://example.com/test/geom_41> .
+
+<http://example.com/test/proc_42> ns1:hasGeometry <http://example.com/test/geom_42> .
+
+<http://example.com/test/proc_43> ns1:hasGeometry <http://example.com/test/geom_43> .
+
+<http://example.com/test/proc_44> ns1:hasGeometry <http://example.com/test/geom_44> .
+
+<http://example.com/test/proc_45> ns1:hasGeometry <http://example.com/test/geom_45> .
+
+<http://example.com/test/proc_46> ns1:hasGeometry <http://example.com/test/geom_46> .
+
+<http://example.com/test/proc_47> ns1:hasGeometry <http://example.com/test/geom_47> .
+
+<http://example.com/test/proc_48> ns1:hasGeometry <http://example.com/test/geom_48> .
+
+<http://example.com/test/proc_49> ns1:hasGeometry <http://example.com/test/geom_49> .
+
+<http://example.com/test/proc_5> ns1:hasGeometry <http://example.com/test/geom_5> .
+
+<http://example.com/test/proc_50> ns1:hasGeometry <http://example.com/test/geom_50> .
+
+<http://example.com/test/proc_51> ns1:hasGeometry <http://example.com/test/geom_51> .
+
+<http://example.com/test/proc_52> ns1:hasGeometry <http://example.com/test/geom_52> .
+
+<http://example.com/test/proc_53> ns1:hasGeometry <http://example.com/test/geom_53> .
+
+<http://example.com/test/proc_54> ns1:hasGeometry <http://example.com/test/geom_54> .
+
+<http://example.com/test/proc_55> ns1:hasGeometry <http://example.com/test/geom_55> .
+
+<http://example.com/test/proc_56> ns1:hasGeometry <http://example.com/test/geom_56> .
+
+<http://example.com/test/proc_57> ns1:hasGeometry <http://example.com/test/geom_57> .
+
+<http://example.com/test/proc_58> ns1:hasGeometry <http://example.com/test/geom_58> .
+
+<http://example.com/test/proc_59> ns1:hasGeometry <http://example.com/test/geom_59> .
+
+<http://example.com/test/proc_6> ns1:hasGeometry <http://example.com/test/geom_6> .
+
+<http://example.com/test/proc_60> ns1:hasGeometry <http://example.com/test/geom_60> .
+
+<http://example.com/test/proc_61> ns1:hasGeometry <http://example.com/test/geom_61> .
+
+<http://example.com/test/proc_62> ns1:hasGeometry <http://example.com/test/geom_62> .
+
+<http://example.com/test/proc_63> ns1:hasGeometry <http://example.com/test/geom_63> .
+
+<http://example.com/test/proc_64> ns1:hasGeometry <http://example.com/test/geom_64> .
+
+<http://example.com/test/proc_65> ns1:hasGeometry <http://example.com/test/geom_65> .
+
+<http://example.com/test/proc_66> ns1:hasGeometry <http://example.com/test/geom_66> .
+
+<http://example.com/test/proc_67> ns1:hasGeometry <http://example.com/test/geom_67> .
+
+<http://example.com/test/proc_68> ns1:hasGeometry <http://example.com/test/geom_68> .
+
+<http://example.com/test/proc_69> ns1:hasGeometry <http://example.com/test/geom_69> .
+
+<http://example.com/test/proc_7> ns1:hasGeometry <http://example.com/test/geom_7> .
+
+<http://example.com/test/proc_70> ns1:hasGeometry <http://example.com/test/geom_70> .
+
+<http://example.com/test/proc_71> ns1:hasGeometry <http://example.com/test/geom_71> .
+
+<http://example.com/test/proc_72> ns1:hasGeometry <http://example.com/test/geom_72> .
+
+<http://example.com/test/proc_73> ns1:hasGeometry <http://example.com/test/geom_73> .
+
+<http://example.com/test/proc_74> ns1:hasGeometry <http://example.com/test/geom_74> .
+
+<http://example.com/test/proc_75> ns1:hasGeometry <http://example.com/test/geom_75> .
+
+<http://example.com/test/proc_76> ns1:hasGeometry <http://example.com/test/geom_76> .
+
+<http://example.com/test/proc_77> ns1:hasGeometry <http://example.com/test/geom_77> .
+
+<http://example.com/test/proc_78> ns1:hasGeometry <http://example.com/test/geom_78> .
+
+<http://example.com/test/proc_79> ns1:hasGeometry <http://example.com/test/geom_79> .
+
+<http://example.com/test/proc_8> ns1:hasGeometry <http://example.com/test/geom_8> .
+
+<http://example.com/test/proc_80> ns1:hasGeometry <http://example.com/test/geom_80> .
+
+<http://example.com/test/proc_81> ns1:hasGeometry <http://example.com/test/geom_81> .
+
+<http://example.com/test/proc_82> ns1:hasGeometry <http://example.com/test/geom_82> .
+
+<http://example.com/test/proc_83> ns1:hasGeometry <http://example.com/test/geom_83> .
+
+<http://example.com/test/proc_84> ns1:hasGeometry <http://example.com/test/geom_84> .
+
+<http://example.com/test/proc_85> ns1:hasGeometry <http://example.com/test/geom_85> .
+
+<http://example.com/test/proc_86> ns1:hasGeometry <http://example.com/test/geom_86> .
+
+<http://example.com/test/proc_87> ns1:hasGeometry <http://example.com/test/geom_87> .
+
+<http://example.com/test/proc_88> ns1:hasGeometry <http://example.com/test/geom_88> .
+
+<http://example.com/test/proc_89> ns1:hasGeometry <http://example.com/test/geom_89> .
+
+<http://example.com/test/proc_9> ns1:hasGeometry <http://example.com/test/geom_9> .
+
+<http://example.com/test/proc_90> ns1:hasGeometry <http://example.com/test/geom_90> .
+
+<http://example.com/test/proc_91> ns1:hasGeometry <http://example.com/test/geom_91> .
+
+<http://example.com/test/proc_92> ns1:hasGeometry <http://example.com/test/geom_92> .
+
+<http://example.com/test/proc_93> ns1:hasGeometry <http://example.com/test/geom_93> .
+
+<http://example.com/test/proc_94> ns1:hasGeometry <http://example.com/test/geom_94> .
+
+<http://example.com/test/proc_95> ns1:hasGeometry <http://example.com/test/geom_95> .
+
+<http://example.com/test/proc_96> ns1:hasGeometry <http://example.com/test/geom_96> .
+
+<http://example.com/test/proc_97> ns1:hasGeometry <http://example.com/test/geom_97> .
+
+<http://example.com/test/proc_98> ns1:hasGeometry <http://example.com/test/geom_98> .
+
+<http://example.com/test/proc_99> ns1:hasGeometry <http://example.com/test/geom_99> .
+
+<http://example.com/test/sample_0> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_0> .
+
+<http://example.com/test/sample_1> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_1> .
+
+<http://example.com/test/sample_10> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_10> .
+
+<http://example.com/test/sample_100> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_100> .
+
+<http://example.com/test/sample_101> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_101> .
+
+<http://example.com/test/sample_102> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_102> .
+
+<http://example.com/test/sample_103> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_103> .
+
+<http://example.com/test/sample_104> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_104> .
+
+<http://example.com/test/sample_105> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_105> .
+
+<http://example.com/test/sample_106> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_106> .
+
+<http://example.com/test/sample_107> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_107> .
+
+<http://example.com/test/sample_108> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_108> .
+
+<http://example.com/test/sample_109> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_109> .
+
+<http://example.com/test/sample_11> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_11> .
+
+<http://example.com/test/sample_110> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_110> .
+
+<http://example.com/test/sample_111> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_111> .
+
+<http://example.com/test/sample_112> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_112> .
+
+<http://example.com/test/sample_113> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_113> .
+
+<http://example.com/test/sample_114> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_114> .
+
+<http://example.com/test/sample_115> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_115> .
+
+<http://example.com/test/sample_116> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_116> .
+
+<http://example.com/test/sample_117> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_117> .
+
+<http://example.com/test/sample_118> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_118> .
+
+<http://example.com/test/sample_119> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_119> .
+
+<http://example.com/test/sample_12> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_12> .
+
+<http://example.com/test/sample_120> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_120> .
+
+<http://example.com/test/sample_121> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_121> .
+
+<http://example.com/test/sample_122> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_122> .
+
+<http://example.com/test/sample_123> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_123> .
+
+<http://example.com/test/sample_124> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_124> .
+
+<http://example.com/test/sample_125> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_125> .
+
+<http://example.com/test/sample_126> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_126> .
+
+<http://example.com/test/sample_127> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_127> .
+
+<http://example.com/test/sample_128> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_128> .
+
+<http://example.com/test/sample_129> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_129> .
+
+<http://example.com/test/sample_13> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_13> .
+
+<http://example.com/test/sample_130> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_130> .
+
+<http://example.com/test/sample_131> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_131> .
+
+<http://example.com/test/sample_132> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_132> .
+
+<http://example.com/test/sample_133> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_133> .
+
+<http://example.com/test/sample_134> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_134> .
+
+<http://example.com/test/sample_135> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_135> .
+
+<http://example.com/test/sample_136> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_136> .
+
+<http://example.com/test/sample_137> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_137> .
+
+<http://example.com/test/sample_138> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_138> .
+
+<http://example.com/test/sample_139> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_139> .
+
+<http://example.com/test/sample_14> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_14> .
+
+<http://example.com/test/sample_140> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_140> .
+
+<http://example.com/test/sample_141> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_141> .
+
+<http://example.com/test/sample_142> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_142> .
+
+<http://example.com/test/sample_143> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_143> .
+
+<http://example.com/test/sample_144> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_144> .
+
+<http://example.com/test/sample_145> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_145> .
+
+<http://example.com/test/sample_146> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_146> .
+
+<http://example.com/test/sample_147> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_147> .
+
+<http://example.com/test/sample_148> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_148> .
+
+<http://example.com/test/sample_149> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_149> .
+
+<http://example.com/test/sample_15> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_15> .
+
+<http://example.com/test/sample_150> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_150> .
+
+<http://example.com/test/sample_151> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_151> .
+
+<http://example.com/test/sample_152> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_152> .
+
+<http://example.com/test/sample_153> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_153> .
+
+<http://example.com/test/sample_154> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_154> .
+
+<http://example.com/test/sample_155> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_155> .
+
+<http://example.com/test/sample_156> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_156> .
+
+<http://example.com/test/sample_157> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_157> .
+
+<http://example.com/test/sample_158> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_158> .
+
+<http://example.com/test/sample_159> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_159> .
+
+<http://example.com/test/sample_16> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_16> .
+
+<http://example.com/test/sample_160> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_160> .
+
+<http://example.com/test/sample_161> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_161> .
+
+<http://example.com/test/sample_162> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_162> .
+
+<http://example.com/test/sample_163> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_163> .
+
+<http://example.com/test/sample_164> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_164> .
+
+<http://example.com/test/sample_165> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_165> .
+
+<http://example.com/test/sample_166> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_166> .
+
+<http://example.com/test/sample_167> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_167> .
+
+<http://example.com/test/sample_168> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_168> .
+
+<http://example.com/test/sample_169> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_169> .
+
+<http://example.com/test/sample_17> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_17> .
+
+<http://example.com/test/sample_170> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_170> .
+
+<http://example.com/test/sample_171> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_171> .
+
+<http://example.com/test/sample_172> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_172> .
+
+<http://example.com/test/sample_173> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_173> .
+
+<http://example.com/test/sample_174> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_174> .
+
+<http://example.com/test/sample_175> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_175> .
+
+<http://example.com/test/sample_176> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_176> .
+
+<http://example.com/test/sample_177> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_177> .
+
+<http://example.com/test/sample_178> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_178> .
+
+<http://example.com/test/sample_179> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_179> .
+
+<http://example.com/test/sample_18> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_18> .
+
+<http://example.com/test/sample_180> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_180> .
+
+<http://example.com/test/sample_181> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_181> .
+
+<http://example.com/test/sample_182> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_182> .
+
+<http://example.com/test/sample_183> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_183> .
+
+<http://example.com/test/sample_184> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_184> .
+
+<http://example.com/test/sample_185> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_185> .
+
+<http://example.com/test/sample_186> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_186> .
+
+<http://example.com/test/sample_187> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_187> .
+
+<http://example.com/test/sample_188> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_188> .
+
+<http://example.com/test/sample_189> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_189> .
+
+<http://example.com/test/sample_19> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_19> .
+
+<http://example.com/test/sample_190> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_190> .
+
+<http://example.com/test/sample_191> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_191> .
+
+<http://example.com/test/sample_192> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_192> .
+
+<http://example.com/test/sample_193> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_193> .
+
+<http://example.com/test/sample_194> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_194> .
+
+<http://example.com/test/sample_195> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_195> .
+
+<http://example.com/test/sample_196> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_196> .
+
+<http://example.com/test/sample_197> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_197> .
+
+<http://example.com/test/sample_198> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_198> .
+
+<http://example.com/test/sample_199> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_199> .
+
+<http://example.com/test/sample_2> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_2> .
+
+<http://example.com/test/sample_20> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_20> .
+
+<http://example.com/test/sample_200> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_200> .
+
+<http://example.com/test/sample_201> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_201> .
+
+<http://example.com/test/sample_202> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_202> .
+
+<http://example.com/test/sample_203> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_203> .
+
+<http://example.com/test/sample_204> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_204> .
+
+<http://example.com/test/sample_205> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_205> .
+
+<http://example.com/test/sample_206> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_206> .
+
+<http://example.com/test/sample_207> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_207> .
+
+<http://example.com/test/sample_208> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_208> .
+
+<http://example.com/test/sample_209> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_209> .
+
+<http://example.com/test/sample_21> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_21> .
+
+<http://example.com/test/sample_22> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_22> .
+
+<http://example.com/test/sample_23> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_23> .
+
+<http://example.com/test/sample_24> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_24> .
+
+<http://example.com/test/sample_25> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_25> .
+
+<http://example.com/test/sample_26> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_26> .
+
+<http://example.com/test/sample_27> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_27> .
+
+<http://example.com/test/sample_28> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_28> .
+
+<http://example.com/test/sample_29> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_29> .
+
+<http://example.com/test/sample_3> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_3> .
+
+<http://example.com/test/sample_30> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_30> .
+
+<http://example.com/test/sample_31> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_31> .
+
+<http://example.com/test/sample_32> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_32> .
+
+<http://example.com/test/sample_33> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_33> .
+
+<http://example.com/test/sample_34> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_34> .
+
+<http://example.com/test/sample_35> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_35> .
+
+<http://example.com/test/sample_36> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_36> .
+
+<http://example.com/test/sample_37> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_37> .
+
+<http://example.com/test/sample_38> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_38> .
+
+<http://example.com/test/sample_39> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_39> .
+
+<http://example.com/test/sample_4> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_4> .
+
+<http://example.com/test/sample_40> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_40> .
+
+<http://example.com/test/sample_41> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_41> .
+
+<http://example.com/test/sample_42> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_42> .
+
+<http://example.com/test/sample_43> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_43> .
+
+<http://example.com/test/sample_44> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_44> .
+
+<http://example.com/test/sample_45> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_45> .
+
+<http://example.com/test/sample_46> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_46> .
+
+<http://example.com/test/sample_47> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_47> .
+
+<http://example.com/test/sample_48> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_48> .
+
+<http://example.com/test/sample_49> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_49> .
+
+<http://example.com/test/sample_5> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_5> .
+
+<http://example.com/test/sample_50> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_50> .
+
+<http://example.com/test/sample_51> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_51> .
+
+<http://example.com/test/sample_52> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_52> .
+
+<http://example.com/test/sample_53> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_53> .
+
+<http://example.com/test/sample_54> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_54> .
+
+<http://example.com/test/sample_55> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_55> .
+
+<http://example.com/test/sample_56> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_56> .
+
+<http://example.com/test/sample_57> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_57> .
+
+<http://example.com/test/sample_58> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_58> .
+
+<http://example.com/test/sample_59> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_59> .
+
+<http://example.com/test/sample_6> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_6> .
+
+<http://example.com/test/sample_60> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_60> .
+
+<http://example.com/test/sample_61> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_61> .
+
+<http://example.com/test/sample_62> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_62> .
+
+<http://example.com/test/sample_63> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_63> .
+
+<http://example.com/test/sample_64> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_64> .
+
+<http://example.com/test/sample_65> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_65> .
+
+<http://example.com/test/sample_66> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_66> .
+
+<http://example.com/test/sample_67> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_67> .
+
+<http://example.com/test/sample_68> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_68> .
+
+<http://example.com/test/sample_69> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_69> .
+
+<http://example.com/test/sample_7> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_7> .
+
+<http://example.com/test/sample_70> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_70> .
+
+<http://example.com/test/sample_71> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_71> .
+
+<http://example.com/test/sample_72> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_72> .
+
+<http://example.com/test/sample_73> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_73> .
+
+<http://example.com/test/sample_74> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_74> .
+
+<http://example.com/test/sample_75> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_75> .
+
+<http://example.com/test/sample_76> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_76> .
+
+<http://example.com/test/sample_77> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_77> .
+
+<http://example.com/test/sample_78> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_78> .
+
+<http://example.com/test/sample_79> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_79> .
+
+<http://example.com/test/sample_8> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_8> .
+
+<http://example.com/test/sample_80> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_80> .
+
+<http://example.com/test/sample_81> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_81> .
+
+<http://example.com/test/sample_82> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_82> .
+
+<http://example.com/test/sample_83> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_83> .
+
+<http://example.com/test/sample_84> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_84> .
+
+<http://example.com/test/sample_85> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_85> .
+
+<http://example.com/test/sample_86> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_86> .
+
+<http://example.com/test/sample_87> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_87> .
+
+<http://example.com/test/sample_88> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_88> .
+
+<http://example.com/test/sample_89> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_89> .
+
+<http://example.com/test/sample_9> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_9> .
+
+<http://example.com/test/sample_90> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_90> .
+
+<http://example.com/test/sample_91> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_91> .
+
+<http://example.com/test/sample_92> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_92> .
+
+<http://example.com/test/sample_93> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_93> .
+
+<http://example.com/test/sample_94> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_94> .
+
+<http://example.com/test/sample_95> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_95> .
+
+<http://example.com/test/sample_96> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_96> .
+
+<http://example.com/test/sample_97> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_97> .
+
+<http://example.com/test/sample_98> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_98> .
+
+<http://example.com/test/sample_99> a <https://w3id.org/tern/ontologies/tern/Sample> ;
+    sosa:isResultOf <http://example.com/test/proc_99> .
+
