@@ -1,0 +1,54 @@
+# This rule checks what type of datum is used in each observation.
+# It returns AGD84, GDA94, GDA2020, WGS84, or None if missing or unknown.
+
+PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>
+PREFIX sosa:   <http://www.w3.org/ns/sosa/>
+PREFIX geo:    <http://www.opengis.net/ont/geosparql#>
+PREFIX dqaf:   <http://example.com/def/dqaf/>
+PREFIX schema: <http://schema.org/>
+
+INSERT {
+  GRAPH dqaf:fullResults {
+    ?observation dqaf:hasResult [
+      sosa:observedProperty <http://example.com/assess/datum_type/> ;
+      schema:value ?datum_type
+    ] .
+  }
+}
+WHERE {
+  # Get observation and its sample
+  ?observation a tern:Observation ;
+               sosa:hasFeatureOfInterest ?sample .
+
+  # Get the procedure used to collect the sample
+  ?sample a tern:Sample ;
+          sosa:isResultOf ?procedure .
+
+  # Try to get the datum from geometry
+  OPTIONAL {
+    ?procedure geo:hasGeometryDatum ?datumRaw .
+  }
+
+  # Convert to lowercase for easier matching
+  BIND(LCASE(STR(?datumRaw)) AS ?datum)
+
+  # Match known types or return "None" if not found
+  BIND(
+    IF(!BOUND(?datum),
+      "None",
+      IF(CONTAINS(?datum, "agd84"),
+        "AGD84",
+        IF(CONTAINS(?datum, "gda94"),
+          "GDA94",
+          IF(CONTAINS(?datum, "gda2020"),
+            "GDA2020",
+            IF(CONTAINS(?datum, "epsg:4326") || CONTAINS(?datum, "wgs84"),
+              "WGS84",
+              "None"
+            )
+          )
+        )
+      )
+    ) AS ?datum_type
+  )
+}

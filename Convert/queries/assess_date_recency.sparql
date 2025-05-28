@@ -1,52 +1,30 @@
-# ====================================================================================
-# Purpose:
-# This query evaluates how recent each observation's date is by checking the year.
-# It assigns a result value:
-#   - "recent_20_years"    → if the year is greater than or equal to 2005
-#   - "outdated_20_years"  → if the year is older than 2005
-#
-# This threshold represents "within the last 20 years" assuming current year = 2025.
-# ====================================================================================
+# This rule checks if the date is recent (after 2005) or outdated (before 2005)
 
-# =============================
-# Step 1: Define common prefixes
-# =============================
-PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>           # Observation ontology
-PREFIX time:   <http://www.w3.org/2006/time#>                     # Time ontology
-PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>                # XML Schema datatypes
-PREFIX dqaf:   <http://example.com/def/dqaf/>                    # DQAF-specific terms
-PREFIX sosa:   <http://www.w3.org/ns/sosa/>                      # Sensor Observation terms
-PREFIX schema: <http://schema.org/>                              # For schema:value
+PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>
+PREFIX time:   <http://www.w3.org/2006/time#>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
+PREFIX dqaf:   <http://example.com/def/dqaf/>
+PREFIX sosa:   <http://www.w3.org/ns/sosa/>
+PREFIX schema: <http://schema.org/>
 
-# ========================================
-# Step 2: Insert the assessment results
-# ========================================
 INSERT {
   GRAPH dqaf:fullResults {
     ?observation dqaf:hasResult [
-      sosa:observedProperty <http://example.com/assess/date_recency/> ;  # Type of assessment
-      schema:value ?is_recent                                             # Result: "recent_20_years" or "outdated_20_years"
+      sosa:observedProperty <http://example.com/assess/date_recency/> ;
+      schema:value ?is_recent
     ]
   }
 }
-
-# ========================================
-# Step 3: Match observations and classify
-# ========================================
 WHERE {
-  # Match all observation resources
+  # Get the observation and its time
   ?observation a tern:Observation .
-
-  # Find associated time information
   ?observation time:hasTime ?ot .
-
-  # Extract the year (e.g., 2022, 1800)
   ?ot time:inXSDgYear ?date .
 
-  # Convert the year to integer for comparison
+  # Change year to number
   BIND(xsd:integer(STR(?date)) AS ?year)
 
-  # Assign label based on whether the year is recent (≥2005) or outdated
+  # If year >= 2005 → recent, else → outdated
   BIND(
     IF(?year >= 2005, "recent_20_years", "outdated_20_years")
     AS ?is_recent

@@ -1,0 +1,34 @@
+# This is a placeholder rule. It does not check the real name validity.
+# If name exists → "valid_name"
+# If name is missing → "invalid_name"
+
+PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>
+PREFIX sosa:   <http://www.w3.org/ns/sosa/>
+PREFIX dqaf:   <http://example.com/def/dqaf/>
+PREFIX schema: <http://schema.org/>
+PREFIX dwc:    <http://rs.tdwg.org/dwc/terms/>
+
+INSERT {
+  GRAPH dqaf:fullResults {
+    ?observation dqaf:hasResult [
+      sosa:observedProperty <http://example.com/assess/scientific_name_validation/> ;
+      schema:value ?status
+    ] .
+  }
+}
+WHERE {
+  # Get observation and its feature
+  ?observation a tern:Observation ;
+               sosa:hasFeatureOfInterest ?feature .
+
+  # Try to get scientific name
+  OPTIONAL {
+    ?feature dwc:scientificName ?sciName .
+  }
+
+  # Always return "valid_name" if name exists
+  BIND(
+    IF(BOUND(?sciName), "valid_name", "invalid_name")
+    AS ?status
+  )
+}

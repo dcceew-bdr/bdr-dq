@@ -1,0 +1,65 @@
+# This rule checks for duplicate entries using scientific name + date + location (WKT).
+# If the same combination appears more than once, it's a duplicate.
+
+PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>
+PREFIX sosa:   <http://www.w3.org/ns/sosa/>
+PREFIX dqaf:   <http://example.com/def/dqaf/>
+PREFIX schema: <http://schema.org/>
+PREFIX dwc:    <http://rs.tdwg.org/dwc/terms/>
+PREFIX time:   <http://www.w3.org/2006/time#>
+PREFIX geo:    <http://www.opengis.net/ont/geosparql#>
+
+INSERT {
+  GRAPH dqaf:fullResults {
+    ?observation dqaf:hasResult [
+      sosa:observedProperty <http://example.com/assess/duplicate/> ;
+      schema:value ?status
+    ] .
+  }
+}
+WHERE {
+  # Get observation and related feature
+  ?observation a tern:Observation ;
+               sosa:hasFeatureOfInterest ?feature .
+
+  # Try to get scientific name, date, and WKT
+  OPTIONAL { ?feature dwc:scientificName ?name . }
+  OPTIONAL {
+    ?observation time:hasTime ?t .
+    ?t time:inXSDgYear ?date .
+  }
+  OPTIONAL {
+    ?feature sosa:isResultOf ?proc .
+    ?proc geo:hasGeometry ?geom .
+    ?geom geo:asWKT ?wkt .
+  }
+
+  # Create key from name + date + WKT
+  BIND(CONCAT(COALESCE(STR(?name), ""), "||", COALESCE(STR(?date), ""), "||", COALESCE(STR(?wkt), "")) AS ?key)
+
+  {
+    # Count how many times each key appears
+    SELECT ?key (COUNT(?obs2) AS ?count)
+    WHERE {
+      ?obs2 a tern:Observation ;
+            sosa:hasFeatureOfInterest ?f2 .
+      OPTIONAL { ?f2 dwc:scientificName ?n2 . }
+      OPTIONAL {
+        ?obs2 time:hasTime ?t2 .
+        ?t2 time:inXSDgYear ?d2 .
+      }
+      OPTIONAL {
+        ?f2 sosa:isResultOf ?p2 .
+        ?p2 geo:hasGeometry ?g2 .
+        ?g2 geo:asWKT ?w2 .
+      }
+      BIND(CONCAT(COALESCE(STR(?n2), ""), "||", COALESCE(STR(?d2), ""), "||", COALESCE(STR(?w2), "")) AS ?key)
+    }
+    GROUP BY ?key
+  }
+
+  # If count > 1 → duplicate, else → unique
+  BIND(
+    IF(?count > 1, "duplicate_entry", "unique_entry") AS ?status
+  )
+}

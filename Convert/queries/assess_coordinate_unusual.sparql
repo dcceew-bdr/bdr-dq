@@ -1,11 +1,4 @@
-# ====================================================================================
-# Coordinate Unusual
-# Identifies if coordinates have repeating decimal digit or number patterns.
-# Examples:
-# - 111.111111 → "unusual"
-# - 123.123123 → "unusual"
-# - 147.893 → "usual"
-# ====================================================================================
+# This rule checks if coordinate values have repeated decimal patterns (like 111111 or 123123123)
 
 PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>
 PREFIX sosa:   <http://www.w3.org/ns/sosa/>
@@ -29,17 +22,17 @@ WHERE {
   ?procedure geo:hasGeometry ?geometry .
   ?geometry geo:asWKT ?wkt .
 
-  # === Parse WKT and extract lon/lat strings ===
+  # Get coordinate string from WKT
   BIND(STR(?wkt) AS ?wktStr)
   BIND(STRBEFORE(STRAFTER(?wktStr, "POINT("), ")") AS ?coords)
   BIND(STRBEFORE(?coords, " ") AS ?lonStr)
   BIND(STRAFTER(?coords, " ") AS ?latStr)
 
-  # === Get decimal parts ===
+  # Get decimal part of lon and lat
   BIND(STRAFTER(?lonStr, ".") AS ?lonDec)
   BIND(STRAFTER(?latStr, ".") AS ?latDec)
 
-  # === Detect unusual coordinate values ===
+  # If decimal has repeating group (like 111111 or 123123123), mark as "unusual"
   BIND(
     IF(
       REGEX(?lonDec, "([0-9]{1,3})\\1{2,}") || REGEX(?latDec, "([0-9]{1,3})\\1{2,}"),

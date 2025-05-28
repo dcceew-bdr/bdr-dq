@@ -1,90 +1,71 @@
-from pyoxigraph import Store
-import numpy as np
+from rdflib import Graph, Namespace, Literal
+from rdflib.namespace import RDF, XSD
+import random
 
-def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
+# =====================
+# Define RDF namespaces
+# =====================
+TERN = Namespace("https://w3id.org/tern/ontologies/tern/")
+SOSA = Namespace("http://www.w3.org/ns/sosa/")
+GEO = Namespace("http://www.opengis.net/ont/geosparql#")
+EX = Namespace("http://example.com/test/")
+
+def create_coordinate_outlier_iqr_test_data():
     """
-    This function calculates coordinate outliers using the Z-score method
-    and writes the result back into dqaf:fullResults using INSERT/WHERE pattern.
+    This function create test RDF data for IQR-based coordinate outlier detection.
+
+    It includes:
+    - 100 normal points near Sydney
+    - 100 normal points near Queensland
+    - 10 outlier points far from both groups
+    - 3 manual points for checking
+
+    Output: RDF Turtle format as string
     """
+    g = Graph()
 
-    # === Step 1: Query coordinates for all observations ===
-    coord_query = """
-    PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
-    PREFIX sosa: <http://www.w3.org/ns/sosa/>
-    PREFIX geo: <http://www.opengis.net/ont/geosparql#>
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    # ==== Add 100 points around Sydney area ====
+    for i in range(100):
+        lon = round(151.2 + random.uniform(-0.05, 0.05), 6)
+        lat = round(-33.9 + random.uniform(-0.05, 0.05), 6)
+        add_point(g, i, lon, lat)
 
-    SELECT ?observation ?lonVal ?latVal
-    WHERE {
-      ?observation a tern:Observation ;
-                   sosa:hasFeatureOfInterest ?sample .
-      ?sample a tern:Sample ;
-              sosa:isResultOf ?procedure .
-      ?procedure geo:hasGeometry ?geometry .
-      ?geometry geo:asWKT ?wkt .
+    # ==== Add 100 points around Queensland area ====
+    for i in range(100, 200):
+        lon = round(153.0 + random.uniform(-0.05, 0.05), 6)
+        lat = round(-27.5 + random.uniform(-0.05, 0.05), 6)
+        add_point(g, i, lon, lat)
 
-      BIND(STR(?wkt) AS ?wktStr)
-      BIND(STRBEFORE(STRAFTER(?wktStr, "POINT("), ")") AS ?coordStr)
-      BIND(STRBEFORE(?coordStr, " ") AS ?lonStr)
-      BIND(STRAFTER(?coordStr, " ") AS ?latStr)
-      BIND(xsd:float(?lonStr) AS ?lonVal)
-      BIND(xsd:float(?latStr) AS ?latVal)
-    }
+    # ==== Add 10 outlier points (far locations) ====
+    for i in range(200, 210):
+        lon = round(random.uniform(240.0, 150.0), 6)
+        lat = round(random.uniform(-40.0, -20.0), 6)
+        add_point(g, i, lon, lat)
+
+    # ==== Add 3 special points manually ====
+    manual_points = [(151.25, -33.85), (150.0, -30.0), (152.9, -27.55)]
+    for i, (lon, lat) in enumerate(manual_points, start=210):
+        add_point(g, i, lon, lat)
+
+    return g.serialize(format="turtle")
+
+def add_point(g, i, lon, lat):
     """
-    results = list(store.query(coord_query))
-
-    # === Step 2: Prepare data ===
-    coords = []
-    obs_map = {}
-    for row in results:
-        lon = float(row["lonVal"].value)
-        lat = float(row["latVal"].value)
-        obs_uri = str(row["observation"]).strip("<>")
-        coords.append((lon, lat))
-        obs_map[obs_uri] = (lon, lat)
-
-    lons = np.array([pt[0] for pt in coords])
-    lats = np.array([pt[1] for pt in coords])
-
-    lon_mean = np.mean(lons)
-    lon_std = np.std(lons)
-    lat_mean = np.mean(lats)
-    lat_std = np.std(lats)
-
-    def is_outlier(val, mean, std):
-        if std == 0:
-            return False
-        return abs((val - mean) / std) > threshold
-
-    # === Step 3: Build SPARQL INSERT ===
-    insert_prefix = """
-    PREFIX dqaf: <http://example.com/def/dqaf/>
-    PREFIX sosa: <http://www.w3.org/ns/sosa/>
-    PREFIX schema: <http://schema.org/>
-
-    INSERT {
-      GRAPH dqaf:fullResults {
+    Helper function to add RDF triples for one observation
     """
-    insert_values = ""
-    for obs_uri, (lon, lat) in obs_map.items():
-        tag = "outlier_coordinate" if (
-            is_outlier(lon, lon_mean, lon_std) or
-            is_outlier(lat, lat_mean, lat_std)
-        ) else "normal_coordinate"
+    obs = EX[f"obs_{i}"]
+    sample = EX[f"sample_{i}"]
+    proc = EX[f"proc_{i}"]
+    geom = EX[f"geom_{i}"]
 
-        insert_values += f"""
-        <{obs_uri}> dqaf:hasResult [
-          sosa:observedProperty <http://example.com/assess/coordinate_outlier_zscore/> ;
-          schema:value "{tag}"
-        ] .
-        """
+    g.add((obs, RDF.type, TERN.Observation))
+    g.add((obs, SOSA.hasFeatureOfInterest, sample))
+    g.add((sample, RDF.type, TERN.Sample))
+    g.add((sample, SOSA.isResultOf, proc))
+    g.add((proc, GEO.hasGeometry, geom))
+    g.add((geom, GEO.asWKT, Literal(f"POINT({lon} {lat})", datatype=XSD.string)))
 
-    insert_suffix = """
-      }
-    } WHERE { }
-    """
-
-    full_insert_query = insert_prefix + insert_values + insert_suffix
-
-    # === Step 4: Run the SPARQL update ===
-    store.update(full_insert_query)
+# ===== Test run when script is run directly =====
+if __name__ == "__main__":
+    ttl_data = create_coordinate_outlier_iqr_test_data()
+    print(ttl_data[:1000])  # print first 1000 characters only

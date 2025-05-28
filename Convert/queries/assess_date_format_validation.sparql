@@ -1,26 +1,13 @@
-# ====================================================================================
-# Purpose:
-# This query checks if an observation's date is in valid format (YYYY-MM-DD).
-# It returns:
-#   - "valid"   → if date is in format like "2023-08-25"
-#   - "invalid" → if the format is incorrect or not matching expected pattern
-#
-# Only observations with rdfs:comment including "NSL name match Observation" are included.
-# ====================================================================================
+# This rule checks if the date has correct format (YYYY-MM-DD).
+# Only observations with comment "NSL name match Observation" are checked.
 
-# =============================
-# Step 1: Define common prefixes
-# =============================
-PREFIX sosa: <http://www.w3.org/ns/sosa/>                         # For time-related observation
-PREFIX time: <http://www.w3.org/2006/time#>                       # For date representation
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>              # For filtering by comment
-PREFIX dqaf: <http://example.com/def/dqaf/>                      # For DQAF assessment output
-PREFIX schema: <http://schema.org/>                              # For schema:value
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>                   # For data types
+PREFIX sosa:   <http://www.w3.org/ns/sosa/>
+PREFIX time:   <http://www.w3.org/2006/time#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dqaf:   <http://example.com/def/dqaf/>
+PREFIX schema: <http://schema.org/>
+PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 
-# ========================================
-# Step 2: Insert the validation result
-# ========================================
 INSERT {
   GRAPH dqaf:fullResults {
     ?observation dqaf:hasResult [
@@ -29,25 +16,19 @@ INSERT {
     ]
   }
 }
-
-# ========================================
-# Step 3: Match and classify observations
-# ========================================
 WHERE {
-  # Get the observation with phenomenonTime
+  # Get time from observation
   ?observation sosa:phenomenonTime ?timeNode .
-
-  # Extract the full date-time string
   ?timeNode time:inXSDDateTimeStamp ?dateLiteral .
 
-  # Get comment to filter relevant observations
+  # Filter by rdfs:comment
   ?observation rdfs:comment ?comment .
   FILTER(CONTAINS(STR(?comment), "NSL name match Observation"))
 
-  # Extract just the date part (first 10 characters)
+  # Take only date part (first 10 characters)
   BIND(SUBSTR(STR(?dateLiteral), 1, 10) AS ?dateStr)
 
-  # Check if the date format is valid using regex (must be YYYY-MM-DD)
+  # Check format with regex (must be YYYY-MM-DD)
   BIND(
     IF(REGEX(?dateStr, "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"), "valid", "invalid")
     AS ?dateFormatValidation

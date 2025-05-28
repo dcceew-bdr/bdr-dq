@@ -3,15 +3,15 @@ import numpy as np
 
 def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
     """
-    This function calculates coordinate outliers using the Z-score method
-    and writes the result back into dqaf:fullResults using INSERT/WHERE pattern.
+    Detects coordinate outliers using Z-score method.
+    Adds result to dqaf:fullResults graph using SPARQL INSERT.
     """
 
-    # === Step 1: Query coordinates for all observations ===
+    # Step 1: Get longitude and latitude from WKT coordinates
     coord_query = """
     PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
-    PREFIX geo: <http://www.opengis.net/geosparql#>
+    PREFIX geo: <http://www.opengis.net/ont/geosparql#>
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
     SELECT ?observation ?lonVal ?latVal
@@ -37,7 +37,7 @@ def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
         print("⚠️ No coordinates found.")
         return
 
-    # === Step 2: Prepare data for Z-score calculation ===
+    # Step 2: Convert query results to coordinate list
     coords = []
     obs_map = {}
     for row in results:
@@ -47,6 +47,7 @@ def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
         coords.append((lon, lat))
         obs_map[obs_uri] = (lon, lat)
 
+    # Step 3: Calculate Z-scores for lon and lat
     lons = np.array([pt[0] for pt in coords])
     lats = np.array([pt[1] for pt in coords])
 
@@ -58,7 +59,7 @@ def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
             return False
         return abs((val - mean) / std) > threshold
 
-    # === Step 3: Build batch INSERT SPARQL query ===
+    # Step 4: Build SPARQL INSERT query to write results
     insert_prefix = """
     PREFIX dqaf: <http://example.com/def/dqaf/>
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
@@ -88,5 +89,5 @@ def run_coordinate_outlier_zscore(store: Store, threshold: float = 3.0):
 
     full_insert_query = insert_prefix + insert_values + insert_suffix
 
-    # === Step 4: Run the SPARQL update ===
+    # Step 5: Save results into the RDF store
     store.update(full_insert_query)

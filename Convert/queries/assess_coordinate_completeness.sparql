@@ -1,23 +1,14 @@
-# ====================================================================================
-# Purpose:
-# This query checks if each observation has complete coordinate information.
-# It returns:
-#   - "non_empty" → if coordinates (WKT) are present
-#   - "empty"     → if geometry or WKT is missing
-# ====================================================================================
+# This SPARQL rule checks if coordinates exist for each observation.
+# It looks for geometry (geo:asWKT). If found → result is "non_empty", else "empty".
 
-# =============================
-# Step 1: Define common prefixes
-# =============================
+# Define all required prefixes (namespaces)
 PREFIX sosa: <http://www.w3.org/ns/sosa/>
 PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
 PREFIX geo:  <http://www.opengis.net/ont/geosparql#>
 PREFIX dqaf: <http://example.com/def/dqaf/>
 PREFIX schema: <http://schema.org/>
 
-# ========================================
-# Step 2: Insert the completeness result
-# ========================================
+# Insert results into dqaf:fullResults graph
 INSERT {
   GRAPH dqaf:fullResults {
     ?observation dqaf:hasResult [
@@ -27,27 +18,25 @@ INSERT {
   }
 }
 
-# ========================================
-# Step 3: Match and classify observations
-# ========================================
+# Find all observations and check geometry status
 WHERE {
-  # Observation must exist
+  # Get observation
   ?observation a tern:Observation .
 
-  # Observation must refer to a sample
+  # Link to sample
   ?observation sosa:hasFeatureOfInterest ?sample .
   ?sample a tern:Sample .
 
-  # Sample must be result of a procedure
+  # Sample must come from a procedure
   ?sample sosa:isResultOf ?procedure .
 
-  # Try to find geometry
+  # Try to find geometry and its WKT value
   OPTIONAL {
     ?procedure geo:hasGeometry ?geometry .
     OPTIONAL { ?geometry geo:asWKT ?wkt . }
   }
 
-  # If WKT is found → "non_empty", else → "empty"
+  # If WKT exists, mark as "non_empty", else "empty"
   BIND(
     IF(BOUND(?wkt), "non_empty", "empty")
     AS ?completeness

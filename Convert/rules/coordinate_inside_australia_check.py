@@ -1,13 +1,12 @@
 from pyoxigraph import Store
-import numpy as np
 
-def run_coordinate_outlier_iqr(store: Store):
+def run_coordinate_inside_australia_check(store: Store):
     """
-    Check which coordinates are outliers using IQR (Interquartile Range) method.
-    Mark observations as 'outlier_coordinate' or 'normal_coordinate'.
+    Check if coordinates are inside Australia.
+    Marks each observation with "inside_australia" or "outside_australia".
     """
 
-    # Step 1: Get longitude and latitude from WKT geometry
+    # Step 1: Extract longitude and latitude values from WKT
     coord_query = """
     PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
@@ -33,29 +32,19 @@ def run_coordinate_outlier_iqr(store: Store):
     """
     results = list(store.query(coord_query))
 
-    # Step 2: Save coordinates in a list and link them to observations
-    coords = []
+    # Step 2: Store coordinates in a dictionary
     obs_map = {}
     for row in results:
+        obs_uri = str(row["observation"]).strip("<>")
         lon = float(row["lonVal"].value)
         lat = float(row["latVal"].value)
-        obs_uri = str(row["observation"]).strip("<>")
-        coords.append((lon, lat))
         obs_map[obs_uri] = (lon, lat)
 
-    # Step 3: Calculate IQR ranges for lon and lat separately
-    lons = np.array([pt[0] for pt in coords])
-    lats = np.array([pt[1] for pt in coords])
+    # Step 3: Define Australia's bounding box
+    def is_in_australia(lon, lat):
+        return 112.0 <= lon <= 154.0 and -44.0 <= lat <= -10.0
 
-    lon_q1, lon_q3 = np.percentile(lons, [25, 75])
-    lat_q1, lat_q3 = np.percentile(lats, [25, 75])
-    lon_iqr = lon_q3 - lon_q1
-    lat_iqr = lat_q3 - lat_q1
-
-    def is_outlier(val, q1, q3, iqr):
-        return val < q1 - 1.5 * iqr or val > q3 + 1.5 * iqr
-
-    # Step 4: Create SPARQL query to add results to the RDF store
+    # Step 4: Prepare SPARQL INSERT query for tagging results
     insert_prefix = """
     PREFIX dqaf: <http://example.com/def/dqaf/>
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
@@ -66,14 +55,10 @@ def run_coordinate_outlier_iqr(store: Store):
     """
     insert_values = ""
     for obs_uri, (lon, lat) in obs_map.items():
-        tag = "outlier_coordinate" if (
-            is_outlier(lon, lon_q1, lon_q3, lon_iqr) or
-            is_outlier(lat, lat_q1, lat_q3, lat_iqr)
-        ) else "normal_coordinate"
-
+        tag = "inside_australia" if is_in_australia(lon, lat) else "outside_australia"
         insert_values += f"""
         <{obs_uri}> dqaf:hasResult [
-          sosa:observedProperty <http://example.com/assess/coordinate_outlier_iqr/> ;
+          sosa:observedProperty <http://example.com/assess/coordinate_in_australia/> ;
           schema:value "{tag}"
         ] .
         """
@@ -82,7 +67,7 @@ def run_coordinate_outlier_iqr(store: Store):
       }
     } WHERE { }
     """
-    full_insert_query = insert_prefix + insert_values + insert_suffix
+    full_query = insert_prefix + insert_values + insert_suffix
 
-    # Step 5: Save the classification results to RDF store
-    store.update(full_insert_query)
+    # Step 5: Save the results into the RDF store
+    store.update(full_query)

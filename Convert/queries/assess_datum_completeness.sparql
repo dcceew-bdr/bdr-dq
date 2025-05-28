@@ -1,26 +1,13 @@
-# ====================================================================================
-# Datum Completeness
-#
-# Definition:
-# This query checks if the "datum" field is provided for each observation.
-#
-# Levels:
-# - dqaf:datum_completeness:empty      → datum value is missing
-# - dqaf:datum_completeness:not_empty  → datum value is present
-# ====================================================================================
+# This rule checks if each observation has a datum value.
+# If datum exists → "not_empty", if missing → "empty"
 
-# =============================
-# Step 1: Define common prefixes
-# =============================
 PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>
 PREFIX sosa:   <http://www.w3.org/ns/sosa/>
 PREFIX geo:    <http://www.opengis.net/ont/geosparql#>
 PREFIX dqaf:   <http://example.com/def/dqaf/>
 PREFIX schema: <http://schema.org/>
 
-# =============================
-# Step 2: Insert the result
-# =============================
+# Add result to dqaf:fullResults graph
 INSERT {
   GRAPH dqaf:fullResults {
     ?observation dqaf:hasResult [
@@ -29,21 +16,19 @@ INSERT {
     ]
   }
 }
-
-# =============================
-# Step 3: Check if datum exists
-# =============================
 WHERE {
-  # Observation → Sample → Procedure (same pattern as other assessments)
+  # Get observation and sample
   ?observation a tern:Observation ;
                sosa:hasFeatureOfInterest ?sample .
+
+  # Get procedure used to collect sample
   ?sample a tern:Sample ;
           sosa:isResultOf ?procedure .
 
-  # Geometry may have datum information
+  # Try to get datum from geometry
   OPTIONAL { ?procedure geo:hasGeometryDatum ?datum . }
 
-  # Decision based on presence of datum
+  # If datum is found → not_empty, else → empty
   BIND(
     IF(BOUND(?datum), "not_empty", "empty")
     AS ?datum_status

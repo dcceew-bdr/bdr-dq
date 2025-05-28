@@ -1,0 +1,33 @@
+# This rule checks if a scientific name is given for each observation.
+# If name exists → non_empty_name
+# If missing → empty_name
+
+PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>
+PREFIX sosa:   <http://www.w3.org/ns/sosa/>
+PREFIX dqaf:   <http://example.com/def/dqaf/>
+PREFIX schema: <http://schema.org/>
+
+INSERT {
+  GRAPH dqaf:fullResults {
+    ?observation dqaf:hasResult [
+      sosa:observedProperty <http://example.com/assess/scientific_name_completeness/> ;
+      schema:value ?status
+    ] .
+  }
+}
+WHERE {
+  # Get observation and its related feature
+  ?observation a tern:Observation ;
+               sosa:hasFeatureOfInterest ?feature .
+
+  # Try to get scientific name
+  OPTIONAL {
+    ?feature <http://rs.tdwg.org/dwc/terms/scientificName> ?sciName .
+  }
+
+  # If name is found → non_empty_name, else → empty_name
+  BIND(
+    IF(BOUND(?sciName), "non_empty_name", "empty_name")
+    AS ?status
+  )
+}

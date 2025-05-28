@@ -1,10 +1,5 @@
-# ====================================================================================
-# Purpose:
-# This query checks if each observation has a valid date (completeness of date data).
-# It assigns a result value:
-#   - "non_empty" → if the observation includes a time and a date (inXSDgYear)
-#   - "empty"     → if the date is missing completely
-# ====================================================================================
+# This rule checks if the observation has a date (inXSDgYear).
+# If date is found → "non_empty", else → "empty".
 
 PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>
 PREFIX time:   <http://www.w3.org/2006/time#>
@@ -23,11 +18,13 @@ INSERT {
 WHERE {
   ?observation a tern:Observation .
 
+  # Try to get the date from the observation
   OPTIONAL {
     ?observation time:hasTime ?t .
     ?t time:inXSDgYear ?date .
   }
 
+  # If date exists → non_empty, else → empty
   BIND(
     IF(BOUND(?date), "non_empty", "empty")
     AS ?status

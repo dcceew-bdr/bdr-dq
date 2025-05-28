@@ -1,10 +1,5 @@
-# ====================================================================================
-# Purpose:
-# Check how many decimal places are used in coordinates (lon/lat) and assign:
-#   - "High"   → both > 4 decimal places
-#   - "Low"    → both < 2 decimal places
-#   - "Medium" → other cases
-# ====================================================================================
+# This rule checks how many decimal digits are in lon/lat values.
+# It returns High, Medium, or Low based on precision.
 
 PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>
 PREFIX sosa:   <http://www.w3.org/ns/sosa/>
@@ -25,25 +20,26 @@ WHERE {
                sosa:hasFeatureOfInterest ?sample .
   ?sample a tern:Sample ;
           sosa:isResultOf ?procedure .
+
   OPTIONAL {
     ?procedure geo:hasGeometry ?geometry .
     OPTIONAL {
       ?geometry geo:asWKT ?wkt .
 
-      # === Clean and extract coordinate strings ===
+      # Get "lon lat" part from WKT string
       BIND(REPLACE(STR(?wkt), "POINT\\(\\s*(.*)\\s*\\)", "$1") AS ?coords)
       BIND(STRBEFORE(?coords, " ") AS ?lonStr)
       BIND(STRAFTER(?coords, " ") AS ?latStr)
 
-      # === Extract decimals ===
+      # Get text after decimal (if exists)
       BIND(IF(CONTAINS(?lonStr, "."), STRAFTER(?lonStr, "."), "") AS ?lonDec)
       BIND(IF(CONTAINS(?latStr, "."), STRAFTER(?latStr, "."), "") AS ?latDec)
 
-      # === Count digits after the decimal ===
+      # Count decimal digits
       BIND(STRLEN(?lonDec) AS ?lonPrecision)
       BIND(STRLEN(?latDec) AS ?latPrecision)
 
-      # === Assign precision category ===
+      # Decide level: High (>4), Low (<2), Medium (else)
       BIND(
         IF(
           (?lonPrecision > 4 && ?latPrecision > 4),

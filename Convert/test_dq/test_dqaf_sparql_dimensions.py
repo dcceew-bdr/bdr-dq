@@ -1,7 +1,7 @@
 import pytest
 from pyoxigraph import Store
 
-# Import test data generation functions
+# Import test data generators
 from Convert.test_data_generation.data_generation_date_recency import create_date_recency_test_data
 from Convert.test_data_generation.data_generation_date_completeness import create_date_completeness_test_data
 from Convert.test_data_generation.data_generation_date_format_validation import create_date_format_validation_test_data
@@ -9,8 +9,11 @@ from Convert.test_data_generation.data_generation_coordinate_completeness import
 from Convert.test_data_generation.data_generation_coordinate_precision import create_coordinate_precision_test_data
 from Convert.test_data_generation.data_generation_geospatial_accuracy_precision import create_geospatial_accuracy_precision_test_data
 from Convert.test_data_generation.data_generation_datum_completeness import create_datum_completeness_test_data
+from Convert.test_data_generation.data_generation_datum_type import create_datum_type_test_data
+from Convert.test_data_generation.data_generation_scientific_name_completeness import create_scientific_name_completeness_test_data
+from Convert.test_data_generation.data_generation_scientific_name_validation import create_scientific_name_validation_test_data
 
-# Parametrized test cases
+# Test many SPARQL rules in one function
 @pytest.mark.parametrize("name, data_func, sparql_file, expected", [
     (
         "date_recency",
@@ -78,24 +81,55 @@ from Convert.test_data_generation.data_generation_datum_completeness import crea
             "http://example.com/test/obs_with_datum": "not_empty",
             "http://example.com/test/obs_no_datum": "empty"
         }
+    ),
+    (
+        "datum_type",
+        create_datum_type_test_data,
+        "../queries/assess_datum_validation.sparql",
+        {
+            "http://example.com/test/obs_agd84": "AGD84",
+            "http://example.com/test/obs_gda94": "GDA94",
+            "http://example.com/test/obs_gda2020": "GDA2020",
+            "http://example.com/test/obs_wgs84": "WGS84",
+            "http://example.com/test/obs_none": "None"
+        }
+    ),
+    (
+        "scientific_name_completeness",
+        create_scientific_name_completeness_test_data,
+        "../queries/assess_scientific_name_completeness.sparql",
+        {
+            "http://example.com/test/obs_with_name": "non_empty_name",
+            "http://example.com/test/obs_no_name": "empty_name"
+        }
+    ),
+    (
+        "scientific_name_validation",
+        create_scientific_name_validation_test_data,
+        "../queries/assess_scientific_name_validation.sparql",
+        {
+            "http://example.com/test/obs_valid": "valid_name",
+            "http://example.com/test/obs_invalid": "valid_name"  # still a placeholder
+        }
     )
 ])
 def test_dqaf_dimensions(name, data_func, sparql_file, expected):
     """
-    Generalized test for DQAF assessments using pytest parametrization.
+    Runs SPARQL file for each DQAF rule.
+    Checks if output matches expected results.
     """
 
-    # === Step 1: Generate RDF test data ===
+    # Load test data into RDF store
     turtle_data = data_func()
     store = Store()
     store.load(turtle_data.encode("utf-8"), format="text/turtle")
 
-    # === Step 2: Run SPARQL INSERT query ===
+    # Load the SPARQL rule
     with open(sparql_file, "r") as f:
         insert_query = f.read()
     store.update(insert_query)
 
-    # === Step 3: Query inserted values from dqaf:fullResults ===
+    # Query the output results
     select_query = f"""
     PREFIX dqaf: <http://example.com/def/dqaf/>
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
@@ -107,21 +141,24 @@ def test_dqaf_dimensions(name, data_func, sparql_file, expected):
         ?observation dqaf:hasResult [
           sosa:observedProperty <http://example.com/assess/{name}/> ;
           schema:value ?value
-        ]
+        ] .
       }}
     }}
     """
     results = store.query(select_query)
 
-    # === Step 4: Convert result to dictionary ===
+    # Collect actual values
     actual_results = {
         str(row["observation"]).strip("<>"): row["value"].value
         for row in results
     }
 
-    print(f"\nExtracted Results ({name}):", actual_results)
+    # Print results for debugging
+    print(f"\n=== Extracted Results ({name}) ===")
+    for obs, val in actual_results.items():
+        print(f"{obs} => {val}")
 
-    # === Step 5: Assert expected results match actual ones ===
+    # Compare with expected values
     for obs_uri, expected_val in expected.items():
         assert obs_uri in actual_results, f"[{name}] Missing: {obs_uri}"
         assert actual_results[obs_uri] == expected_val, \

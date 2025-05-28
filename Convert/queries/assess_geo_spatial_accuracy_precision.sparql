@@ -1,16 +1,14 @@
-# ====================================================================================
+# ===========================================================
 # Purpose:
-# This query checks how accurate a coordinate is, based on the uncertainty value.
+# This rule checks how precise the location (coordinate) is.
 #
 # Definitions:
-# - "Uncertainty" means how far the real location might be from the recorded point (in meters).
-# - "low_precision" → If uncertainty > 10,000 meters or if missing
-# - "high_precision" → If uncertainty ≤ 10,000 meters
-# ====================================================================================
+# - Uncertainty = how far the real point might be from the recorded one (in meters).
+# - If uncertainty is more than 10,000 meters or missing → low_precision
+# - If uncertainty is 10,000 meters or less → high_precision
+# ===========================================================
 
-# =============================
-# Step 1: Define common prefixes
-# =============================
+# Step 1: Define common prefixes (vocabularies used in data)
 PREFIX tern:   <https://w3id.org/tern/ontologies/tern/>
 PREFIX sosa:   <http://www.w3.org/ns/sosa/>
 PREFIX geo:    <http://www.opengis.net/ont/geosparql#>
@@ -18,9 +16,7 @@ PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX dqaf:   <http://example.com/def/dqaf/>
 PREFIX schema: <http://schema.org/>
 
-# ========================================
-# Step 2: Insert the result (precision level)
-# ========================================
+# Step 2: Insert precision result (high or low) into result graph
 INSERT {
   GRAPH dqaf:fullResults {
     ?observation dqaf:hasResult [
@@ -30,22 +26,21 @@ INSERT {
   }
 }
 
-# ========================================
-# Step 3: Match observations and assess accuracy
-# ========================================
+# Step 3: Find the accuracy level (based on uncertainty)
 WHERE {
-  # Get each observation and its associated sample
+  # Get observation → sample → procedure
   ?observation a tern:Observation ;
                sosa:hasFeatureOfInterest ?sample .
   ?sample a tern:Sample ;
           sosa:isResultOf ?procedure .
 
-  # OPTIONAL: Try to get the spatial accuracy value (uncertainty in meters)
+  # Try to get uncertainty value (in meters) if exists
   OPTIONAL {
     ?procedure geo:hasMetricSpatialAccuracy ?accuracy .
   }
 
-  # Determine if accuracy is high or low
+  # If accuracy is not found or more than 10,000 → low precision
+  # If accuracy is less than or equal to 10,000 → high precision
   BIND(
     IF(
       !BOUND(?accuracy) || xsd:float(?accuracy) > 10000,

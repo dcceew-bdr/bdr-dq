@@ -4,11 +4,11 @@ from sklearn.covariance import MinCovDet
 
 def run_coordinate_outlier_robust_covariance(store: Store, threshold: float = 5.0):
     """
-    This function detects coordinate outliers using the Robust Covariance method
-    and writes the result back into dqaf:fullResults using INSERT/WHERE pattern.
+    Detect outlier coordinates using Robust Covariance method (Mahalanobis distance).
+    Add results into RDF store using SPARQL INSERT statement.
     """
 
-    # === Step 1: Query coordinates for all observations ===
+    # Step 1: Get longitude and latitude from WKT geometry
     coord_query = """
     PREFIX tern: <https://w3id.org/tern/ontologies/tern/>
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
@@ -34,12 +34,13 @@ def run_coordinate_outlier_robust_covariance(store: Store, threshold: float = 5.
     """
     results = list(store.query(coord_query))
 
+    # Step 2: Check if we got any coordinates
     if not results:
         print("⚠️ No coordinates found.")
         return
 
     coords = []
-    obs_map = {}
+    obs_map = {}  # Keep track of which coordinates belong to which observation
     for row in results:
         lon = float(row["lonVal"].value)
         lat = float(row["latVal"].value)
@@ -49,11 +50,11 @@ def run_coordinate_outlier_robust_covariance(store: Store, threshold: float = 5.
 
     coords = np.array(coords)
 
-    # === Step 2: Fit Robust Covariance Model ===
+    # Step 3: Use Robust Covariance to calculate Mahalanobis distances
     robust_cov = MinCovDet().fit(coords)
     distances = robust_cov.mahalanobis(coords)
 
-    # === Step 3: Build batch INSERT SPARQL query ===
+    # Step 4: Create SPARQL INSERT query to add outlier results to RDF
     insert_prefix = """
     PREFIX dqaf: <http://example.com/def/dqaf/>
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
@@ -65,7 +66,6 @@ def run_coordinate_outlier_robust_covariance(store: Store, threshold: float = 5.
     insert_values = ""
     for obs_uri, dist in zip(obs_map.keys(), distances):
         tag = "outlier_coordinate" if dist > threshold else "normal_coordinate"
-
         insert_values += f"""
         <{obs_uri}> dqaf:hasResult [
           sosa:observedProperty <http://example.com/assess/coordinate_outlier_robust_covariance/> ;
@@ -77,7 +77,7 @@ def run_coordinate_outlier_robust_covariance(store: Store, threshold: float = 5.
       }
     } WHERE { }
     """
-
     full_insert_query = insert_prefix + insert_values + insert_suffix
 
+    # Step 5: Save results to RDF store
     store.update(full_insert_query)

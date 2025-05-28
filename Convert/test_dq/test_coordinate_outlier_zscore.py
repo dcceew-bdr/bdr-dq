@@ -1,19 +1,20 @@
 import folium
-import pandas as pd
 from pyoxigraph import Store
 from Convert.rules.coordinate_outlier_zscore import run_coordinate_outlier_zscore
 from Convert.test_data_generation.data_generation_coordinate_outlier_zscore import create_coordinate_outlier_zscore_test_data
 
-def test_coordinate_outlier_zscore_map():
-    # === Step 1: Generate and load test RDF data ===
+def test_dq_coordinate_outlier_zscore_map():
+    # Step 1: Create RDF data with normal and outlier coordinates
     turtle_data = create_coordinate_outlier_zscore_test_data()
+
+    # Step 2: Load RDF data into PyOxigraph store
     store = Store()
     store.load(turtle_data.encode("utf-8"), format="text/turtle")
 
-    # === Step 2: Run Z-score rule to classify coordinates ===
+    # Step 3: Apply the Z-score detection method
     run_coordinate_outlier_zscore(store)
 
-    # === Step 3: Query results and WKT points ===
+    # Step 4: Query RDF to get result label and coordinate
     query = """
     PREFIX dqaf: <http://example.com/def/dqaf/>
     PREFIX sosa: <http://www.w3.org/ns/sosa/>
@@ -34,52 +35,34 @@ def test_coordinate_outlier_zscore_map():
       ?geometry geo:asWKT ?wkt .
     }
     """
-    results = store.query(query)
+    results = list(store.query(query))
 
-    # === Step 4: Build result table ===
-    data = []
-    for row in results:
-        obs = str(row["observation"]).strip("<>")
-        wkt = row["wkt"].value.replace("POINT(", "").replace(")", "")
-        lon, lat = map(float, wkt.split())
-        actual = row["value"].value
-
-        expected = "outlier_coordinate" if int(obs.split("_")[-1]) >= 190 else "normal_coordinate"
-        status = "match" if actual == expected else "mismatch"
-
-        data.append({
-            "observation": obs,
-            "lon": lon,
-            "lat": lat,
-            "expected": expected,
-            "actual": actual,
-            "status": status
-        })
-
-    # === Step 5: Draw map ===
+    # Step 5: Create the map with default zoom on Victoria, Australia
     m = folium.Map(location=[-36, 145], zoom_start=6)
 
-    for d in data:
-        if d["status"] == "mismatch":
-            color = "yellow"
-        elif d["actual"] == "outlier_coordinate":
-            color = "red"
-        else:
-            color = "green"
+    # Step 6: Draw each point on the map
+    for row in results:
+        wkt = row["wkt"].value.replace("POINT(", "").replace(")", "")
+        lon, lat = map(float, wkt.split())
+        label = row["value"].value
+
+        # Choose red for outliers, green for normal points
+        color = "green" if label == "normal_coordinate" else "red"
 
         folium.CircleMarker(
-            location=[d["lat"], d["lon"]],
+            location=[lat, lon],
             radius=5,
             color=color,
             fill=True,
             fill_color=color,
             fill_opacity=0.8,
-            popup=folium.Popup(f"{d['observation']}<br>Expected: {d['expected']}<br>Actual: {d['actual']}")
+            popup=label
         ).add_to(m)
 
-    m.save("coordinate_outliers_zscore_map.html")
-    print("✅ Map saved as 'coordinate_outliers_zscore_map.html'")
-    print(pd.DataFrame(data).head())
+    # Step 7: Save the map to a local HTML file
+    m.save("test_dq_coordinate_outlier_zscore_map.html")
+    print("Map saved: test_dq_coordinate_outlier_zscore_map.html")
 
+# Only run this if the file is executed directly
 if __name__ == "__main__":
-    test_coordinate_outlier_zscore_map()
+    test_dq_coordinate_outlier_zscore_map()
